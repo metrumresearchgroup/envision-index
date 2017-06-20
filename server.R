@@ -1,6 +1,6 @@
 server <- shinyServer(
   function(input, output, session) {
-    # rV <- reactiveValues()
+
     # App Table ---------------------------------------------------------------
     
     clientURL <- reactive({
@@ -70,17 +70,31 @@ server <- shinyServer(
     
     observe({
       req(input$logApp)
-      # input$refreshLogs
-      logDir <- "/var/log/shiny-server"
       logs <- list.files(input$logDir)
       if(length(logs) == 0){
+        
         updateSelectInput(session, 'logFile', choices = "No Logs Found")
+        
       } else {
+        
         appLogs <- logs[grepl(input$logApp, logs)]
+        
         userAppLogs <- appLogs[grepl(globals$user, appLogs)]
-        userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
-        newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
-        updateSelectInput(session, 'logFile', choices = appLogs, selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
+        
+        if(length(userAppLogs) > 0){
+          
+          userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
+          
+          newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
+          
+          updateSelectInput(session,
+                            'logFile',
+                            choices = appLogs,
+                            selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
+        } else {
+          
+          updateSelectInput(session, 'logFile', choices = appLogs)
+        }
       }
     })
     

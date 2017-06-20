@@ -7,7 +7,4 @@ notApps <- c("envision-index")
 
 globals$apps <- apps[!(apps %in% notApps)]
 
-metrumAppSource <- try(
-  source('https://raw.githubusercontent.com/metrumresearchgroup/shinymetrum/master/R/metrum-app.R'),
-  silent = TRUE
-)
+source('https://raw.githubusercontent.com/metrumresearchgroup/shinymetrum/master/R/metrum-app.R')

@@ -1,8 +1,8 @@
 ui <- metrumApp(
   logo_location = "https://metrumrg-soft.s3.amazonaws.com/shinyapps/shinymetrum/metworxLogo.png",
   include_footer = FALSE,
-  includeCSS("www/css/envision-index.css"),
-  includeScript("www/js/envision-index.js"),
+  includeCSS("https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/www/css/envision-index.css"),
+  includeScript("https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/www/js/envision-index.js"),
   fluidPage(
     div(class = "container",
         id = "envision-app-table",

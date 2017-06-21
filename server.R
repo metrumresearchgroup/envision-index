@@ -24,8 +24,7 @@ server <- shinyServer(
         
         info.i <- file.info(file.path('/data', 'shiny-server', app.i))
         name.i <- tagList(
-          tags$a(class = "code", 
-                 href = file.path(clientURL(), "envision", app.i, ""),
+          tags$a(href = file.path(clientURL(), "envision", app.i, ""),
                  # target = "_blank",   
                  app.i)# ,
           # tags$span(style = "color:#686868",

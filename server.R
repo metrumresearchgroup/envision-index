@@ -9,6 +9,13 @@ server <- shinyServer(
              session$clientData$url_hostname)
     })
     
+    apps <- reactive({
+      clientURL()
+      apps <- sort(list.dirs('/data/shiny-server',
+                             recursive = FALSE, full.names = FALSE))
+      apps[apps != "index"]
+    })
+    
     output$appTable <- renderUI({
       
       appTableHTML <- tags$table(class = "table table-striped",
@@ -20,7 +27,7 @@ server <- shinyServer(
                                                     tags$th(""))))
       appTableBodyHTML <- tags$tbody()
       
-      for(app.i in globals$apps){
+      for(app.i in apps()){
         
         info.i <- file.info(file.path('/data', 'shiny-server', app.i))
         name.i <- tagList(

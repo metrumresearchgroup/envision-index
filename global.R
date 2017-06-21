@@ -1,10 +1,20 @@
 globals <- list()
 
+
 globals$user <- Sys.info()[["user"]]
 
-apps <- sort(list.dirs('/data/shiny-server', recursive = FALSE, full.names = FALSE))
-notApps <- c("envision-index")
+globals$apps <- sort(list.dirs("/data/shiny-server",
+                               recursive = FALSE,
+                               full.names = FALSE))
 
-globals$apps <- apps[!(apps %in% notApps)]
+globals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup/"
 
-source('https://raw.githubusercontent.com/metrumresearchgroup/shinymetrum/master/R/metrum-app.R')
+globals$envisionIndexGitHub <- file.path(globals$metrumGitHub,
+                                         "envision-index",
+                                         "master")
+
+globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
+                                         "shinymetrum",
+                                         "master")
+
+source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))

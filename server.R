@@ -9,8 +9,8 @@ server <- shinyServer(
              session$clientData$url_hostname)
     })
     
-    apps <- reactive({
-      clientURL()
+    apps <- eventReactive(session, {
+      message("apps refreshed")
       apps <- sort(list.dirs('/data/shiny-server',
                              recursive = FALSE, full.names = FALSE))
       apps[apps != "index"]

@@ -14,7 +14,7 @@ server <- shinyServer(
       appTableHTML <- tags$table(class = "table table-striped", 
                                  tags$thead(tags$tr(tags$th("Name"),
                                                     tags$th("Author"),
-                                                    tags$th("Size (bytes)"),
+                                                    # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),
                                                     tags$th(""))))
       appTableBodyHTML <- tags$tbody()
@@ -27,7 +27,7 @@ server <- shinyServer(
                          app.i)
         
         author.i <- info.i$uname
-        size.i <- info.i$size
+        # size.i <- info.i$size
         
         files.i <- list.files(file.path("/data/shiny-server", app.i), full.names = TRUE)
         if(length(files.i) > 0){
@@ -45,7 +45,7 @@ server <- shinyServer(
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(name.i),
                                                    tags$td(author.i),
-                                                   tags$td(size.i),
+                                                   # tags$td(size.i),
                                                    tags$td(modified.i),
                                                    tags$td(logButton.i)))
       }

@@ -80,29 +80,36 @@ server <- shinyServer(
     observe({
       req(input$logApp)
       logs <- list.files(input$logDir)
+      
       if(length(logs) == 0){
-        
-        updateSelectInput(session, 'logFile', choices = "No Logs Found")
-        
-      } else {
-        
-        appLogs <- logs[grepl(input$logApp, logs)]
-        userAppLogs <- appLogs[grepl(globals$user, appLogs)]
-        
-        if(length(userAppLogs) > 0){
-          
-          userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
-          newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
-          
-          updateSelectInput(session,
-                            'logFile',
-                            choices = appLogs,
-                            selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
-        } else {
-          
-          updateSelectInput(session, 'logFile', choices = appLogs)
-        }
+        return(
+          updateSelectInput(session, 'logFile', choices = "No Logs Found")
+        )
       }
+      
+      appLogs <- logs[grepl(input$logApp, logs)]
+      
+      if(length(appLogs) == 0){
+        return(
+          updateSelectInput(session, 'logFile', choices = "No Logs Found For This App")
+        )
+      }
+      
+      userAppLogs <- appLogs[grepl(globals$user, appLogs)]
+      
+      if(length(userAppLogs) == 0){
+        return(
+          updateSelectInput(session, 'logFile', choices = appLogs)
+        )
+      }
+      
+      userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
+      newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
+      
+      updateSelectInput(session,
+                        'logFile',
+                        choices = appLogs,
+                        selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
     })
     
     autoInvalidate <- reactiveTimer(1000, session = session)

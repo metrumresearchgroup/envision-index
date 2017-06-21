@@ -78,13 +78,11 @@ server <- shinyServer(
       } else {
         
         appLogs <- logs[grepl(input$logApp, logs)]
-        
         userAppLogs <- appLogs[grepl(globals$user, appLogs)]
         
         if(length(userAppLogs) > 0){
           
           userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
-          
           newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
           
           updateSelectInput(session,

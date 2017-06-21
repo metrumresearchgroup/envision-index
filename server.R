@@ -90,6 +90,7 @@ server <- shinyServer(
       appLogs <- logs[grepl(input$logApp, logs)]
       
       if(length(appLogs) == 0){
+        message("no logs app")
         return(
           updateSelectInput(session, 'logFile', choices = "No Logs Found For This App")
         )

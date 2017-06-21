@@ -6,7 +6,7 @@ ui <- metrumApp(
   fluidPage(
     div(class = "container",
         id = "envision-app-table",
-        h2("Envision Applications"),
+        h1("Envision Applications"),
         uiOutput('appTable')
     ),
     div(class = "container-fluid",

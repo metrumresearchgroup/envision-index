@@ -11,7 +11,8 @@ server <- shinyServer(
     
     output$appTable <- renderUI({
       
-      appTableHTML <- tags$table(class = "table table-striped", 
+      appTableHTML <- tags$table(class = "table table-striped",
+                                 style = "font-size:15px;",
                                  tags$thead(tags$tr(tags$th("Name"),
                                                     tags$th("Author"),
                                                     # tags$th("Size (bytes)"),

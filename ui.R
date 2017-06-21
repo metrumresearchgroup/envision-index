@@ -12,6 +12,7 @@ ui <- metrumApp(
     div(class = "container-fluid",
         id = "envision-log-reader",
         style = "visibility:hidden;",
+        br(),
         fluidRow(
           column(
             width = 1,

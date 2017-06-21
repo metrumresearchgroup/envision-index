@@ -14,7 +14,7 @@ globals$envisionIndexGitHub <- file.path(globals$metrumGitHub,
                                          "master")
 
 globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
-                                         "shinymetrum",
-                                         "master")
+                                       "shinymetrum",
+                                       "master")
 
 source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))

@@ -15,7 +15,7 @@ ui <- metrumApp(
         fluidRow(
           column(
             width = 1,
-            actionButton(inputId = "showApps", class = "btn-primary", label = "Back to Apps")
+            actionButton(inputId = "showApps", class = "btn-info btn-lg", label = "Back to Apps", icon = icon("step-backward"))
           ),
           column(
             width = 4,

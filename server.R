@@ -24,9 +24,10 @@ server <- shinyServer(
         info.i <- file.info(file.path("..", app.i))
         name.i <- tagList(
           tags$a(href = file.path(clientURL(), "envision", app.i, ""),
-                 target = "_blank",
+                 target = "_blank",   
                  app.i),
-          tags$span(class = "glyphicon glyphicon-new-window", `aria-hidden` = "true")
+          tags$span(style = "color:#686868",
+                    class = "glyphicon glyphicon-new-window", `aria-hidden` = "true")
         )
         
         author.i <- info.i$uname

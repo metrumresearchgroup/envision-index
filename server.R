@@ -22,7 +22,7 @@ server <- shinyServer(
       
       for(app.i in globals$apps){
         
-        info.i <- file.info(app.i)
+        info.i <- file.info(file.path('/data', 'shiny-server', app.i))
         name.i <- tagList(
           tags$a(href = paste0(app.i, "/"), # file.path(clientURL(), "envision", app.i),
                  # target = "_blank",   

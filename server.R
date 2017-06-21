@@ -1,6 +1,6 @@
 server <- shinyServer(
   function(input, output, session) {
-
+    
     # App Table ---------------------------------------------------------------
     
     clientURL <- reactive({
@@ -22,9 +22,12 @@ server <- shinyServer(
       for(app.i in globals$apps){
         
         info.i <- file.info(file.path("..", app.i))
-        name.i <- tags$a(href = file.path(clientURL(), "envision", app.i, ""),
-                         target = "_blank",
-                         app.i)
+        name.i <- tagList(
+          tags$a(href = file.path(clientURL(), "envision", app.i, ""),
+                 target = "_blank",
+                 app.i),
+          tags$span(class = "glyphicon glyphicon-new-window", `aria-hidden` = "true")
+        )
         
         author.i <- info.i$uname
         # size.i <- info.i$size

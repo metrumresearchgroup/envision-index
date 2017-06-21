@@ -4,8 +4,10 @@ message("envision-index 7")
 
 globals$user <- Sys.info()[["user"]]
 
-globals$apps <- sort(list.dirs('/data/shiny-server',
+apps <- sort(list.dirs('/data/shiny-server',
                                recursive = FALSE, full.names = FALSE))
+
+globals$apps <- apps[apps != "index"]
 
 globals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup"
 

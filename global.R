@@ -1,6 +1,6 @@
 globals <- list()
 
-message("envision-index 6")
+message("envision-index 7")
 
 globals$user <- Sys.info()[["user"]]
 

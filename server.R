@@ -118,7 +118,7 @@ server <- shinyServer(
     output$logContents <- renderPrint({
       req(input$logFile)
       
-      if(input$liveStream & (input$logFile != "No Logs Found") & (input$indexDisplay == "logs")){
+      if(input$liveStream & !grepl("No Logs Found", input$logFile) & (input$indexDisplay == "logs")){
         autoInvalidate()
       }
       

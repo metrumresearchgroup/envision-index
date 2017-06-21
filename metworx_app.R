@@ -1,10 +1,11 @@
-gitHubRepo <- "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master"
+library(shiny)
+appRepo <- "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master"
 
 remoteCodeSourced <- TRUE
 
 for(script.i in c("global.R", "ui.R", "server.R")){
   try.i <- try(
-    source(file.path(gitHubRepo, script.i))
+    source(file.path(appRepo, script.i))
   )
   
   if(class(try.i) == "try-error"){
@@ -35,7 +36,7 @@ if(runRemoteApp){
                                      tags$li(tags$a(href = link.i, target = "_blank", app.i)))
       }
       tagList(
-        tags$h1("Index of /"),
+        tags$h1("Envision Apps"),
         indexLinks
       )
     })

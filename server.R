@@ -32,7 +32,7 @@ server <- shinyServer(
                                                     # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),
                                                     tags$th(""))))
-      appTableBodyHTML <- tags$tbody(style = "font-size:26px;")
+      appTableBodyHTML <- tags$tbody(style = "font-size:16px;")
       
       for(app.i in apps()){
         

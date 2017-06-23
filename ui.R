@@ -1,6 +1,6 @@
-ui <- metrumApp(
-  logo_location = file.path(globals$shinymetrumGitHub, "inst", "img", "metworxLogo.png"),
-  include_footer = FALSE,
+ui <- metworxApp(
+  # logo_location = file.path(globals$shinymetrumGitHub, "inst", "img", "metworxLogo.png"),
+  # include_footer = FALSE,
   includeCSS(file.path(globals$envisionIndexGitHub, "css", "envision-index.css")),
   includeScript(file.path(globals$envisionIndexGitHub, "js", "envision-index.js")),
   fluidPage(

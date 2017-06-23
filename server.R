@@ -39,7 +39,7 @@ server <- shinyServer(
         name.i <- tagList(
           tags$a(href = file.path(clientURL(), "envision", app.i, ""),
                  app.i),
-          tags$span(style = "font-color:lightgrey;", 
+          tags$span(style = "color:lightgrey;", 
                     class = "glyphicon glyphicon-new-window",
                     `aria-hidden` = "true")
         )

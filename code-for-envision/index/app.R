@@ -1,4 +1,3 @@
-library(shiny)
 appRepo <- "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master"
 
 remoteCodeSourced <- TRUE

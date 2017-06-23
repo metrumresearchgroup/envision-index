@@ -27,6 +27,7 @@ server <- shinyServer(
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;",
                                  tags$thead(tags$tr(tags$th("Name"),
+                                                    tags$th("Launch"),
                                                     tags$th("Author"),
                                                     # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),
@@ -45,14 +46,15 @@ server <- shinyServer(
         #           `aria-hidden` = "true")
         # )
         name.i <- tagList(
-          app.i,
-          tags$a(class="btn btn-primary btn-lg",
-                 target = "_blank",
-                 href = file.path(clientURL(), "envision", app.i, ""),
-                 tags$span(class = "glyphicon glyphicon-new-window",
-                           `aria-hidden` = "true"),
-                 "Launch App")
+          app.i
         )
+        
+        launch.i <- tags$a(class="btn btn-primary btn-lg",
+                           target = "_blank",
+                           href = file.path(clientURL(), "envision", app.i, ""),
+                           tags$span(class = "glyphicon glyphicon-new-window",
+                                     `aria-hidden` = "true"),
+                           "Launch App")
         
         author.i <- info.i$uname
         # size.i <- info.i$size
@@ -65,8 +67,8 @@ server <- shinyServer(
           modified.i <- ""
         }
         
-        appButtons.i <- tags$div(class = "text-right",
-                                 tags$a(class="btn btn-warning btn-xs metrum-log-button",
+        log.i <- tags$div(class = "text-right",
+                                 tags$a(class="btn btn-warning metrum-log-button",
                                         id = app.i,
                                         tags$span(class = "glyphicon glyphicon-list-alt",
                                                   `aria-hidden` = "true"),
@@ -74,10 +76,11 @@ server <- shinyServer(
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(name.i),
+                                                   tags$td(launch.i),
                                                    tags$td(author.i),
                                                    # tags$td(size.i),
                                                    tags$td(modified.i),
-                                                   tags$td(appButtons.i)))
+                                                   tags$td(log.i)))
       }
       tagAppendChild(appTableHTML, appTableBodyHTML)
     })

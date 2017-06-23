@@ -61,14 +61,12 @@ server <- shinyServer(
                                  tags$a(class="btn btn-primary btn-lg",
                                         target = "_blank",
                                         id = app.i,
-                                        tags$span(# style = "color:#C8C8C8;",
-                                                  class = "glyphicon glyphicon-new-window",
+                                        tags$span(class = "glyphicon glyphicon-new-window",
                                                   `aria-hidden` = "true"),
                                         "Launch App"),
                                 tags$a(class="btn btn-warning btn-xs metrum-log-button",
                                        id = app.i,
-                                       tags$span(# style = "color:#C8C8C8;",
-                                                 class = "glyphicon glyphicon-list-alt",
+                                       tags$span(class = "glyphicon glyphicon-list-alt",
                                                  `aria-hidden` = "true"),
                                        "View Log"))
         

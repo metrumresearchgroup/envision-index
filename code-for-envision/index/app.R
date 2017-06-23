@@ -33,7 +33,7 @@ if(runRemoteApp){
       for(app.i in apps[!(apps %in% notApps)]){
         link.i <- file.path(clientURL, "envision", app.i, "")
         indexLinks <- tagAppendChild(indexLinks,
-                                     tags$li(tags$a(href = link.i, target = "_blank", app.i)))
+                                     tags$li(tags$a(href = link.i, app.i)))
       }
       tagList(
         tags$h1("Envision Apps"),

@@ -58,7 +58,8 @@ server <- shinyServer(
         }
         
         appButtons.i <- tags$div(class = "text-right",
-                                 tags$a(class="btn btn-primary btn-lg metrum-log-button",
+                                 tags$a(class="btn btn-primary btn-lg",
+                                        target = "_blank",
                                         id = app.i,
                                         tags$span(# style = "color:#C8C8C8;",
                                                   class = "glyphicon glyphicon-new-window",

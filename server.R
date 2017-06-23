@@ -36,14 +36,15 @@ server <- shinyServer(
       for(app.i in apps()){
         
         info.i <- file.info(file.path(globals$appsLoc, app.i))
-        name.i <- tagList(
-          tags$a(href = file.path(clientURL(), "envision", app.i, ""),
-                 target = "_blank",
-                 app.i),
-          tags$span(style = "color:#C8C8C8;", 
-                    class = "glyphicon glyphicon-new-window",
-                    `aria-hidden` = "true")
-        )
+        # name.i <- tagList(
+        #   tags$a(href = file.path(clientURL(), "envision", app.i, ""),
+        #          target = "_blank",
+        #          app.i),
+          # tags$span(style = "color:#C8C8C8;",
+          #           class = "glyphicon glyphicon-new-window",
+          #           `aria-hidden` = "true")
+        # )
+        name.i <- app.i
         
         author.i <- info.i$uname
         # size.i <- info.i$size
@@ -56,9 +57,18 @@ server <- shinyServer(
           modified.i <- ""
         }
         
-        logButton.i <- tags$div(class = "text-right",
+        appButtons.i <- tags$div(class = "text-right",
+                                 tags$a(class="btn btn-primary btn-lg metrum-log-button",
+                                        id = app.i,
+                                        tags$span(# style = "color:#C8C8C8;",
+                                                  class = "glyphicon glyphicon-new-window",
+                                                  `aria-hidden` = "true"),
+                                        "Launch App"),
                                 tags$a(class="btn btn-warning btn-xs metrum-log-button",
                                        id = app.i,
+                                       tags$span(# style = "color:#C8C8C8;",
+                                                 class = "glyphicon glyphicon-list-alt",
+                                                 `aria-hidden` = "true"),
                                        "View Log"))
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
@@ -66,7 +76,7 @@ server <- shinyServer(
                                                    tags$td(author.i),
                                                    # tags$td(size.i),
                                                    tags$td(modified.i),
-                                                   tags$td(logButton.i)))
+                                                   tags$td(appButtons.i)))
       }
       tagAppendChild(appTableHTML, appTableBodyHTML)
     })

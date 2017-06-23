@@ -7,13 +7,7 @@ ui <- metrumApp(
     div(class = "container",
         id = "envision-app-table",
         h1("Envision Applications"),
-        fluidRow(
-          column(
-            width = 8,
-            offset = 2,
-            uiOutput('appTable')
-          )
-        )
+        uiOutput('appTable')
     ),
     div(class = "container-fluid",
         id = "envision-log-reader",

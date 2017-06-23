@@ -45,7 +45,7 @@ server <- shinyServer(
         #           class = "glyphicon glyphicon-new-window",
         #           `aria-hidden` = "true")
         # )
-        name.i <- tags$div(
+        name.i <- tags$span(
           style = "font-size:20px;",
           app.i
         )

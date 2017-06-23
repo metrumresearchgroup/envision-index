@@ -15,4 +15,4 @@ globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
                                        "shinymetrum",
                                        "master")
 
-source(file.path(globals$shinymetrumGitHub, "R", "metworx-app.R"))
+source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))

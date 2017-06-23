@@ -59,7 +59,7 @@ server <- shinyServer(
         
         description.i <- as.character(appDescriptions$description[appDescriptions$app==app.i])
         
-        launch.i <- tags$a(class="btn btn-primary btn-lg",
+        launch.i <- tags$a(class="btn btn-primary",
                            target = "_blank",
                            href = file.path(clientURL(), "envision", app.i, ""),
                            tags$span(class = "glyphicon glyphicon-new-window",

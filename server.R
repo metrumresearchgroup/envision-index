@@ -24,10 +24,18 @@ server <- shinyServer(
         )
       }
       
+      appDescriptions <- data.frame(app = c("hello", "log_maker", "logReader"),
+                                    description = c("Simple app that ships with shiny-server to use as an example",
+                                    "Create a log that prints the time every second",
+                                    "View log files on an envision shiny-server")
+      )
+      
+      
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;",
                                  tags$thead(tags$tr(tags$th("Name"),
                                                     tags$th(""),
+                                                    tags$th("Description"),
                                                     tags$th("Author"),
                                                     # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),
@@ -48,6 +56,8 @@ server <- shinyServer(
         name.i <- tagList(
           app.i
         )
+        
+        description.i <- as.character(appDescriptions$description[appDescriptions$app==app.i])
         
         launch.i <- tags$a(class="btn btn-primary btn-lg",
                            target = "_blank",
@@ -77,6 +87,7 @@ server <- shinyServer(
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(name.i),
                                                    tags$td(launch.i),
+                                                   tags$td(description.i),
                                                    tags$td(author.i),
                                                    # tags$td(size.i),
                                                    tags$td(modified.i),

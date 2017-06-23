@@ -1,6 +1,6 @@
 globals <- list()
 
-message("envision-index 13")
+message("envision-index 15")
 
 globals$user <- Sys.info()[["user"]]
 globals$appsLoc <- file.path("/data", "shiny-server")
@@ -15,4 +15,4 @@ globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
                                        "shinymetrum",
                                        "master")
 
-source(file.path(globals$shinymetrumGitHub, "R", "metrum-ap.R"))
+source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))

@@ -13,7 +13,7 @@ server <- shinyServer(
       message("apps refreshed")
       apps <- sort(list.dirs('/data/shiny-server',
                              recursive = FALSE, full.names = FALSE))
-      apps[apps != "index"]
+      apps[!(apps %in% c("index", "rmd"))]
     })
     
     output$appTable <- renderUI({

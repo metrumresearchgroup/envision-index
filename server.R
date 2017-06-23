@@ -18,6 +18,12 @@ server <- shinyServer(
     
     output$appTable <- renderUI({
       
+      if(length(apps()) == 0){
+        return(
+          tags$h3(paste0("No Apps Found at ", globals$appsLoc))
+        )
+      }
+      
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;",
                                  tags$thead(tags$tr(tags$th("Name"),

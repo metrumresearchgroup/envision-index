@@ -1,8 +1,9 @@
 globals <- list()
 
-message("envision-index 10")
+message("envision-index 11")
 
 globals$user <- Sys.info()[["user"]]
+globals$appsLoc <- file.path("/data", "shiny-server")
 
 globals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup"
 

@@ -11,7 +11,7 @@ server <- shinyServer(
     
     apps <- eventReactive(session, {
       message("apps refreshed")
-      apps <- sort(list.dirs('/data/shiny-server',
+      apps <- sort(list.dirs(globals$appsLoc,
                              recursive = FALSE, full.names = FALSE))
       apps[!(apps %in% c("index", "rmd"))]
     })
@@ -29,7 +29,7 @@ server <- shinyServer(
       
       for(app.i in apps()){
         
-        info.i <- file.info(file.path('/data', 'shiny-server', app.i))
+        info.i <- file.info(file.path(globals$appsLoc, app.i))
         name.i <- tagList(
           tags$a(href = file.path(clientURL(), "envision", app.i, ""),
                  app.i)
@@ -38,7 +38,7 @@ server <- shinyServer(
         author.i <- info.i$uname
         # size.i <- info.i$size
         
-        files.i <- list.files(file.path('/data', 'shiny-server', app.i), full.names = TRUE)
+        files.i <- list.files(file.path(globals$appsLoc, app.i), full.names = TRUE)
         if(length(files.i) > 0){
           difftime.i <- difftime(Sys.time(), max(do.call("rbind", lapply(files.i, file.info))$mtime)) #### exclude restart.txt
           modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")

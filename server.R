@@ -48,7 +48,7 @@ server <- shinyServer(
           app.i,
           tags$a(class="btn btn-primary btn-lg",
                  target = "_blank",
-                 id = app.i,
+                 href = file.path(clientURL(), "envision", app.i, ""),
                  tags$span(class = "glyphicon glyphicon-new-window",
                            `aria-hidden` = "true"),
                  "Launch App")

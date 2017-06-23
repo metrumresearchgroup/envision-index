@@ -24,7 +24,7 @@ server <- shinyServer(
         )
       }
       
-      appTableHTML <- tags$table(class = "table table-striped",
+      appTableHTML <- tags$table(class = "table table-striped vertical-align",
                                  style = "font-size:16px;",
                                  tags$thead(tags$tr(tags$th("Name"),
                                                     tags$th(""),

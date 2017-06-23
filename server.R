@@ -82,7 +82,7 @@ server <- shinyServer(
                                         id = app.i,
                                         tags$span(class = "glyphicon glyphicon-list-alt",
                                                   `aria-hidden` = "true"),
-                                        "View Log"))
+                                        "View Logs"))
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(name.i),

@@ -27,7 +27,7 @@ server <- shinyServer(
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;",
                                  tags$thead(tags$tr(tags$th("Name"),
-                                                    tags$th("Launch"),
+                                                    tags$th(""),
                                                     tags$th("Author"),
                                                     # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),

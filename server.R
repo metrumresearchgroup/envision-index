@@ -25,14 +25,14 @@ server <- shinyServer(
       }
       
       appTableHTML <- tags$table(class = "table table-striped",
-                                 tags$thead(style = "font-size:20px;",
-                                            tags$tr(tags$th("Name"),
+                                 style = "font-size:16px;",
+                                 tags$thead(tags$tr(tags$th("Name"),
                                                     tags$th(""),
                                                     tags$th("Author"),
                                                     # tags$th("Size (bytes)"),
                                                     tags$th("Last Modified"),
                                                     tags$th(""))))
-      appTableBodyHTML <- tags$tbody(style = "font-size:16px;")
+      appTableBodyHTML <- tags$tbody()
       
       for(app.i in apps()){
         
@@ -45,8 +45,7 @@ server <- shinyServer(
         #           class = "glyphicon glyphicon-new-window",
         #           `aria-hidden` = "true")
         # )
-        name.i <- tags$span(
-          style = "font-size:20px;",
+        name.i <- tagList(
           app.i
         )
         

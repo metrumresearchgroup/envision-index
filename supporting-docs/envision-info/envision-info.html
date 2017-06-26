@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <h1>Customize Envision Index page with envision-manifest </h1>
+    <p>
+        The envision dashboard page is how you access your shiny-server apps. It provides a list of apps found at /data/shiny-server, with a link to each. This is also where you can view the logs for your applications. Until now, envision users were not able to customize this page. This is now possible, via the envision-manifest.
+    </p>
+    <p>
+        The envision-manifest allows developers to customize the index page by enabling icons, app descriptions, etc. This purpose of this document is to help developers get up and running with an envision-manifest.
+    </p>
+    <p>The envision-manifest is a folder that contains meta data about the app and (optionally) an image file to use as the icon. The quickest way to get up and running is to look at the example that is deployed with an Envision session, stored with the "hello" app.</p>
+    <h2>Location</h2>
+    <img style="width:75%" src="envision-manifest-tree.png">
+    <p>
+        The envision-manifest is stored at the same level as the app (server.R and ui.R or app.R). To be useful, the envision-manifest must contain a file called "app-info.yaml". Additionally, an icon may be supplied in this folder (and will be specified in app-info.yaml).
+    </p>
+    <h2>app-info.yaml</h2>
+    <img style="width:75%" src="app-info.png">
+    <p>app-info.yaml allows for the following options:</p>
+    <ul>
+        <li>
+            <b>icon</b>: File name of icon (must be located in envision-manifest folder). <i>If not provided, the default is the Metrum icon.</i></li>
+        <li><b>name</b>: Display name for app. <i>If not provided, the default is the app's folder name.</i></li>
+        <li>
+            <b>description</b>: The app's description.
+        </li>
+        <li>
+            <b>author</b>: The app's author. <i>If not provided, the default is generated using the unix command "uname" on the app's folder.</i>
+        </li>
+        <li>
+            <b>log_button</b>: Should access to the logs be displayed for this application?<i> If not provided, the default is TRUE.</i>
+        </li>
+    </ul>
+    <h2>The settings above will result in:</h2>
+    <img style="width:75%" src="envision-dashboard.png">
+</body>
+
+</html>

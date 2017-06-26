@@ -1,4 +1,5 @@
-name: "Hello App"
-description: "Simple app that ships with shiny-server to use as an example"
 icon: "app-icon.png"
-log_button: TRUE
+name: "It's Alive"
+description: "Simple example demonstrating a shiny app and the envision-manifest"
+author: "RStudio"
+log_button: FALSE

@@ -16,3 +16,4 @@ globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
                                        "master")
 
 source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))
+

@@ -4,10 +4,23 @@ ui <- metrumApp(
   includeCSS(file.path(globals$envisionIndexGitHub, "css", "envision-index.css")),
   includeScript(file.path(globals$envisionIndexGitHub, "js", "envision-index.js")),
   fluidPage(
-    div(class = "container",
-        id = "envision-app-table",
-        h1("Envision Applications"),
-        uiOutput('appTable')
+    div(id = "envision-app-table",
+        fluidRow(
+          column(width = 1,
+                 offset = 10,
+                 # br(),
+                 actionButton(class="btn-info btn-lg",
+                              style = "margin-top:10px",
+                              inputId = "envisionHelpModal",
+                              label = "Envision",
+                              icon = icon("info-circle")
+                 )
+          ),
+          div(class = "container",
+              h1(style = "display:inline", "Envision Apps"),
+              uiOutput('appTable')
+          )
+        )
     ),
     div(class = "container-fluid",
         id = "envision-log-reader",
@@ -16,7 +29,7 @@ ui <- metrumApp(
         fluidRow(
           column(
             width = 1,
-            actionButton(inputId = "showApps", class = "btn-info btn-lg", label = "Back to Apps", icon = icon("step-backward"))
+            actionButton(inputId = "showApps", class = "btn-primary btn-lg", label = "Back to Apps", icon = icon("step-backward"))
           ),
           column(
             width = 4,
@@ -45,7 +58,8 @@ ui <- metrumApp(
         fluidRow(
           column(
             width = 12,
-            verbatimTextOutput("logContents")
+            verbatimTextOutput("logContents"),
+            uiOutput("noLogWarning")
           )
         )
     )

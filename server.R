@@ -16,6 +16,17 @@ server <- shinyServer(
       apps[!(apps %in% c("index"))]
     })
     
+    observeEvent(session, {
+      
+      www_files <- list.files("www")
+      
+      for(www_file.i in www_files[www_files != "index-app-icon.png"]){
+        file.remove(file.path("www", www_file.i))
+      }
+      
+    })
+    
+    
     output$appTable <- renderUI({
       
       if(length(apps()) == 0){
@@ -24,20 +35,22 @@ server <- shinyServer(
         )
       }
       
-      appTableFields <- c("", "name", "", "description", "author", "last_modified", "")
+      # appTableFields <- c("", "name", "", "description", "author", "last_modified", "")
       
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;")
       
       appTableHeadHTML <- tags$thead()
       
-      for(table_field.i in c(appTableFields)){
-        
-        clean_name.i <- tools::toTitleCase(gsub("_", " ", table_field.i, fixed = TRUE))
-        column_title.i <- tags$th(clean_name.i)
-        
-        appTableHeadHTML <- tagAppendChild(appTableHeadHTML, column_title.i)
-      }
+      appTableHeadHTML <-  tagAppendChild(appTableHeadHTML,
+                                          tags$tr(tags$th(""),
+                                                  tags$th("Name"),
+                                                  tags$th(""),
+                                                  tags$th("Description"),
+                                                  tags$th("Author"),
+                                                  tags$th("Last Modified"),
+                                                  tags$th("")))
+      
       
       appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
       
@@ -47,101 +60,102 @@ server <- shinyServer(
         
         info.i <- file.info(file.path(globals$appsLoc, app.i))
         
+        launch_button.i <- tags$a(class="btn btn-primary btn-lg",
+                                  target = "_blank",
+                                  href = file.path(clientURL(), "envision", app.i, ""),
+                                  tags$span(class = "glyphicon glyphicon-new-window",
+                                            `aria-hidden` = "true"),
+                                  "Launch")
+        
+        
+        yaml_file.i <- file.path(globals$appsLoc,
+                                 app.i,
+                                 "envision-manifest",
+                                 "app-info.yaml")
+        
+        if(file.exists(yaml_file.i)){
+          appYaml.i <- TRUE
+          yaml.i <- yaml::yaml.load_file(yaml_file.i)
+          
+        } else {
+          appYaml.i <- FALSE
+          yaml.i <- yaml::yaml.load_file(file.path("envision-manifest", "app-info.yaml"))
+        }
+        
+        ## Icon
+        if("icon" %in% names(yaml.i) & appYaml.i){
+          
+          icon_file.i <-  file.path(globals$appsLoc,
+                                    app.i,
+                                    'envision-manifest',
+                                    yaml.i$icon)
+          
+          if(file.exists(icon_file.i)){
+            
+            file.copy(from = icon_file.i,
+                      to = file.path('www', paste0(app.i, "-", yaml.i$icon)))
+            
+            icon.i <- tags$img(height = "50px", width = "50px", src = paste0(app.i, "-", yaml.i$icon))
+          } else {
+            icon.i <- ""
+          }
+        } else {
+          icon.i <- tags$img(height = "50px", width = "50px", src = paste0("index-app-icon.png"))
+        }
+        
+        ## Name
+        if("name" %in% names(yaml.i)){
+          name.i <- yaml.i$name
+        } else {
+          name.i <- app.i
+        }
+        
+        ## Author
+        if("author" %in% names(yaml.i)){
+          author.i <- yaml.i$author
+        } else {
+          author.i <- info.i$uname
+        }
+        
+        if("description" %in% names(yaml.i)){
+          description.i <- yaml.i$description
+        } else {
+          description.i <- ""
+        }
+        
+        
+        if("log_button" %in% names(yaml.i)){
+          
+          if(yaml.i$log_button == FALSE){
+            log_button.i <- ""
+          } else {
+            log_button.i <- tags$div(class = "text-right",
+                                     tags$a(class="btn btn-warning metrum-log-button",
+                                            id = app.i,
+                                            tags$span(class = "glyphicon glyphicon-list-alt",
+                                                      `aria-hidden` = "true"),
+                                            "View Logs"))
+          }
+        } else {
+          log_button.i <- tags$div(class = "text-right",
+                                   tags$a(class="btn btn-warning metrum-log-button",
+                                          id = app.i,
+                                          tags$span(class = "glyphicon glyphicon-list-alt",
+                                                    `aria-hidden` = "true"),
+                                          "View Logs"))
+        }
+        
+        
         files.i <- list.files(file.path(globals$appsLoc, app.i), full.names = TRUE)
         
         if(length(files.i) > 0){
           #### exclude restart.txt
           difftime.i <- difftime(Sys.time(),
-                                 max(do.call("rbind", lapply(files.i, file.info))$mtime))
+                                 max(do.call("rbind", lapply(files.i[files.i != "restart.txt"], file.info))$mtime))
           last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
+        } else {
+          last_modified.i <- ""
         }
-        
-        yaml_file.i <- file.path(globals$appsLoc,
-                                 app.i,
-                                 'envision-manifest',
-                                 'app-info.yaml')
-        
-        if(file.exists(yaml_file.i)){
-          
-          yaml.i <- yaml::yaml.load_file(yaml_file.i)
-          
-          # icon is a special case
-          if("icon" %in% names(yaml.i)){
-            
-            icon_file.i <-  file.path(globals$appsLoc,
-                                      app.i,
-                                      'envision-manifest',
-                                      yaml.i$icon)
-            
-            if(file.exists(icon_file.i)){
-              icon.i <- tags$img(src = icon_file.i)
-            }
-          }
-          
-          if("log_button" %in% names(yaml.i)){
-            
-            if(yaml.i$log_button){
-              
-              log_button.i <- tags$div(class = "text-right",
-                                       tags$a(class="btn btn-warning metrum-log-button",
-                                              id = app.i,
-                                              tags$span(class = "glyphicon glyphicon-list-alt",
-                                                        `aria-hidden` = "true"),
-                                              "View Logs"))
-            } else {
-              log_button.i <- ""
-            }
-            
-          }
-          
-          for(yaml_field.i in appTableFields[!(appTableFields %in% c("", "last_modified"))]){
-            
-            if(yaml_field.i %in% names(yaml.i)){
-              
-              value.i <- yaml.i[names(yaml.i) == yaml_field.i]
-              
-              assign(x = paste0(yaml_field.i, ".i"),
-                     value = value.i,
-                     envir = .GlobalEnv)
-            }
-          }
-        }
-        
-        # fill in fields not found in yaml
-        for(field.i in paste0(appTableFields[appTableFields != ""], ".i")){
-        
-          if(!exists(field.i)){
-            
-            # name is a special case (gets fill with in app name)
-            if(field.i == "name.i"){
-              
-              assign(x = "name.i",
-                     value = app.i,
-                     envir = .GlobalEnv)
-              next
-            }
-            # author is a special case (gets filled in with uname)
-            if(field.i == "author.i"){
-              
-              assign(x = "author.i",
-                     value = info.i$uname,
-                     envir = .GlobalEnv)
-              next
-            }
-            
-            assign(x = field.i,
-                   value = "",
-                   envir = .GlobalEnv)
-          }
-        }
-        
-        launch_button.i <- tags$a(class="btn btn-primary",
-                                  target = "_blank",
-                                  href = file.path(clientURL(), "envision", app.i, ""),
-                                  tags$span(class = "glyphicon glyphicon-new-window",
-                                            `aria-hidden` = "true"),
-                                  "Launch App")
-        
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(icon.i),
@@ -226,9 +240,30 @@ server <- shinyServer(
       } else {
         # Reset to NULL so it stops trying to print
         updateSelectInput(session, inputId = "logFile", choices = NULL)
-        writeLines("Log Not Found")
+        writeLines("")
       }
       
     })
+    
+    output$noLogWarning <- renderUI({
+      if(grepl("No Logs Found", input$logFile)){
+        
+        tags$div(class="alert alert-warning container", role="alert",
+                 tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
+                 tags$span(class="sr-only", "Error:"),
+                 "No logs were found. By default, logs are deleted when an Envision app stops running. To change this setting, see help file here: ."
+        )
+        
+      }
+    })
+    
+    observeEvent(input$envisionHelpModal, {
+      showModal(modalDialog(
+        size = "l",
+        title = "Metworx EnvIsion Shiny-server",
+        HTML("This dashboard is generated using the apps found in /data/shiny-server.<br><br> The additional information (Description, Icon, etc.) is stored in an envision-manifest folder. <br><br>Please see link <a href = 'www.google.com' target ='_blank'>here</a> for more help.")
+      ))
+    })
+    
   }
 )

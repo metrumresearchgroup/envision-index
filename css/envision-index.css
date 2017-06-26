@@ -3,3 +3,7 @@
     background-color: #2A2A2A;
     overflow-y: scroll;
 }
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}

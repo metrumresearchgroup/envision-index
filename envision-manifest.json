@@ -1,0 +1,15 @@
+{
+
+    "hello": {
+        "title": "It's Alive",
+        "description": "Simple app that ships with shiny-server to use as an example"
+    },
+    "log_maker": {
+        "title": "Log generator",
+        "description": "Create a log that prints the time every second"
+    },
+    "logReader": {
+        "title": "View Logs",
+        "description": "View log files on an envision shiny-server"
+    }
+}

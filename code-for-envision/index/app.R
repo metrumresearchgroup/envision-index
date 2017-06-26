@@ -26,7 +26,7 @@ if(runRemoteApp){
     output$shinyServerApps <- renderUI({
       clientURL <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname)
       apps <- sort(list.dirs('/data/shiny-server', recursive = FALSE, full.names = FALSE))
-      notApps <- c("index", "rmd")
+      notApps <- c("index")
       indexLinks <- tags$ul(style = "font-size:18px")
       
       for(app.i in apps[!(apps %in% notApps)]){

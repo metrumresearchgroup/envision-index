@@ -1,0 +1,4 @@
+name: "Hello App"
+description: "Simple app that ships with shiny-server to use as an example"
+icon: "app-icon.png"
+log_button: TRUE

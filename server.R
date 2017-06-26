@@ -24,74 +24,133 @@ server <- shinyServer(
         )
       }
       
-      appDescriptions <- data.frame(app = c("hello", "log_maker", "logReader"),
-                                    description = c("Simple app that ships with shiny-server to use as an example",
-                                    "Create a log that prints the time every second",
-                                    "View log files on an envision shiny-server")
-      )
-      
+      appTableFields <- c("", "name", "", "description", "author", "last_modified", "")
       
       appTableHTML <- tags$table(class = "table table-striped",
-                                 style = "font-size:16px;",
-                                 tags$thead(tags$tr(tags$th("Name"),
-                                                    tags$th(""),
-                                                    tags$th("Description"),
-                                                    tags$th("Author"),
-                                                    # tags$th("Size (bytes)"),
-                                                    tags$th("Last Modified"),
-                                                    tags$th(""))))
+                                 style = "font-size:16px;")
+      
+      appTableHeadHTML <- tags$thead()
+      
+      for(table_field.i in c(appTableFields)){
+        
+        clean_name.i <- tools::toTitleCase(gsub("_", " ", table_field.i, fixed = TRUE))
+        column_title.i <- tags$th(clean_name.i)
+        
+        appTableHeadHTML <- tagAppendChild(appTableHeadHTML, column_title.i)
+      }
+      
+      appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
+      
       appTableBodyHTML <- tags$tbody()
       
       for(app.i in apps()){
         
         info.i <- file.info(file.path(globals$appsLoc, app.i))
-        # name.i <- tagList(
-        #   tags$a(href = file.path(clientURL(), "envision", app.i, ""),
-        #          target = "_blank",
-        #          app.i),
-        # tags$span(style = "color:#C8C8C8;",
-        #           class = "glyphicon glyphicon-new-window",
-        #           `aria-hidden` = "true")
-        # )
-        name.i <- tagList(
-          app.i
-        )
-        
-        description.i <- as.character(appDescriptions$description[appDescriptions$app==app.i])
-        
-        launch.i <- tags$a(class="btn btn-primary btn-lg",
-                           target = "_blank",
-                           href = file.path(clientURL(), "envision", app.i, ""),
-                           tags$span(class = "glyphicon glyphicon-new-window",
-                                     `aria-hidden` = "true"),
-                           "Launch App")
-        
-        author.i <- info.i$uname
-        # size.i <- info.i$size
         
         files.i <- list.files(file.path(globals$appsLoc, app.i), full.names = TRUE)
+        
         if(length(files.i) > 0){
-          difftime.i <- difftime(Sys.time(), max(do.call("rbind", lapply(files.i, file.info))$mtime)) #### exclude restart.txt
-          modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
-        } else {
-          modified.i <- ""
+          #### exclude restart.txt
+          difftime.i <- difftime(Sys.time(),
+                                 max(do.call("rbind", lapply(files.i, file.info))$mtime))
+          last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
         }
         
-        log.i <- tags$div(class = "text-right",
-                                 tags$a(class="btn btn-warning metrum-log-button",
-                                        id = app.i,
-                                        tags$span(class = "glyphicon glyphicon-list-alt",
-                                                  `aria-hidden` = "true"),
-                                        "View Logs"))
+        yaml_file.i <- file.path(globals$appsLoc,
+                                 app.i,
+                                 'envision-manifest',
+                                 'app-info.yaml')
+        
+        if(file.exists(yaml_file.i)){
+          
+          yaml.i <- yaml::yaml.load_file(yaml_file.i)
+          
+          # icon is a special case
+          if("icon" %in% names(yaml.i)){
+            
+            icon_file.i <-  file.path(globals$appsLoc,
+                                      app.i,
+                                      'envision-manifest',
+                                      yaml.i$icon)
+            
+            if(file.exists(icon_file.i)){
+              icon.i <- tags$img(src = icon_file.i)
+            }
+          }
+          
+          if("log_button" %in% names(yaml.i)){
+            
+            if(yaml.i$log_button){
+              
+              log_button.i <- tags$div(class = "text-right",
+                                       tags$a(class="btn btn-warning metrum-log-button",
+                                              id = app.i,
+                                              tags$span(class = "glyphicon glyphicon-list-alt",
+                                                        `aria-hidden` = "true"),
+                                              "View Logs"))
+            } else {
+              log_button.i <- ""
+            }
+            
+          }
+          
+          for(yaml_field.i in appTableFields[!(appTableFields %in% c("", "last_modified"))]){
+            
+            if(yaml_field.i %in% names(yaml.i)){
+              
+              value.i <- yaml.i[names(yaml.i) == yaml_field.i]
+              
+              assign(x = paste0(yaml_field.i, ".i"),
+                     value = value.i,
+                     envir = .GlobalEnv)
+            }
+          }
+        }
+        
+        # fill in fields not found in yaml
+        for(field.i in paste0(appTableFields[appTableFields != ""], ".i")){
+        
+          if(!exists(field.i)){
+            
+            # name is a special case (gets fill with in app name)
+            if(field.i == "name.i"){
+              
+              assign(x = "name.i",
+                     value = app.i,
+                     envir = .GlobalEnv)
+              next
+            }
+            # author is a special case (gets filled in with uname)
+            if(field.i == "author.i"){
+              
+              assign(x = "author.i",
+                     value = info.i$uname,
+                     envir = .GlobalEnv)
+              next
+            }
+            
+            assign(x = field.i,
+                   value = "",
+                   envir = .GlobalEnv)
+          }
+        }
+        
+        launch_button.i <- tags$a(class="btn btn-primary",
+                                  target = "_blank",
+                                  href = file.path(clientURL(), "envision", app.i, ""),
+                                  tags$span(class = "glyphicon glyphicon-new-window",
+                                            `aria-hidden` = "true"),
+                                  "Launch App")
+        
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
-                                           tags$tr(tags$td(name.i),
-                                                   tags$td(launch.i),
+                                           tags$tr(tags$td(icon.i),
+                                                   tags$td(name.i),
+                                                   tags$td(launch_button.i),
                                                    tags$td(description.i),
                                                    tags$td(author.i),
-                                                   # tags$td(size.i),
-                                                   tags$td(modified.i),
-                                                   tags$td(log.i)))
+                                                   tags$td(last_modified.i),
+                                                   tags$td(log_button.i)))
       }
       tagAppendChild(appTableHTML, appTableBodyHTML)
     })

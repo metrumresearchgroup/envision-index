@@ -43,7 +43,7 @@ server <- shinyServer(
                                           tags$tr(tags$th(""),
                                                   tags$th(""),
                                                   tags$th(""),
-                                                  tags$th(""),
+                                                  tags$th("")
                                                   # tags$th("Author"),
                                                   # tags$th("Last Modified"),
                                                   # tags$th("")

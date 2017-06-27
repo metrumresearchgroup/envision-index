@@ -65,7 +65,7 @@ server <- shinyServer(
         if(file.exists(DESCRIPTION.i)){
           message("DESCRIPTION found for: ", app.i)
           # as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
-          app_options.i <- as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
+          app_options.i <- as.data.frame(read.dcf(file = DESCRIPTION.i), stringsAsFactors = FALSE)
           
           ## Need to copy icon to index/www (if provided)
           # if("icon" %in% names(app_options.i)){

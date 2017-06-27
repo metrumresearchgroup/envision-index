@@ -20,12 +20,11 @@ server <- shinyServer(
       
       www_files <- list.files("www")
       
-      for(www_file.i in www_files[www_files != "index-app-icon.png"]){
+      for(www_file.i in www_files){
         file.remove(file.path("www", www_file.i))
       }
       
     })
-    
     
     output$appTable <- renderUI({
       
@@ -34,8 +33,6 @@ server <- shinyServer(
           tags$h3(paste0("No Apps Found at ", globals$appsLoc))
         )
       }
-      
-      # appTableFields <- c("", "name", "", "description", "author", "last_modified", "")
       
       appTableHTML <- tags$table(class = "table table-striped",
                                  style = "font-size:16px;")
@@ -51,22 +48,14 @@ server <- shinyServer(
                                                   tags$th("Last Modified"),
                                                   tags$th("")))
       
-      
       appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
       
       appTableBodyHTML <- tags$tbody()
       
       for(app.i in apps()){
         
+        # Pull info to use to fill in author (if not provided), last save date, etc.
         info.i <- file.info(file.path(globals$appsLoc, app.i))
-        
-        launch_button.i <- tags$a(class="btn btn-primary btn-lg",
-                                  target = "_blank",
-                                  href = file.path(clientURL(), "envision", app.i, ""),
-                                  tags$span(class = "glyphicon glyphicon-new-window",
-                                            `aria-hidden` = "true"),
-                                  "Launch")
-        
         
         yaml_file.i <- file.path(globals$appsLoc,
                                  app.i,
@@ -74,82 +63,86 @@ server <- shinyServer(
                                  "app-info.yaml")
         
         if(file.exists(yaml_file.i)){
-          appYaml.i <- TRUE
-          yaml.i <- yaml::yaml.load_file(yaml_file.i)
           
-        } else {
-          appYaml.i <- FALSE
-          yaml.i <- yaml::yaml.load_file(file.path("envision-manifest", "app-info.yaml"))
+          app_options.i <- yaml::yaml.load_file(yaml_file.i)
+          
+          ## Need to copy icon to index/www (if provided)
+          if("icon" %in% names(app_options.i)){
+            
+            icon_file.i <-  file.path(globals$appsLoc,
+                                      app.i,
+                                      'envision-manifest',
+                                      app_options.i$icon)
+            
+            file.copy(from = icon_file.i,
+                      to = file.path('www', paste0(app.i, "-", app_options.i$icon)))
+            
+            # update where icon points to
+            app_options.i$icon <- paste0(app.i, "-", app_options.i$icon)
+          }
+          
+        }  else {
+          
+          # Provide default icon
+          app_options.i <- list(
+            icon = "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
+          )
         }
         
         ## Icon
-        if("icon" %in% names(yaml.i) & appYaml.i){
-          
-          icon_file.i <-  file.path(globals$appsLoc,
-                                    app.i,
-                                    'envision-manifest',
-                                    yaml.i$icon)
-          
-          if(file.exists(icon_file.i)){
-            
-            file.copy(from = icon_file.i,
-                      to = file.path('www', paste0(app.i, "-", yaml.i$icon)))
-            
-            icon.i <- tags$img(height = "50px", width = "50px", src = paste0(app.i, "-", yaml.i$icon))
-          } else {
-            icon.i <- ""
-          }
-        } else {
-          icon.i <- tags$img(height = "50px", width = "50px", src = paste0("index-app-icon.png"))
-        }
+        icon.i <- tags$img(alt = "Icon Not Found", 
+                           height = "50px",
+                           width = "50px",
+                           src = app_options.i$icon)
         
         ## Name
-        if("name" %in% names(yaml.i)){
-          name.i <- yaml.i$name
+        if("name" %in% names(app_options.i)){
+          name.i <- app_options.i$name
         } else {
           name.i <- app.i
         }
         
+        ## Launch button
+        launch_button.i <- tags$a(class="btn btn-primary btn-lg",
+                                  target = "_blank",
+                                  href = file.path(clientURL(), "envision", app.i, ""),
+                                  tags$span(class = "glyphicon glyphicon-new-window",
+                                            `aria-hidden` = "true"),
+                                  "Launch")
+        
         ## Author
-        if("author" %in% names(yaml.i)){
-          author.i <- yaml.i$author
+        if("author" %in% names(app_options.i)){
+          author.i <- app_options.i$author
         } else {
           author.i <- info.i$uname
         }
         
-        if("description" %in% names(yaml.i)){
-          description.i <- yaml.i$description
+        ## Description
+        if("description" %in% names(app_options.i)){
+          description.i <- app_options.i$description
         } else {
           description.i <- ""
         }
         
+        ## Log button
+        log_button.i <- tags$div(class = "text-right",
+                                 tags$a(class="btn btn-warning metrum-log-button",
+                                        id = app.i,
+                                        tags$span(class = "glyphicon glyphicon-list-alt",
+                                                  `aria-hidden` = "true"),
+                                        "View Logs"))
         
-        if("log_button" %in% names(yaml.i)){
-          
-          if(yaml.i$log_button == FALSE){
+        ## clear out if option is set to false
+        if("log_button" %in% names(app_options.i)){
+          if(app_options.i$log_button == FALSE){
             log_button.i <- ""
-          } else {
-            log_button.i <- tags$div(class = "text-right",
-                                     tags$a(class="btn btn-warning metrum-log-button",
-                                            id = app.i,
-                                            tags$span(class = "glyphicon glyphicon-list-alt",
-                                                      `aria-hidden` = "true"),
-                                            "View Logs"))
-          }
-        } else {
-          log_button.i <- tags$div(class = "text-right",
-                                   tags$a(class="btn btn-warning metrum-log-button",
-                                          id = app.i,
-                                          tags$span(class = "glyphicon glyphicon-list-alt",
-                                                    `aria-hidden` = "true"),
-                                          "View Logs"))
+          } 
         }
         
-        
+        ## Last Modified
         files.i <- list.files(file.path(globals$appsLoc, app.i), full.names = TRUE)
         
         if(length(files.i) > 0){
-          #### exclude restart.txt
           difftime.i <- difftime(Sys.time(),
                                  max(do.call("rbind", lapply(files.i[files.i != "restart.txt"], file.info))$mtime))
           last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
@@ -175,8 +168,8 @@ server <- shinyServer(
       tags$div(
         class = "text-center",
         tags$h1(style = "display:inline", input$logApp),
-        tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom", title=
-                      paste0("By default, the newest log for the current user (", globals$user, ") is displayed"), 
+        tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
+                    title= paste0("By default, the newest log for the current user (", globals$user, ") is displayed"), 
                     tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
         ),
         tags$script(
@@ -185,8 +178,18 @@ server <- shinyServer(
       )
     })
     
+    autoInvalidate <- reactiveTimer(1000, session = session)
+    
     observe({
       req(input$logApp)
+      
+      # If no logs found, re-check every second
+      if(!is.null(input$logFile)){
+        if(grepl("No Logs Found", input$logFile) & (input$indexDisplay == "logs")){
+          autoInvalidate()
+        }
+      }
+      
       logs <- list.files(input$logDir)
       
       if(length(logs) == 0){
@@ -198,9 +201,8 @@ server <- shinyServer(
       appLogs <- logs[grepl(input$logApp, logs)]
       
       if(length(appLogs) == 0){
-        message("no logs app")
         return(
-          updateSelectInput(session, 'logFile', choices = "No Logs Found For This App")
+          updateSelectInput(session, 'logFile', choices = "No Logs Found")
         )
       }
       
@@ -221,8 +223,6 @@ server <- shinyServer(
                         selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
     })
     
-    autoInvalidate <- reactiveTimer(1000, session = session)
-    
     output$logContents <- renderPrint({
       req(input$logFile)
       
@@ -231,15 +231,15 @@ server <- shinyServer(
       }
       
       logFilePath <- file.path(input$logDir, input$logFile)
-      message(logFilePath)
-      # Catch cases where the root path with selected file don't exist
+      
+      # Catch cases where the root path with selected file does not exist
       if(file.exists(logFilePath)){
         
         log <- tail(readLines(logFilePath), 200)
         writeLines(log)
       } else {
         # Reset to NULL so it stops trying to print
-        updateSelectInput(session, inputId = "logFile", choices = NULL)
+        updateSelectInput(session, inputId = "logFile", choices = "No Logs Found")
         writeLines("")
       }
       

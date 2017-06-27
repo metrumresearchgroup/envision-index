@@ -43,10 +43,10 @@ server <- shinyServer(
                                           tags$tr(tags$th(""),
                                                   tags$th(""),
                                                   tags$th(""),
-                                                  tags$th("")
+                                                  tags$th(""),
                                                   # tags$th("Author"),
                                                   # tags$th("Last Modified"),
-                                                  # tags$th("")
+                                                  tags$th("")
                                                   ))
       
       appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
@@ -91,7 +91,7 @@ server <- shinyServer(
         }
         
         ## Icon
-        icon.i <- tags$img(alt = "Icon Not Found",
+        icon.i <- tags$img(alt = "Icon Not Found", 
                            height = "200px",
                            width = "200px",
                            src = app_options.i$icon)
@@ -155,11 +155,10 @@ server <- shinyServer(
                                            tags$tr(tags$td(icon.i),
                                                    tags$td(style = "font-size:20px;font-weight:bold;", name.i),
                                                    tags$td(description.i),
-                                                   tags$td(style = "display:inline;", launch_button.i, log_button.i)
+                                                   tags$td(launch_button.i),
                                                    # tags$td(author.i),
                                                    # tags$td(last_modified.i),
-                                                   # tags$td(log_button.i)
-                                                   ))
+                                                   tags$td(log_button.i)))
       }
       tagAppendChild(appTableHTML, appTableBodyHTML)
     })

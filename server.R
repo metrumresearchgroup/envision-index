@@ -155,7 +155,7 @@ server <- shinyServer(
                                            tags$tr(tags$td(icon.i),
                                                    tags$td(style = "font-size:20px", name.i),
                                                    tags$td(description.i),
-                                                   tags$td(launch_button.i, log_button.i)
+                                                   tags$td(style = "display:inline;", launch_button.i, log_button.i)
                                                    # tags$td(author.i),
                                                    # tags$td(last_modified.i),
                                                    # tags$td(log_button.i)

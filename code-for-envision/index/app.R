@@ -12,7 +12,7 @@ for(script.i in c("global.R", "ui.R", "server.R")){
   }
 }
 
-runRemoteApp <- remoteCodeSourced & exists("globals") & exists("ui") & exists("server")
+runRemoteApp <- remoteCodeSourced & exists("envisionGlobals") & exists("ui") & exists("server")
 
 if(runRemoteApp){
   shinyApp(ui = ui, server = server)

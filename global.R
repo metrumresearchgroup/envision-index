@@ -1,19 +1,19 @@
-globals <- list()
+envisionGlobals <- list()
 
 message("envision-index 27")
 
-globals$user <- Sys.info()[["user"]]
-globals$appsLoc <- file.path("/data", "shiny-server")
+envisionGlobals$user <- Sys.info()[["user"]]
+envisionGlobals$appsLoc <- file.path("/data", "shiny-server")
 
-globals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup"
+envisionGlobals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup"
 
-globals$envisionIndexGitHub <- file.path(globals$metrumGitHub,
+envisionGlobals$envisionIndexGitHub <- file.path(envisionGlobals$metrumGitHub,
                                          "envision-index",
                                          "master")
 
-globals$shinymetrumGitHub <- file.path(globals$metrumGitHub,
+envisionGlobals$shinymetrumGitHub <- file.path(envisionGlobals$metrumGitHub,
                                        "shinymetrum",
                                        "master")
 
-source(file.path(globals$shinymetrumGitHub, "R", "metrum-app.R"))
+source(file.path(envisionGlobals$shinymetrumGitHub, "R", "metrum-app.R"))
 

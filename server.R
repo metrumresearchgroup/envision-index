@@ -11,7 +11,7 @@ server <- shinyServer(
     
     apps <- eventReactive(session, {
       message("apps refreshed")
-      apps <- sort(list.dirs(globals$appsLoc,
+      apps <- sort(list.dirs(envisionGlobals$appsLoc,
                              recursive = FALSE, full.names = FALSE))
       apps[!(apps %in% c("index"))]
     })
@@ -30,7 +30,7 @@ server <- shinyServer(
       
       if(length(apps()) == 0){
         return(
-          tags$h3(paste0("No Apps Found at ", globals$appsLoc))
+          tags$h3(paste0("No Apps Found at ", envisionGlobals$appsLoc))
         )
       }
       
@@ -47,7 +47,7 @@ server <- shinyServer(
                                                   # tags$th("Author"),
                                                   # tags$th("Last Modified"),
                                                   tags$th("")
-                                                  ))
+                                          ))
       
       appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
       
@@ -56,21 +56,21 @@ server <- shinyServer(
       for(app.i in apps()){
         
         # Pull info to use to fill in author (if not provided), last save date, etc.
-        info.i <- file.info(file.path(globals$appsLoc, app.i))
+        info.i <- file.info(file.path(envisionGlobals$appsLoc, app.i))
         
-        yaml_file.i <- file.path(globals$appsLoc,
-                                 app.i,
-                                 "envision-manifest",
-                                 "app-info.yaml")
+        DESCRIPTION.i <- file.path(envisionGlobals$appsLoc,
+                                   app.i,
+                                   "DESCRIPTION")
         
-        if(file.exists(yaml_file.i)){
-          
-          app_options.i <- yaml::yaml.load_file(yaml_file.i)
+        if(file.exists(DESCRIPTION.i)){
+          # as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
+          app_options.i <- as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
           
           ## Need to copy icon to index/www (if provided)
-          if("icon" %in% names(app_options.i)){
+          # if("icon" %in% names(app_options.i)){
+          if(FALSE){
             
-            icon_file.i <-  file.path(globals$appsLoc,
+            icon_file.i <-  file.path(envisionGlobals$appsLoc,
                                       app.i,
                                       'envision-manifest',
                                       app_options.i$icon)
@@ -97,11 +97,11 @@ server <- shinyServer(
                            src = app_options.i$icon)
         
         ## Name
-        if("name" %in% names(app_options.i)){
-          name.i <- app_options.i$name
-        } else {
-          name.i <- app.i
-        }
+        # if("name" %in% names(app_options.i)){
+        # name.i <- app_options.i$name
+        #   } else {
+        name.i <- app.i
+        #   }
         
         ## Launch button
         launch_button.i <- tags$a(class="btn btn-primary btn-lg",
@@ -112,17 +112,17 @@ server <- shinyServer(
                                   "Launch App")
         
         ## Author
-        if("author" %in% names(app_options.i)){
-          author.i <- app_options.i$author
-        } else {
-          author.i <- info.i$uname
-        }
+        # if("author" %in% names(app_options.i)){
+        #   author.i <- app_options.i$author
+        # } else {
+        #   author.i <- info.i$uname
+        # }
         
         ## Description
-        if("description" %in% names(app_options.i)){
-          description.i <- app_options.i$description
+        if("Title" %in% names(app_options.i)){
+          title.i <- app_options.i$Title
         } else {
-          description.i <- ""
+          title.i <- ""
         }
         
         ## Log button
@@ -141,20 +141,20 @@ server <- shinyServer(
         }
         
         ## Last Modified
-        files.i <- list.files(file.path(globals$appsLoc, app.i), full.names = TRUE)
+        files.i <- list.files(file.path(envisionGlobals$appsLoc, app.i), full.names = TRUE)
         
-        if(length(files.i) > 0){
-          difftime.i <- difftime(Sys.time(),
-                                 max(do.call("rbind", lapply(files.i[files.i != "restart.txt"], file.info))$mtime))
-          last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
-        } else {
-          last_modified.i <- ""
-        }
+        # if(length(files.i) > 0){
+        #   difftime.i <- difftime(Sys.time(),
+        #                          max(do.call("rbind", lapply(files.i[files.i != "restart.txt"], file.info))$mtime))
+        #   last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
+        # } else {
+        #   last_modified.i <- ""
+        # }
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(icon.i),
                                                    tags$td(style = "font-size:24px;font-weight:bold;", name.i),
-                                                   tags$td(description.i),
+                                                   tags$td(title.i),
                                                    tags$td(launch_button.i),
                                                    # tags$td(author.i),
                                                    # tags$td(last_modified.i),
@@ -170,7 +170,7 @@ server <- shinyServer(
         class = "text-center",
         tags$h1(style = "display:inline", input$logApp),
         tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
-                    title= paste0("By default, the newest log for the current user (", globals$user, ") is displayed"), 
+                    title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
                     tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
         ),
         tags$script(
@@ -207,7 +207,7 @@ server <- shinyServer(
         )
       }
       
-      userAppLogs <- appLogs[grepl(globals$user, appLogs)]
+      userAppLogs <- appLogs[grepl(envisionGlobals$user, appLogs)]
       
       if(length(userAppLogs) == 0){
         return(

@@ -92,8 +92,8 @@ server <- shinyServer(
         
         ## Icon
         icon.i <- tags$img(alt = "Icon Not Found", 
-                           height = "200px",
-                           width = "200px",
+                           height = "140px",
+                           width = "190px",
                            src = app_options.i$icon)
         
         ## Name
@@ -153,7 +153,7 @@ server <- shinyServer(
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(icon.i),
-                                                   tags$td(style = "font-size:20px;font-weight:bold;", name.i),
+                                                   tags$td(style = "font-size:24px;font-weight:bold;", name.i),
                                                    tags$td(description.i),
                                                    tags$td(launch_button.i),
                                                    # tags$td(author.i),

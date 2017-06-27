@@ -95,7 +95,7 @@ server <- shinyServer(
         #                    height = "140px",
         #                    width = "190px",
         #                    src = app_options.i$icon)
-        icon <- HTML(
+        icon.i <- HTML(
           paste0(
           '
           <div class="thumbnail-container">

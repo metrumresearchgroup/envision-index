@@ -63,6 +63,7 @@ server <- shinyServer(
                                    "DESCRIPTION")
         
         if(file.exists(DESCRIPTION.i)){
+          message("DESCRIPTION found for: ", app.i)
           # as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
           app_options.i <- as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
           

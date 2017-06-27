@@ -91,7 +91,7 @@ server <- shinyServer(
         }
         
         ## Icon
-        icon.i <- tags$img(alt = "Icon Not Found", 
+        icon.i <- tags$img(alt = "Icon Not Found", #
                            height = "200px",
                            width = "200px",
                            src = app_options.i$icon)

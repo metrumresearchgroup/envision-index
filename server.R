@@ -158,7 +158,7 @@ server <- shinyServer(
                                                    tags$td(launch_button.i),
                                                    # tags$td(author.i),
                                                    # tags$td(last_modified.i),
-                                                   tags$td(log_button.i))))
+                                                   tags$td(log_button.i)))
       }
       tagAppendChild(appTableHTML, appTableBodyHTML)
     })

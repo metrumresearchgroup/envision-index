@@ -91,10 +91,21 @@ server <- shinyServer(
         }
         
         ## Icon
-        icon.i <- tags$img(alt = "Icon Not Found", 
-                           height = "140px",
-                           width = "190px",
-                           src = app_options.i$icon)
+        # icon.i <- tags$img(alt = "Icon Not Found", 
+        #                    height = "140px",
+        #                    width = "190px",
+        #                    src = app_options.i$icon)
+        icon <- HTML(
+          paste0(
+          '
+          <div class="thumbnail-container">
+  <div class="thumbnail">
+   <iframe src="', file.path(clientURL(), "envision", app.i, ""), '" frameborder="0" onload="this.style.opacity = 1"></iframe>
+  </div>
+</div>
+          '
+        )
+        )
         
         ## Name
         if("name" %in% names(app_options.i)){

@@ -108,7 +108,7 @@ server <- shinyServer(
                                   href = file.path(clientURL(), "envision", app.i, ""),
                                   tags$span(class = "glyphicon glyphicon-new-window",
                                             `aria-hidden` = "true"),
-                                  "Launch")
+                                  "Launch App")
         
         ## Author
         if("author" %in% names(app_options.i)){

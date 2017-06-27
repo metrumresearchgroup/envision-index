@@ -41,8 +41,8 @@ server <- shinyServer(
       
       appTableHeadHTML <-  tagAppendChild(appTableHeadHTML,
                                           tags$tr(tags$th(""),
-                                                  tags$th("Name"),
-                                                  tags$th("Description"),
+                                                  tags$th(""),
+                                                  tags$th(""),
                                                   tags$th(""),
                                                   # tags$th("Author"),
                                                   # tags$th("Last Modified"),
@@ -152,7 +152,7 @@ server <- shinyServer(
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(icon.i),
-                                                   tags$td(name.i),
+                                                   tags$td(style = "font-size:20px", name.i),
                                                    tags$td(description.i),
                                                    tags$td(launch_button.i),
                                                    # tags$td(author.i),

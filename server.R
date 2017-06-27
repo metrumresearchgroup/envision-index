@@ -153,7 +153,7 @@ server <- shinyServer(
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
                                            tags$tr(tags$td(icon.i),
-                                                   tags$td(style = "font-size:20px", name.i),
+                                                   tags$td(style = "font-size:20px;font-weight:bold;", name.i),
                                                    tags$td(description.i),
                                                    tags$td(style = "display:inline;", launch_button.i, log_button.i)
                                                    # tags$td(author.i),

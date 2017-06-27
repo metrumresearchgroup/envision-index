@@ -34,7 +34,7 @@ server <- shinyServer(
         )
       }
       
-      appTableHTML <- tags$table(class = "table table-striped",
+      appTableHTML <- tags$table(class = "table",
                                  style = "font-size:16px;")
       
       appTableHeadHTML <- tags$thead()

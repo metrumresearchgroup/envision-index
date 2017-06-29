@@ -12,3 +12,7 @@
     max-width: 500px;
     text-align: left;
 }
+
+.toolTipLink a:link{
+   font-weight: bold;
+}

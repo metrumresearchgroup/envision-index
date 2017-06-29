@@ -173,10 +173,18 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       tags$div(
         class = "text-center",
-        tags$h1(style = "display:inline", input$logApp),
-        tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
-                    title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
-                    tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
+        fluidRow(
+          column(
+            width = 6,
+            tags$h1(style = "display:inline", input$logApp)
+          ),
+          column(
+            width = 6,
+            tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
+                        title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
+                        tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
+            )
+          )
         ),
         tags$script(
           '$("#defaultToolTip").tooltip();'

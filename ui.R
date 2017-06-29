@@ -8,8 +8,7 @@ ui <- metrumApp(
         div(class = "container",
             br(),
             br(),
-            br(),
-            # h1(style = "display:inline", "Envision Apps"),
+            h1(style = "display:inline", "Envision Apps"),
             br(),
             br(),
             uiOutput('appTable')

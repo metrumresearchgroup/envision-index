@@ -86,7 +86,7 @@ server <- shinyServer(
             file.copy(
               from = app_options.i$EnvisionTileLocation,
               to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
-          #  )
+            )
           
          # if(file_copy.i){
             tile_file.i <- temp_img_name.i

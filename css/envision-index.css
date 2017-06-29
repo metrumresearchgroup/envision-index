@@ -8,7 +8,7 @@
      vertical-align: middle;
 }
 
-.appTableToolTip .tooltip-inner {
+.tooltip-inner > .appTableToolTip {
     max-width: 500px;
     text-align: left;
 }

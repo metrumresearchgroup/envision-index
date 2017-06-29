@@ -71,8 +71,6 @@ server <- shinyServer(
           app_options.i$Warnings <- paste0("No description file found at:</br>", DESCRIPTION_file.i)
         }
         
-        # Start with default image, replace if file is found and copy to www is successful
-        
         if(file.exists(app_options.i$EnvisionTileLocation)){
           
           temp_img_name.i <- paste0(app.i,
@@ -80,17 +78,15 @@ server <- shinyServer(
                                     round(as.numeric(Sys.time()), 0),
                                     "-",
                                     basename(app_options.i$EnvisionTileLocation))
+          file.copy(
+            from = app_options.i$EnvisionTileLocation,
+            to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
+          )
           
-         # file_copy.i <-
-            file.copy(
-              from = app_options.i$EnvisionTileLocation,
-              to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
-            )
+          tile_file.i <- temp_img_name.i
           
-         # if(file_copy.i){
-            tile_file.i <- temp_img_name.i
-         # }
         } else {
+          
           tile_file.i <- 
             "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
         }
@@ -157,7 +153,7 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       tags$div(
         class = "text-center",
-        tags$h1(style = "display:inline", input$logApp),
+        tags$a(target = "_blank", href = file.path(clientURL(), "envision", input$logApp, "")),
         tags$button(type="button", class="btn btn-link", id="logToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
                     title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
                     tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")

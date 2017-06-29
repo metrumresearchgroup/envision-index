@@ -153,7 +153,7 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       tags$div(
         class = "text-center",
-        tags$a(target = "_blank", href = file.path(clientURL(), "envision", input$logApp, "")),
+        tags$a(target = "_blank", href = file.path(clientURL(), "envision", input$logApp, ""), input$logApp),
         tags$button(type="button", class="btn btn-link", id="logToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
                     title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
                     tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")

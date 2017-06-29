@@ -72,8 +72,7 @@ server <- shinyServer(
         }
         
         # Start with default image, replace if file is found and copy to www is successful
-        tile_file.i <- 
-          "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
+
         
         if(file.exists(app_options.i$EnvisionTileLocation)){
           
@@ -83,15 +82,18 @@ server <- shinyServer(
                                     "-",
                                     basename(app_options.i$EnvisionTileLocation))
           
-          file_copy.i <-
+         # file_copy.i <-
             file.copy(
               from = app_options.i$EnvisionTileLocation,
               to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
-            )
+          #  )
           
-          if(file_copy.i){
+         # if(file_copy.i){
             tile_file.i <- temp_img_name.i
-          }
+         # }
+        } else {
+          tile_file.i <- 
+            "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
         }
         
         tile.i <- tags$img(alt = "Tile Not Found", 

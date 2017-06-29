@@ -1,6 +1,6 @@
 envisionGlobals <- list()
 
-message("envision-index 28")
+message("envision-index 30")
 
 envisionGlobals$user <- Sys.info()[["user"]]
 envisionGlobals$appsLoc <- file.path("/data", "shiny-server")

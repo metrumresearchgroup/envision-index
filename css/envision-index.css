@@ -7,3 +7,7 @@
 .table > tbody > tr > td {
      vertical-align: middle;
 }
+
+.tooltip-inner {
+    max-width: 350px;
+}

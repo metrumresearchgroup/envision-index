@@ -72,7 +72,6 @@ server <- shinyServer(
         }
         
         # Start with default image, replace if file is found and copy to www is successful
-
         
         if(file.exists(app_options.i$EnvisionTileLocation)){
           

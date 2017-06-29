@@ -5,21 +5,13 @@ ui <- metrumApp(
   includeScript(file.path(envisionGlobals$envisionIndexGitHub, "js", "envision-index.js")),
   fluidPage(
     div(id = "envision-app-table",
-        fluidRow(
-          column(width = 1,
-                 offset = 10,
-                 # br(),
-                 actionButton(class="btn-info btn-lg",
-                              style = "margin-top:10px",
-                              inputId = "envisionHelpModal",
-                              label = "Envision",
-                              icon = icon("info-circle")
-                 )
-          ),
-          div(class = "container",
-              h1(style = "display:inline", "Envision Apps"),
-              uiOutput('appTable')
-          )
+        div(class = "container",
+            br(),
+            br(),
+            h1(style = "display:inline", "Envision Apps"),
+            br(),
+            br(),
+            uiOutput('appTable')
         )
     ),
     div(class = "container-fluid",

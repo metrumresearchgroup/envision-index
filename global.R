@@ -8,12 +8,12 @@ envisionGlobals$appsLoc <- file.path("/data", "shiny-server")
 envisionGlobals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearchgroup"
 
 envisionGlobals$envisionIndexGitHub <- file.path(envisionGlobals$metrumGitHub,
-                                         "envision-index",
-                                         "master")
+                                                 "envision-index",
+                                                 "master")
 
 envisionGlobals$shinymetrumGitHub <- file.path(envisionGlobals$metrumGitHub,
-                                       "shinymetrum",
-                                       "master")
+                                               "shinymetrum",
+                                               "master")
 
 source(file.path(envisionGlobals$shinymetrumGitHub, "R", "metrum-app.R"))
 

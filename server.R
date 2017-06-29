@@ -11,20 +11,19 @@ server <- shinyServer(
     
     apps <- eventReactive(session, {
       message("apps refreshed")
-      apps <- sort(list.dirs(envisionGlobals$appsLoc,
-                             recursive = FALSE, full.names = FALSE))
+      appsDirs <- data.frame(AppDir = list.dirs(envisionGlobals$appsLoc, recursive = FALSE),
+                             MTime = NA,
+                             stringsAsFactors = FALSE)
+      # Need modified time (mtime) at the file level (not directory level)
+      for(appDir.i in appsDirs$AppDir){
+        fileInfo.i <- do.call("rbind", lapply(list.files(appDir.i, full.names = TRUE), file.info))
+        appsDirs$MTime[appsDirs$AppDir == appDir.i] <- max(fileInfo.i$mtime)
+      }
+      
+      apps <- gsub(paste0(envisionGlobals$appsLoc, "/"), "", appsDirs$AppDir[rev(order(appsDirs$MTime))])
       apps[!(apps %in% c("index"))]
     })
     
-    observeEvent(session, {
-      
-      www_files <- list.files("www")
-      
-      for(www_file.i in www_files){
-        file.remove(file.path("www", www_file.i))
-      }
-      
-    })
     
     output$appTable <- renderUI({
       
@@ -38,75 +37,63 @@ server <- shinyServer(
                                  style = "font-size:16px;")
       
       appTableHeadHTML <- tags$thead()
-      
-      appTableHeadHTML <-  tagAppendChild(appTableHeadHTML,
-                                          tags$tr(tags$th(""),
-                                                  tags$th(""),
-                                                  tags$th(""),
-                                                  tags$th(""),
-                                                  # tags$th("Author"),
-                                                  # tags$th("Last Modified"),
-                                                  tags$th("")
-                                          ))
-      
       appTableHTML <- tagAppendChild(appTableHTML, appTableHeadHTML)
       
       appTableBodyHTML <- tags$tbody()
       
+      # Clear out old temp tiles
+      lapply(list.files("www", full.names = TRUE), file.remove)
+      
       for(app.i in apps()){
         
-        # Pull info to use to fill in author (if not provided), last save date, etc.
-        info.i <- file.info(file.path(envisionGlobals$appsLoc, app.i))
+        # Set defaults
+        app_options.i <- data.frame(EnvisionName = app.i, 
+                                    EnvisionDescription = "",
+                                    EnvisionViewLogs = TRUE,
+                                    EnvisionTileLocation = "",
+                                    EnvisionFlags = "",
+                                    stringsAsFactors = FALSE)
         
-        DESCRIPTION.i <- file.path(envisionGlobals$appsLoc,
-                                   app.i,
-                                   "DESCRIPTION")
+        DESCRIPTION_file.i <- file.path(envisionGlobals$appsLoc, app.i, "DESCRIPTION")
         
-        if(file.exists(DESCRIPTION.i)){
-          message("DESCRIPTION found for: ", app.i)
-          # as.data.frame(read.dcf("DESCRIPTION"), stringsAsFactors = FALSE)
-          app_options.i <- 
-            as.data.frame(
-              read.dcf(file = DESCRIPTION.i),
-              stringsAsFactors = FALSE
-            )
+        if(file.exists(DESCRIPTION_file.i)){
+          DESCRIPTION_df.i <- as.data.frame(read.dcf(file = DESCRIPTION_file.i), stringsAsFactors = FALSE)
           
-          ## Need to copy icon to index/www (if provided)
-          # if("icon" %in% names(app_options.i)){
-          if(FALSE){
-            
-            icon_file.i <-  file.path(envisionGlobals$appsLoc,
-                                      app.i,
-                                      'envision-manifest',
-                                      app_options.i$icon)
-            
-            file.copy(from = icon_file.i,
-                      to = file.path('www', paste0(app.i, "-", app_options.i$icon)))
-            
-            # update where icon points to
-            app_options.i$icon <- paste0(app.i, "-", app_options.i$icon)
+          for(column.i in colnames(app_options.i)){
+            if(column.i %in% colnames(DESCRIPTION_df.i)){
+              app_options.i[[column.i]] <- DESCRIPTION_df.i[[column.i]]
+            }
           }
           
-        }  else {
+          app_options.i$Warnings <- ""
           
-          # Provide default icon
-          app_options.i <- list(
-            icon = "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
-          )
+        } else {
+          app_options.i$Warnings <- paste0("No description file found at:</br>", DESCRIPTION_file.i)
         }
         
-        ## Icon
-        icon.i <- tags$img(alt = "Icon Not Found", 
+        if(file.exists(app_options.i$EnvisionTileLocation)){
+          
+          temp_img_name.i <- paste0(app.i,
+                                    "-temp-tile-",
+                                    round(as.numeric(Sys.time()), 0),
+                                    "-",
+                                    basename(app_options.i$EnvisionTileLocation))
+          
+          file.copy(
+            from = app_options.i$EnvisionTileLocation,
+            to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
+          )
+          
+          tile_file.i <- temp_img_name.i
+        } else {
+          tile_file.i <- 
+            "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
+        }
+        
+        tile.i <- tags$img(alt = "Tile Not Found", 
                            height = "140px",
                            width = "190px",
-                           src = app_options.i$icon)
-        
-        ## Name
-        # if("name" %in% names(app_options.i)){
-        # name.i <- app_options.i$name
-        #   } else {
-        name.i <- app.i
-        #   }
+                           src = tile_file.i)
         
         ## Launch button
         launch_button.i <- tags$a(class="btn btn-primary btn-lg",
@@ -116,56 +103,48 @@ server <- shinyServer(
                                             `aria-hidden` = "true"),
                                   "Launch App")
         
-        ## Author
-        # if("author" %in% names(app_options.i)){
-        #   author.i <- app_options.i$author
-        # } else {
-        #   author.i <- info.i$uname
-        # }
-        
-        ## Description
-        if("Title" %in% names(app_options.i)){
-          title.i <- app_options.i$Title
-        } else {
-          title.i <- ""
-        }
-        
         ## Log button
-        log_button.i <- tags$div(class = "text-right",
-                                 tags$a(class="btn btn-warning metrum-log-button",
-                                        id = app.i,
-                                        tags$span(class = "glyphicon glyphicon-list-alt",
-                                                  `aria-hidden` = "true"),
-                                        "View Logs"))
-        
-        ## clear out if option is set to false
-        if("log_button" %in% names(app_options.i)){
-          if(app_options.i$log_button == FALSE){
-            log_button.i <- ""
-          } 
+        if(app_options.i$EnvisionViewLogs){
+          log_button.i <- tags$div(class = "text-right",
+                                   tags$a(class="btn btn-info metrum-log-button",
+                                          id = app.i,
+                                          tags$span(class = "glyphicon glyphicon-list-alt",
+                                                    `aria-hidden` = "true"),
+                                          "View Logs"))
+          
+        } else {
+          log_button.i <- ""
         }
         
-        ## Last Modified
-        files.i <- list.files(file.path(envisionGlobals$appsLoc, app.i), full.names = TRUE)
-        
-        # if(length(files.i) > 0){
-        #   difftime.i <- difftime(Sys.time(),
-        #                          max(do.call("rbind", lapply(files.i[files.i != "restart.txt"], file.info))$mtime))
-        #   last_modified.i <- paste(round(as.numeric(difftime.i), 0), units(difftime.i), collapse = " ")
-        # } else {
-        #   last_modified.i <- ""
-        # }
+        if(app_options.i$Warnings != ""){
+          warnings.i <- 
+            tags$button(type="button",
+                        class="btn btn-link appTableToolTip",
+                        id=paste0(app.i, "-toolTip"),
+                        `data-toggle`="tooltip",
+                        `data-placement`="top",
+                        title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warnings</span></br></br>", app_options.i$Warnings, "</br></br>For more info, click <b><a 'toolTipLink' href='http://metrumrg.com/' target='_blank'>here</a></b>"),
+                        tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;")))
+        } else {
+          warnings.i <- ""
+        }
         
         appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
-                                           tags$tr(tags$td(icon.i),
-                                                   tags$td(style = "font-size:24px;font-weight:bold;", name.i),
-                                                   tags$td(title.i),
+                                           tags$tr(class = "", tags$td(tile.i),
+                                                   tags$td(style = "font-size:24px;font-weight:bold;", app_options.i$EnvisionName),
+                                                   tags$td(app_options.i$EnvisionDescription),
                                                    tags$td(launch_button.i),
-                                                   # tags$td(author.i),
-                                                   # tags$td(last_modified.i),
-                                                   tags$td(log_button.i)))
+                                                   tags$td(log_button.i),
+                                                   tags$td(warnings.i)))
       }
-      tagAppendChild(appTableHTML, appTableBodyHTML)
+      appsTable <- tagAppendChild(appTableHTML, appTableBodyHTML)
+      
+      tagList(
+        appsTable,
+        tags$script(
+          '$(".appTableToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1300 }});'
+        )
+      )
     })
     
     # Log  --------------------------------------------------------------------
@@ -173,21 +152,13 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       tags$div(
         class = "text-center",
-        fluidRow(
-          column(
-            width = 6,
-            tags$h1(style = "display:inline", input$logApp)
-          ),
-          column(
-            width = 6,
-            tags$button(type="button", class="btn btn-link", id="defaultToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
-                        title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
-                        tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
-            )
-          )
+        tags$h1(style = "display:inline", input$logApp),
+        tags$button(type="button", class="btn btn-link", id="logToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
+                    title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
+                    tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
         ),
         tags$script(
-          '$("#defaultToolTip").tooltip();'
+          '$("#logToolTip").tooltip();'
         )
       )
     })
@@ -270,14 +241,5 @@ server <- shinyServer(
         
       }
     })
-    
-    observeEvent(input$envisionHelpModal, {
-      showModal(modalDialog(
-        size = "l",
-        title = "Metworx EnvIsion Shiny-server",
-        HTML("This dashboard is generated using the apps found in /data/shiny-server.<br><br> The additional information (Description, Icon, etc.) is stored in an envision-manifest folder. <br><br>Please see link <a href = 'www.google.com' target ='_blank'>here</a> for more help.")
-      ))
-    })
-    
   }
 )

@@ -4,6 +4,7 @@ ui <- metrumApp(
   includeCSS(file.path(envisionGlobals$envisionIndexGitHub, "css", "envision-index.css")),
   includeScript(file.path(envisionGlobals$envisionIndexGitHub, "js", "envision-index.js")),
   fluidPage(
+    uiOuput("RStudioButton"),
     div(id = "envision-app-table",
         div(class = "container",
             br(),

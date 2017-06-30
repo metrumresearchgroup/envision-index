@@ -9,6 +9,14 @@ server <- shinyServer(
              session$clientData$url_hostname)
     })
     
+    RStuioButton <- renderUI({
+      tags$a(
+        href = file.path(clientURL(), "RStudio", app.i, ""),
+        target = "_blank",
+        "RStudio"
+      )
+    })
+    
     apps <- eventReactive(session, {
       message("apps refreshed")
       appsDirs <- data.frame(AppDir = list.dirs(envisionGlobals$appsLoc, recursive = FALSE),
@@ -151,6 +159,7 @@ server <- shinyServer(
     # Log  --------------------------------------------------------------------
     
     output$logAppName <- renderUI({
+      req(input$logApp)
       tags$div(
         class = "text-center",
         tags$a(target = "_blank", href = file.path(clientURL(), "envision", input$logApp, ""), input$logApp),

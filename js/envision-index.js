@@ -6,7 +6,7 @@
 });*/
 
 function resizeLogOutput() {
-    $("#logContents").css("max-height", $(window).height() - 200);
+    $("#logContents").css("max-height", $(window).height() - 300);
 }
 
 function scrollBottomLog() {

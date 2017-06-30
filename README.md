@@ -9,27 +9,27 @@ If the sourced code fails, there is a fallback application (uploaded to the Metw
 
 The envision-index allows users to specify options at the app level, via a DESCRIPTION file.
 
-**Exhaustive list of Envision DESCRIPTION file options:**
+### Exhaustive list of Envision DESCRIPTION file options:**
 
-#### EnvisionName
+**_EnvisionName_**
   * Type: Character
   * Default: ""
   * Description: Name for application display on envision-index.
   * Example: `EnvisionName: It's Alive`
 
-**EnvisionDescription**
+**_EnvisionDescription_**
   * Type: Character
   * Default: ""
   * Description: Description for application display on envision-index.
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
-**EnvisionViewLogs**
+**_EnvisionViewLogs_**
   * Type: Boolean
   * Default: TRUE
   * Description: Should a "View Logs" button appear on the envision-index?
   * Example: `EnvisionViewLogs: TRUE`
 
-**EnvisionTileLocation**
+**_EnvisionTileLocation_**
   * Type: Character
   * Default: NULL
   * Description: Location of the image file to display as app tile in envision-index.

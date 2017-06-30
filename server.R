@@ -1,30 +1,22 @@
 server <- shinyServer(
   function(input, output, session) {
     
-    # App Table ---------------------------------------------------------------
-    
     clientURL <- reactive({
-      paste0(session$clientData$url_protocol,
-             "//",
-             session$clientData$url_hostname)
+      paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname)
     })
     
-    RStuioButton <- renderUI({
-      tags$a(
-        href = file.path(clientURL(), "RStudio", app.i, ""),
-        target = "_blank",
-        "RStudio"
-      )
-    })
-    
+    # App Table ---------------------------------------------------------------
     apps <- eventReactive(session, {
-      message("apps refreshed")
+      
       appsDirs <- data.frame(AppDir = list.dirs(envisionGlobals$appsLoc, recursive = FALSE),
                              MTime = NA,
                              stringsAsFactors = FALSE)
+      
       # Need modified time (mtime) at the file level (not directory level)
       for(appDir.i in appsDirs$AppDir){
-        fileInfo.i <- do.call("rbind", lapply(list.files(appDir.i, full.names = TRUE), file.info))
+        
+        files.i <- list.files(appDir.i, full.names = TRUE)
+        fileInfo.i <- do.call("rbind", lapply(files.i[files.i != paste0(appDir.i, "/restart.txt")], file.info))
         appsDirs$MTime[appsDirs$AppDir == appDir.i] <- max(fileInfo.i$mtime)
       }
       
@@ -59,7 +51,6 @@ server <- shinyServer(
                                     EnvisionDescription = "",
                                     EnvisionViewLogs = TRUE,
                                     EnvisionTileLocation = "",
-                                    EnvisionFlags = "",
                                     stringsAsFactors = FALSE)
         
         DESCRIPTION_file.i <- file.path(envisionGlobals$appsLoc, app.i, "DESCRIPTION")
@@ -81,6 +72,7 @@ server <- shinyServer(
         
         if(file.exists(app_options.i$EnvisionTileLocation)){
           
+          # Create a name that will be unique to each session
           temp_img_name.i <- paste0(app.i,
                                     "-temp-tile-",
                                     round(as.numeric(Sys.time()), 0),
@@ -95,8 +87,7 @@ server <- shinyServer(
           
         } else {
           
-          tile_file.i <- 
-            "https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/default-icon.png"
+          tile_file.i <- file.path(envisionGlobals$envisionIndexGitHub, "img", "default-tile.png")
         }
         
         tile.i <- tags$img(alt = "Tile Not Found", 
@@ -115,12 +106,11 @@ server <- shinyServer(
         ## Log button
         if(app_options.i$EnvisionViewLogs){
           log_button.i <- tags$div(class = "text-right",
-                                   tags$a(class="btn btn-info metrum-log-button",
+                                   tags$a(class="btn btn-link metrum-log-button",
                                           id = app.i,
                                           tags$span(class = "glyphicon glyphicon-list-alt",
                                                     `aria-hidden` = "true"),
                                           "View Logs"))
-          
         } else {
           log_button.i <- ""
         }
@@ -132,7 +122,9 @@ server <- shinyServer(
                         id=paste0(app.i, "-toolTip"),
                         `data-toggle`="tooltip",
                         `data-placement`="top",
-                        title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>", app_options.i$Warnings, "</br></br>For more info, click <b><a 'toolTipLink' href='http://metrumrg.com/' target='_blank'>here</a></b>"),
+                        title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
+                                       app_options.i$Warnings,
+                                       "</br></br>For more info, click <b><a 'toolTipLink' href='http://metrumrg.com/' target='_blank'>here</a></b>"),
                         tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;")))
         } else {
           warnings.i <- ""
@@ -161,15 +153,26 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       req(input$logApp)
       tags$div(
-        class = "text-center",
-        tags$a(target = "_blank", href = file.path(clientURL(), "envision", input$logApp, ""), input$logApp),
-        tags$button(type="button", class="btn btn-link", id="logToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
-                    title= paste0("By default, the newest log for the current user (", envisionGlobals$user, ") is displayed"), 
-                    tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")
-        ),
-        tags$script(
-          '$("#logToolTip").tooltip();'
+        style = "font-size:25px;", 
+        tags$a(target = "_blank",
+               href = file.path(clientURL(), "envision", input$logApp, ""),
+               tagList(tags$span(class="glyphicon glyphicon-new-window", `aria-hidden`="true"),
+                       input$logApp)
         )
+      )
+    })
+    
+    output$logAppHelp <- renderUI({
+      req(input$logApp)
+      tagList(
+        tags$button(type="button", class="btn btn-link", id="logToolTip", `data-toggle`="tooltip", `data-placement`="bottom",
+                    title= paste0("By default, the newest log for this app (",
+                                  input$logApp,
+                                  ") and user (",
+                                  envisionGlobals$user,
+                                  ") is selected"), 
+                    tags$span(style = "display:inline;font-size:8px;", class = "badge", "?")),
+        tags$script('$("#logToolTip").tooltip();')
       )
     })
     
@@ -180,7 +183,7 @@ server <- shinyServer(
       
       # If no logs found, re-check every second
       if(!is.null(input$logFile)){
-        if(grepl("No Logs Found", input$logFile) & (input$indexDisplay == "logs")){
+        if((input$logFile == "No Logs Found") & (input$indexDisplay == "logs")){
           autoInvalidate()
         }
       }
@@ -221,7 +224,7 @@ server <- shinyServer(
     output$logContents <- renderPrint({
       req(input$logFile)
       
-      if(input$liveStream & !grepl("No Logs Found", input$logFile) & (input$indexDisplay == "logs")){
+      if(input$liveStream & !(input$logFile == "No Logs Found") & (input$indexDisplay == "logs")){
         autoInvalidate()
       }
       
@@ -241,14 +244,14 @@ server <- shinyServer(
     })
     
     output$noLogWarning <- renderUI({
-      if(grepl("No Logs Found", input$logFile)){
+      if(input$logFile == "No Logs Found"){
         
-        tags$div(class="alert alert-warning container", role="alert",
+        tags$div(class = "alert alert-warning", role = "alert",
                  tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
                  tags$span(class="sr-only", "Error:"),
-                 "No logs were found. By default, logs are deleted when an Envision app stops running. To change this setting, see help file here: ."
-        )
-        
+                 "By default, logs are deleted when an Envision app stops running. To change this, update the settings found in /etc/shiny-server/shiny-server.conf (set preserve_logs true). Click ",
+                 tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target="_blank", "here"),
+                 " for more info.")
       }
     })
   }

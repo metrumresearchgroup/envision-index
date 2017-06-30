@@ -1,6 +1,6 @@
 envisionGlobals <- list()
 
-message("envision-index 35")
+message("envision-index 33")
 
 envisionGlobals$user <- Sys.info()[["user"]]
 envisionGlobals$appsLoc <- file.path("/data", "shiny-server")
@@ -16,4 +16,3 @@ envisionGlobals$shinymetrumGitHub <- file.path(envisionGlobals$metrumGitHub,
                                                "master")
 
 source(file.path(envisionGlobals$shinymetrumGitHub, "R", "metrum-app.R"))
-

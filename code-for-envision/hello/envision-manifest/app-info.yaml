@@ -1,5 +1,0 @@
-icon: "app-icon.png"
-name: "It's Alive"
-description: "Simple example demonstrating a shiny app and the envision-manifest"
-author: "RStudio"
-log_button: FALSE

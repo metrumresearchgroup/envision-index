@@ -124,7 +124,7 @@ server <- shinyServer(
                         `data-placement`="top",
                         title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
                                        app_options.i$Warnings,
-                                       "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>"),
+                                       "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
                         tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;")))
         } else {
           warnings.i <- ""

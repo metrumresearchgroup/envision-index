@@ -35,7 +35,7 @@ The envision-index allows users to specify options at the app level, via a DESCR
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
 
 ## Example Result
-![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
+![Example](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/DESCRIPTION-example.png)
 
 Download example DESCRIPTION file [here](https://github.com/metrumresearchgroup/envision-index/raw/master/code-for-envision/hello/DESCRIPTION).
   

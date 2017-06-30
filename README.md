@@ -11,6 +11,12 @@ The envision-index allows users to specify options at the app level, via a DESCR
 
 ### Exhaustive list of Envision DESCRIPTION file options
 
+`
+EnvisionName
+EnvisionDescription
+EnvisionViewLogs
+EnvisionTileLocation
+`
 
 * **EnvisionName**
   * Type: Character

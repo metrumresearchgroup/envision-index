@@ -34,5 +34,5 @@ The envision-index allows users to specify options at the app level, via a DESCR
   * Description: Location of the image file to display as app tile in envision-index.
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
   
-Download example DESCRIPTION file [here](https://github.com/metrumresearchgroup/envision-index/raw/master/code-for-envision/hello/DESCRIPTION)
+Download example DESCRIPTION file [here](https://github.com/metrumresearchgroup/envision-index/raw/master/code-for-envision/hello/DESCRIPTION).
   

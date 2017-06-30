@@ -1,9 +1,6 @@
-Envision-index is the landing page for the Envision feature of Metworx
-
+#envision-index
+This is landing page for the Envision feature of Metworx. The majority of the code for the envision-index application will be sourced live from this GitHub repo.
 The code that will get uploaded to a Metworx disk (on build, automatically) is found in [code-for-envision-index](https://github.com/metrumresearchgroup/envision-index/tree/master/code-for-envision)
-
-The majority of the code for the envision-index application will be sourced live from this GitHub repo.
-
 If the source fails, there is a small fallback application (saved on disk) that will give users access to their envision apps.
 
 The envision-index allows users to specify options at the app level, via a DESCRIPTION file

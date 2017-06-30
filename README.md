@@ -7,7 +7,7 @@ If the sourced code fails, there is a fallback application (uploaded to the Metw
 [](#description-file-in-envision)
 ## DESCRIPTION file in Envision apps
 
-The envision-index allows users to specify options at the app level, via a DESCRIPTION file.
+Metworx envision allows shiny app developers to specify options at the app level, via a DESCRIPTION file.
 
 ### Exhaustive list of Envision DESCRIPTION file options:
 

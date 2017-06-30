@@ -250,8 +250,8 @@ server <- shinyServer(
                  tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
                  tags$span(class="sr-only", "Error:"),
                  "By default, logs are deleted when an Envision app stops running. To change this, update the settings found in /etc/shiny-server/shiny-server.conf (set preserve_logs true). Click ",
-                 tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target = "_blank", tagList(HTML("<b>here</b>"),
-                 " for more info.")))
+                 tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target = "_blank", HTML("<b>here</b>")),
+                 " for more info.")
       }
     })
   }

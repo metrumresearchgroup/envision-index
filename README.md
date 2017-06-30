@@ -23,13 +23,13 @@ The envision-index allows users to specify options at the app level, via a DESCR
   * Description: Description for application display on envision-index.
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
-#### **`EnvisionViewLogs`
+#### `EnvisionViewLogs`
   * Type: Boolean
   * Default: TRUE
   * Description: Should a "View Logs" button appear on the envision-index?
   * Example: `EnvisionViewLogs: TRUE`
 
-### `EnvisionTileLocation`
+#### `EnvisionTileLocation`
   * Type: Character
   * Default: NULL
   * Description: Location of the image file to display as app tile in envision-index.

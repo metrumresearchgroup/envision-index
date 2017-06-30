@@ -33,6 +33,9 @@ The envision-index allows users to specify options at the app level, via a DESCR
   * Default: NULL
   * Description: Location of the image file to display as app tile in envision-index.
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
-  
+
+## Example Result
+![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
+
 Download example DESCRIPTION file [here](https://github.com/metrumresearchgroup/envision-index/raw/master/code-for-envision/hello/DESCRIPTION).
   

@@ -153,7 +153,7 @@ server <- shinyServer(
     output$logAppName <- renderUI({
       req(input$logApp)
       tags$div(
-        style = "font-size:25px;", 
+        style = "font-size:28px;", 
         tags$a(target = "_blank",
                href = file.path(clientURL(), "envision", input$logApp, ""),
                tagList(tags$span(class="glyphicon glyphicon-new-window", `aria-hidden`="true"),

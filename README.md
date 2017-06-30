@@ -24,7 +24,7 @@ The envision-index allows users to specify options at the app level, via a DESCR
 
 * EnvisionViewLogs
   * Type: Boolean
-  * Default: FALSE
+  * Default: TRUE
   * Description: Should a "View Logs" button appear on the envision-index?
   * Example: `EnvisionViewLogs: TRUE`
 

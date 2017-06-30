@@ -9,9 +9,9 @@ If the sourced code fails, there is a fallback application (uploaded to the Metw
 
 The envision-index allows users to specify options at the app level, via a DESCRIPTION file.
 
-### Exhaustive list of Envision DESCRIPTION file options:
+**Exhaustive list of Envision DESCRIPTION file options:**
 
-**EnvisionName**
+#### EnvisionName
   * Type: Character
   * Default: ""
   * Description: Name for application display on envision-index.

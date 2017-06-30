@@ -14,25 +14,25 @@ Metworx envision allows shiny app developers to specify options at the app level
 #### `EnvisionName`
   * Type: Character
   * Default: ""
-  * Description: Name for application display on envision-index.
+  * Description: App display name.
   * Example: `EnvisionName: It's Alive`
 
 #### `EnvisionDescription`
   * Type: Character
   * Default: ""
-  * Description: Description for application display on envision-index.
+  * Description: App description.
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
 #### `EnvisionViewLogs`
   * Type: Boolean
   * Default: TRUE
-  * Description: Should a "View Logs" button appear on the envision-index?
+  * Description: Should a "View Logs" button appear next to the app?
   * Example: `EnvisionViewLogs: TRUE`
 
 #### `EnvisionTileLocation`
   * Type: Character
   * Default: NULL
-  * Description: Location of the image file to display as app tile in envision-index.
+  * Description: Location of the image file to display as app tile.
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
 
 ### Example Result

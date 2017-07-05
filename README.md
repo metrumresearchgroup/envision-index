@@ -8,6 +8,7 @@ If the sourced code fails, there is a fallback application (uploaded to the Metw
 ## DESCRIPTION file in Envision apps
 
 Metworx envision allows shiny app developers to specify options at the app level via a DESCRIPTION file.
+
 The DESCRIPTION file should be placed the same level as the code for the app (where server.R/ui.R or app.R are located).
 
 ### Exhaustive list of Envision DESCRIPTION file options:

@@ -204,21 +204,18 @@ server <- shinyServer(
         )
       }
       
-      userAppLogs <- appLogs[grepl(envisionGlobals$user, appLogs)]
+      appLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, appLogs), file.info))
+      sortedAppLogs <- gsub(paste0(input$logDir, "/"), "", rownames(appLogsInfo)[order(appLogsInfo$mtime, decreasing = TRUE)])
       
-      if(length(userAppLogs) == 0){
+      sortedUserAppLogs <- sortedAppLogs[grepl(envisionGlobals$user, sortedAppLogs)]
+      
+      if(length(sortedUserAppLogs) == 0){
         return(
-          updateSelectInput(session, 'logFile', choices = appLogs)
+          updateSelectInput(session, 'logFile', choices = sortedAppLogs)
         )
       }
       
-      userAppLogsInfo <- do.call("rbind", lapply(file.path(input$logDir, userAppLogs), file.info))
-      newestUserAppLog <- rownames(userAppLogsInfo)[order(userAppLogsInfo$mtime, decreasing = TRUE)][1]
-      
-      updateSelectInput(session,
-                        'logFile',
-                        choices = appLogs,
-                        selected = gsub(paste0(input$logDir, "/"), "", newestUserAppLog))
+      updateSelectInput(session, 'logFile', choices = sortedAppLogs, selected = sortedUserAppLogs[1])
     })
     
     output$logContents <- renderPrint({

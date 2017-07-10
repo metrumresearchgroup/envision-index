@@ -241,14 +241,16 @@ server <- shinyServer(
     })
     
     output$noLogWarning <- renderUI({
+      req(input$logApp)
       if(input$logFile == "No Logs Found"){
         
         tags$div(class = "alert alert-warning", role = "alert",
                  tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
                  tags$span(class="sr-only", "Error:"),
-                 "By default, logs are deleted when an Envision app stops running. To change this, update the settings found in /etc/shiny-server/shiny-server.conf (set preserve_logs true). Click ",
-                 tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target = "_blank", HTML("<b>here</b>")),
-                 " for more info.")
+                 HTML(paste0("No logs found for this app (", input$logApp, ") in ", input$logDir, ".</br></br>",
+                             "<i>(By default, logs are deleted when an Envision app stops running. To change this, update the settings found in /etc/shiny-server/shiny-server.conf (set preserve_logs true). Click ",
+                             tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target = "_blank", HTML("<b>here</b>")),
+                             " for more info.)</i>")))
       }
     })
   }

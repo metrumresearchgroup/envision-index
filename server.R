@@ -142,6 +142,7 @@ server <- shinyServer(
                                                      tags$td(log_button.i),
                                                      tags$td(warnings.i)))
           incProgress(1, message = NULL)
+          Sys.sleep(1)
         }
         appsTable <- tagAppendChild(appTableHTML, appTableBodyHTML)
         

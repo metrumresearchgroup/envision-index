@@ -38,7 +38,6 @@ body {
 }
 
 #logContents {
-    color: #4F4;
     background-color: #2A2A2A;
     overflow-y: scroll;
 }

@@ -186,7 +186,7 @@ server <- shinyServer(
     
     autoInvalidate <- reactiveTimer(1000, session = session)
     
-    observe({
+    observeEvent(list(input$logApp, input$logDir), {
       req(input$logApp)
       
       # If no logs found, re-check every second

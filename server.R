@@ -44,101 +44,109 @@ server <- shinyServer(
       # Clear out old temp tiles
       lapply(list.files("www", full.names = TRUE), file.remove)
       
-      for(app.i in apps()){
+      progBarLength <- length(apps()) + 1
+      
+      withProgress(session = session, message = "Loading Apps", min = 0, max = progBarLength, {
         
-        # Set defaults
-        app_options.i <- data.frame(EnvisionName = app.i, 
-                                    EnvisionDescription = "",
-                                    EnvisionViewLogs = TRUE,
-                                    EnvisionTileLocation = "",
-                                    stringsAsFactors = FALSE)
-        
-        DESCRIPTION_file.i <- file.path(envisionGlobals$appsLoc, app.i, "DESCRIPTION")
-        
-        if(file.exists(DESCRIPTION_file.i)){
-          DESCRIPTION_df.i <- as.data.frame(read.dcf(file = DESCRIPTION_file.i), stringsAsFactors = FALSE)
+        for(app.i in apps()){
           
-          for(column.i in colnames(app_options.i)){
-            if(column.i %in% colnames(DESCRIPTION_df.i)){
-              app_options.i[[column.i]] <- DESCRIPTION_df.i[[column.i]]
+          # Set defaults
+          app_options.i <- data.frame(EnvisionName = app.i, 
+                                      EnvisionDescription = "",
+                                      EnvisionViewLogs = TRUE,
+                                      EnvisionTileLocation = "",
+                                      stringsAsFactors = FALSE)
+          
+          DESCRIPTION_file.i <- file.path(envisionGlobals$appsLoc, app.i, "DESCRIPTION")
+          
+          if(file.exists(DESCRIPTION_file.i)){
+            DESCRIPTION_df.i <- as.data.frame(read.dcf(file = DESCRIPTION_file.i), stringsAsFactors = FALSE)
+            
+            for(column.i in colnames(app_options.i)){
+              if(column.i %in% colnames(DESCRIPTION_df.i)){
+                app_options.i[[column.i]] <- DESCRIPTION_df.i[[column.i]]
+              }
             }
+            
+            app_options.i$Warnings <- ""
+            
+          } else {
+            app_options.i$Warnings <- paste0("No description file found at:</br>", DESCRIPTION_file.i)
           }
           
-          app_options.i$Warnings <- ""
+          if(file.exists(app_options.i$EnvisionTileLocation)){
+            
+            # Create a name that will be unique to each session
+            temp_img_name.i <- paste0(app.i,
+                                      "-temp-tile-",
+                                      round(as.numeric(Sys.time()), 0),
+                                      "-",
+                                      basename(app_options.i$EnvisionTileLocation))
+            file.copy(
+              from = app_options.i$EnvisionTileLocation,
+              to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
+            )
+            
+            tile_file.i <- temp_img_name.i
+            
+          } else {
+            
+            tile_file.i <- file.path(envisionGlobals$envisionIndexGitHub, "img", "default-tile.png")
+          }
           
-        } else {
-          app_options.i$Warnings <- paste0("No description file found at:</br>", DESCRIPTION_file.i)
+          tile.i <- tags$img(alt = "Tile Not Found", 
+                             height = "140px",
+                             width = "190px",
+                             src = tile_file.i)
+          
+          ## Launch button
+          launch_button.i <- tags$a(class="btn btn-primary btn-lg",
+                                    target = "_blank",
+                                    href = file.path(clientURL(), "envision", app.i, ""),
+                                    tags$span(class = "glyphicon glyphicon-new-window",
+                                              `aria-hidden` = "true"),
+                                    "Launch App")
+          
+          ## Log button
+          if(app_options.i$EnvisionViewLogs){
+            log_button.i <- tags$div(class = "text-right",
+                                     tags$a(class="btn btn-link metrum-log-button",
+                                            id = app.i,
+                                            tags$span(class = "glyphicon glyphicon-list-alt",
+                                                      `aria-hidden` = "true"),
+                                            "View Logs"))
+          } else {
+            log_button.i <- ""
+          }
+          
+          if(app_options.i$Warnings != ""){
+            warnings.i <- 
+              tags$button(type="button",
+                          class="btn btn-link appTableToolTip",
+                          id=paste0(app.i, "-toolTip"),
+                          `data-toggle`="tooltip",
+                          `data-placement`="top",
+                          title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
+                                         app_options.i$Warnings,
+                                         "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
+                          tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;")))
+          } else {
+            warnings.i <- ""
+          }
+          
+          appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
+                                             tags$tr(class = "", tags$td(tile.i),
+                                                     tags$td(style = "font-size:24px;font-weight:bold;", app_options.i$EnvisionName),
+                                                     tags$td(app_options.i$EnvisionDescription),
+                                                     tags$td(launch_button.i),
+                                                     tags$td(log_button.i),
+                                                     tags$td(warnings.i)))
+          incProgress(1)
         }
+        appsTable <- tagAppendChild(appTableHTML, appTableBodyHTML)
         
-        if(file.exists(app_options.i$EnvisionTileLocation)){
-          
-          # Create a name that will be unique to each session
-          temp_img_name.i <- paste0(app.i,
-                                    "-temp-tile-",
-                                    round(as.numeric(Sys.time()), 0),
-                                    "-",
-                                    basename(app_options.i$EnvisionTileLocation))
-          file.copy(
-            from = app_options.i$EnvisionTileLocation,
-            to = paste0("/data/shiny-server/index/www/", temp_img_name.i)
-          )
-          
-          tile_file.i <- temp_img_name.i
-          
-        } else {
-          
-          tile_file.i <- file.path(envisionGlobals$envisionIndexGitHub, "img", "default-tile.png")
-        }
-        
-        tile.i <- tags$img(alt = "Tile Not Found", 
-                           height = "140px",
-                           width = "190px",
-                           src = tile_file.i)
-        
-        ## Launch button
-        launch_button.i <- tags$a(class="btn btn-primary btn-lg",
-                                  target = "_blank",
-                                  href = file.path(clientURL(), "envision", app.i, ""),
-                                  tags$span(class = "glyphicon glyphicon-new-window",
-                                            `aria-hidden` = "true"),
-                                  "Launch App")
-        
-        ## Log button
-        if(app_options.i$EnvisionViewLogs){
-          log_button.i <- tags$div(class = "text-right",
-                                   tags$a(class="btn btn-link metrum-log-button",
-                                          id = app.i,
-                                          tags$span(class = "glyphicon glyphicon-list-alt",
-                                                    `aria-hidden` = "true"),
-                                          "View Logs"))
-        } else {
-          log_button.i <- ""
-        }
-        
-        if(app_options.i$Warnings != ""){
-          warnings.i <- 
-            tags$button(type="button",
-                        class="btn btn-link appTableToolTip",
-                        id=paste0(app.i, "-toolTip"),
-                        `data-toggle`="tooltip",
-                        `data-placement`="top",
-                        title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
-                                       app_options.i$Warnings,
-                                       "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
-                        tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;")))
-        } else {
-          warnings.i <- ""
-        }
-        
-        appTableBodyHTML <- tagAppendChild(appTableBodyHTML,
-                                           tags$tr(class = "", tags$td(tile.i),
-                                                   tags$td(style = "font-size:24px;font-weight:bold;", app_options.i$EnvisionName),
-                                                   tags$td(app_options.i$EnvisionDescription),
-                                                   tags$td(launch_button.i),
-                                                   tags$td(log_button.i),
-                                                   tags$td(warnings.i)))
-      }
-      appsTable <- tagAppendChild(appTableHTML, appTableBodyHTML)
+        incProgress(1)
+      })
       
       tagList(
         appsTable,

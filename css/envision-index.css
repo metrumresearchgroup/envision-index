@@ -1,27 +1,15 @@
-#logContents {
-    color: #4F4;
-    background-color: #2A2A2A;
-    overflow-y: scroll;
-}
-
-.table > tbody > tr > td {
-     vertical-align: middle;
-}
-
-#envision-app-table .tooltip-inner {
-    max-width: 500px;
-    text-align: left;
-}
-
-
 body {
     padding-top: 70px;
+}
+
+/* ensure login for shiny server is always on top */
+.shiny-server-account {
+    z-index: 1050;
 }
 
 .navbar-fixed-top {
     background-color: rgba(220, 220, 220, 0.7);
 }
-
 
 .navbar-brand>img {
     height: 100%;
@@ -35,11 +23,22 @@ body {
 }
 
 @media (min-width: 768px) {
-.navbar-fixed-top .navbar-brand {
-    margin-left: 0 !important;
-}
+    .navbar-fixed-top .navbar-brand {
+        margin-left: 0 !important;
+    }
 }
 
-.shiny-server-account {
-  z-index:1050;
+.table>tbody>tr>td {
+    vertical-align: middle;
+}
+
+#envision-app-table .tooltip-inner {
+    max-width: 500px;
+    text-align: left;
+}
+
+#logContents {
+    color: #4F4;
+    background-color: #2A2A2A;
+    overflow-y: scroll;
 }

@@ -46,7 +46,7 @@ server <- shinyServer(
       
       progBarLength <- length(apps()) + 1
       
-      withProgress(session = session, message = "", min = 0, max = progBarLength, {
+      withProgress(session = session, message = NULL, min = 0, max = progBarLength, style = "old", {
         
         for(app.i in apps()){
           

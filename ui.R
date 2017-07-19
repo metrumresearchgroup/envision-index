@@ -1,9 +1,25 @@
-ui <- metrumApp(
-  logo_location = file.path(envisionGlobals$shinymetrumGitHub, "inst", "img", "metworxLogo.png"),
-  include_footer = FALSE,
-  includeCSS(file.path(envisionGlobals$envisionIndexGitHub, "css", "envision-index.css")),
-  includeScript(file.path(envisionGlobals$envisionIndexGitHub, "js", "envision-index.js")),
+ui <- 
+  # metrumApp(
+  # logo_location = file.path(envisionGlobals$shinymetrumGitHub, "inst", "img", "metworxLogo.png"),
+  # include_footer = FALSE,
+  
   fluidPage(
+    
+    includeCSS(file.path(envisionGlobals$envisionIndexGitHub, "css", "envision-index.css")),
+    includeScript(file.path(envisionGlobals$envisionIndexGitHub, "js", "envision-index.js")),
+    
+    tags$nav(
+      class = "navbar navbar-default navbar-fixed-top",
+      tags$div(
+        class = "container-fluid",
+        tags$img(
+          class = "navbar-brand",
+          id = "metrum-logo",
+          alt = "Metrum Research Group",
+          src = file.path(envisionGlobals$envisionIndexGitHub, "img", "metworxLogo.png")
+        )
+      )
+    ),
     div(id = "envision-app-table",
         div(
           class = "container",
@@ -60,4 +76,4 @@ ui <- metrumApp(
         )
     )
   )
-)
+# )

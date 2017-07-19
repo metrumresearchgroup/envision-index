@@ -12,3 +12,34 @@
     max-width: 500px;
     text-align: left;
 }
+
+
+body {
+    padding-top: 70px;
+}
+
+.navbar-fixed-top {
+    background-color: rgba(220, 220, 220, 0.7);
+}
+
+
+.navbar-brand>img {
+    height: 100%;
+    width: auto;
+}
+
+.navbar-fixed-top .navbar-brand {
+    padding: 5px;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+.navbar-fixed-top .navbar-brand {
+    margin-left: 0 !important;
+}
+}
+
+.shiny-server-account {
+  z-index:1050;
+}

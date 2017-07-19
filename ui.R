@@ -32,7 +32,7 @@ ui <-
           column(
             width = 1,
             actionButton(inputId = "showApps",
-                         class = "btn-link btn-lg",
+                         class = "btn-primary btn-lg",
                          label = "Back to Apps",
                          icon = icon("step-backward"))
           )
@@ -72,5 +72,4 @@ ui <-
           )
         )
     )
-    
   )

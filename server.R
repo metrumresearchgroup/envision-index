@@ -46,7 +46,7 @@ server <- shinyServer(
       
       progBarLength <- length(apps()) + 1
       
-      withProgress(session = session, message = NULL, min = 0, max = progBarLength, {
+      withProgress(session = session, message = NULL, min = 0, max = progBarLength, style = "old", {
         
         for(app.i in apps()){
           
@@ -141,11 +141,11 @@ server <- shinyServer(
                                                      tags$td(launch_button.i),
                                                      tags$td(log_button.i),
                                                      tags$td(warnings.i)))
-          incProgress(1)
+          incProgress(1, message = NULL)
         }
         appsTable <- tagAppendChild(appTableHTML, appTableBodyHTML)
         
-        incProgress(1)
+        incProgress(1, message = NULL)
       })
       
       tagList(

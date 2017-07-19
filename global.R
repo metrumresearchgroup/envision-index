@@ -8,9 +8,3 @@ envisionGlobals$metrumGitHub <- "https://raw.githubusercontent.com/metrumresearc
 envisionGlobals$envisionIndexGitHub <- file.path(envisionGlobals$metrumGitHub,
                                                  "envision-index",
                                                  "master")
-
-# envisionGlobals$shinymetrumGitHub <- file.path(envisionGlobals$metrumGitHub,
-#                                                "shinymetrum",
-#                                                "master")
-# 
-# source(file.path(envisionGlobals$shinymetrumGitHub, "R", "metrum-app.R"))

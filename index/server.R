@@ -447,27 +447,8 @@ function(input, output, session) {
         tagList(
           fluidRow(
             column(
-              width = 4,
-              box(
-                width = NULL,
-                title = "Envision Info", 
-                solidHeader = TRUE,
-                status = "info",
-                collapsible = TRUE,
-                HTML(
-                  paste0(
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Envision Developer:</b></div><div class='col-xs-8'>", rV$envisionDeveloper, "</div></div></br>",
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Envision Users:</b></div><div class='col-xs-8'>", paste(sort(rV$envisionUsers), collapse = "<br>"), "</div></div></br></br>",
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Software:</b></div><div class='col-xs-8'>", software_info, "</div></div></br>"
-                  )
-                )
-              )
-            ),
-            column(
-              width = 5,
+              width = 6,
+              offset = 1,
               box(
                 width = NULL,
                 title = "Configure Apps", 
@@ -525,6 +506,26 @@ function(input, output, session) {
                         HTML("<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>")
                       )
                     )
+                  )
+                )
+              )
+            ),
+            column(
+              width = 4,
+              box(
+                width = NULL,
+                title = "Envision Info", 
+                solidHeader = TRUE,
+                status = "info",
+                collapsible = TRUE,
+                HTML(
+                  paste0(
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Envision Developer:</b></div><div class='col-xs-8'>", rV$envisionDeveloper, "</div></div></br>",
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Envision Users:</b></div><div class='col-xs-8'>", paste(sort(rV$envisionUsers), collapse = "<br>"), "</div></div></br></br>",
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Software:</b></div><div class='col-xs-8'>", software_info, "</div></div></br>"
                   )
                 )
               )

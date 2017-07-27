@@ -18,13 +18,13 @@ function(input, output, session) {
     rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper
   })
   
-  output$envisionDeveloper <- renderUI({
-    HTML(
-    paste("User: ", rV$thisEnvisionUser, "</br>",
-          "Developer: ", rV$envisionDeveloper, "</br>",
-          "Is Developer: ", rV$isDeveloper)
-    )
-  })
+  # output$envisionDeveloper <- renderUI({
+  #   HTML(
+  #   paste("User: ", rV$thisEnvisionUser, "</br>",
+  #         "Developer: ", rV$envisionDeveloper, "</br>",
+  #         "Is Developer: ", rV$isDeveloper)
+  #   )
+  # })
   
   autoInvalidate <- reactiveTimer(1000, session = session)
   

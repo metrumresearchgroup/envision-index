@@ -13,11 +13,11 @@ dashboardPage(
                tabName = "configure",
                icon = icon("gears"),
                badgeLabel = "Developer",
-               badgeColor = "blue"),
-      tags$div(
-        class = "container",
-        uiOutput('envisionDeveloper')
-      )
+               badgeColor = "blue")# ,
+      # tags$div(
+      #   class = "container",
+      #   uiOutput('envisionDeveloper')
+      # )
 
     )
   ), ## Body content

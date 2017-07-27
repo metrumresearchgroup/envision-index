@@ -28,7 +28,7 @@ The DESCRIPTION file should be placed the same level as the code for the app (wh
   * Type: String
   * Default: all
   * Description: Which users can view the app in the Envision Dashboard?
-  * Example: `EnvisionViewLogs: anderson danp`
+  * Example: `EnvisionUsers: user1 user2`
 
 #### `EnvisionTileLocation`
   * Type: Character

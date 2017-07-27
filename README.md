@@ -25,11 +25,11 @@ The DESCRIPTION file should be placed the same level as the code for the app (wh
   * Description: App description.
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
-#### `EnvisionViewLogs`
-  * Type: Boolean
-  * Default: TRUE
-  * Description: Should a "View Logs" button appear next to the app?
-  * Example: `EnvisionViewLogs: TRUE`
+#### `EnvisionUsers`
+  * Type: String
+  * Default: all
+  * Description: Which users can view the app in the Envision Dashboard?
+  * Example: `EnvisionViewLogs: anderson danp`
 
 #### `EnvisionTileLocation`
   * Type: Character

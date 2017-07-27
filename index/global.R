@@ -1,0 +1,4 @@
+.libPaths("lib")
+
+library(shinydashboard)
+

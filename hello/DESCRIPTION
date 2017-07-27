@@ -1,0 +1,3 @@
+EnvisionName: It's Alive
+EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file
+EnvisionTileLocation: /data/shiny-server/hello/img/tile.png

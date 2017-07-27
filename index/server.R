@@ -84,7 +84,6 @@ function(input, output, session) {
     apps_df[apps_df$ShowThisUser, ]
   })
   
-  
   output$appBoxes <- renderUI({
     
     # Clear out old temp tiles

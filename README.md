@@ -1,7 +1,7 @@
 # Envision Index App
-This is the code to place at /data/shiny-server on Metworx Envision workflow.
+This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.
 
-It include an html template (index.html) to take the user to the index app. It also has example applications (hello & rmd).
+It includes an html template (`index.html`) that directs the user to the `index` app. It also has example applications (`hello` & `rmd`).
 
 [](#description-file-in-envision)
 ## DESCRIPTION file in Envision apps

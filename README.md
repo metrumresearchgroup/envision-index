@@ -14,25 +14,25 @@ The DESCRIPTION file should be placed at the same level as the code for the app 
 
 #### `EnvisionName`
   * Type: Character
-  * Default: ""
+  * Default: `the app folder name`
   * Description: App display name.
   * Example: `EnvisionName: It's Alive`
 
 #### `EnvisionDescription`
   * Type: Character
-  * Default: ""
+  * Default: ` `
   * Description: App description.
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
 #### `EnvisionUsers`
   * Type: Space delimited character vector
-  * Default: all
+  * Default: `all`
   * Description: Which users can view the app in the Envision Dashboard?
   * Example: `EnvisionUsers: user1 user2`
 
 #### `EnvisionTileLocation`
   * Type: Character
-  * Default: NULL
+  * Default: `default-tile.png`
   * Description: Location of the image file to display as app tile.
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
 

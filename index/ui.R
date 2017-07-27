@@ -81,7 +81,7 @@ dashboardPage(
                       fluidRow(
                         column(
                           width = 2,
-                          offset = 8,
+                          offset = 7,
                           span(
                             style = "font-size:20px",
                             checkboxInput(
@@ -92,11 +92,11 @@ dashboardPage(
                           )
                         ),
                         column(
-                          width = 1,
+                          width = 3,
                           actionButton(
                             class = "pull-right",
                             inputId = "downloadLogModal",
-                            label = "Download Logs",
+                            label = HTML("Download Logs"),
                             icon = icon("download")
                           )
                         )

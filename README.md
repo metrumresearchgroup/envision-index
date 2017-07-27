@@ -25,7 +25,7 @@ The DESCRIPTION file should be placed at the same level as the code for the app 
   * Example: `EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file`
 
 #### `EnvisionUsers`
-  * Type: String
+  * Type: Space delimited character vector
   * Default: all
   * Description: Which users can view the app in the Envision Dashboard?
   * Example: `EnvisionUsers: user1 user2`

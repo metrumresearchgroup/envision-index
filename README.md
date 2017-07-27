@@ -39,5 +39,5 @@ The DESCRIPTION file should be placed at the same level as the code for the app 
 ### Example Result
 ![Example](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/DESCRIPTION-example.png)
 
-Download example DESCRIPTION file [here](https://github.com/metrumresearchgroup/envision-index/raw/master/code-for-envision/hello/DESCRIPTION).
+Download example DESCRIPTION file [here](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/hello/DESCRIPTION).
   

@@ -437,7 +437,7 @@ function(input, output, session) {
           sessionInfo()$R.version$version.string,
           paste0("Shiny version ", sessionInfo()$otherPkgs$shiny$Version),
           paste0("Shiny-server version ", system("cat /opt/shiny-server/GIT_VERSION", intern = TRUE)),
-          "<i>For info on loading your own versions of packages, click <a href='https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages' target='_blank'>here</a>.</i>",
+          "</br><i>For info on overriding default packages, click <a href='https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages' target='_blank'>here</a>.</i>",
           sep = '</br></br>'
         )
       )

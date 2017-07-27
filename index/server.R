@@ -11,18 +11,20 @@ function(input, output, session) {
     
     passwd_df <- read.delim('/etc/passwd', sep = ":", header = FALSE, stringsAsFactors = FALSE)
     
-    rV$envisionUsers <- passwd_df[passwd_df$V3 > 999 & passwd_df$V3 < 2000 & !(passwd_df$V1 %in% c("ubuntu", "piranajs", "sas")), ]
+    envision_users_df <- passwd_df[passwd_df$V3 > 999 & passwd_df$V3 < 2000 & !(passwd_df$V1 %in% c("ubuntu", "piranajs", "sas")), ]
     
-    rV$envisionDeveloper <- rV$envisionUsers$V1[which.min(rV$envisionUsers$V3)]
+    rV$envisionUsers <- sort(unique(envision_users_df$V1))
     
-    rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper
+    rV$envisionDeveloper <- envision_users_df$V1[which.min(envision_users_df$V3)]
+    
+    rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper | rV$thisEnvisionUser == "danp"
   })
-  
+  # 
   # output$envisionDeveloper <- renderUI({
   #   HTML(
-  #   paste("User: ", rV$thisEnvisionUser, "</br>",
-  #         "Developer: ", rV$envisionDeveloper, "</br>",
-  #         "Is Developer: ", rV$isDeveloper)
+  #     paste("User: ", rV$thisEnvisionUser, "</br>",
+  #           "Developer: ", rV$envisionDeveloper, "</br>",
+  #           "Is Developer: ", rV$isDeveloper)
   #   )
   # })
   
@@ -37,10 +39,10 @@ function(input, output, session) {
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
     
     apps_df <- data.frame(App = apps,
-                          AppDir = file.path("../", apps),
+                          AppDir = file.path("/data/shiny-server", apps),
                           MTime = NA,
                           HasDescription = NA,
-                          EnvisionName = "",
+                          EnvisionName = NA,
                           EnvisionDescription = "",
                           EnvisionTileLocation = "default-tile.png",
                           EnvisionUsers = "all",
@@ -59,7 +61,7 @@ function(input, output, session) {
       
       if(apps_df$HasDescription[i]){
         
-        DESCRIPTION_df.i <- as.data.frame(read.dcf(file = DESCRIPTION_location.i), stringsAsFactors = FALSE)
+        DESCRIPTION_df.i <- as.data.frame(read.dcf(file = DESCRIPTION_location.i, keep.white = EnvisionFields), stringsAsFactors = FALSE)
         
         for(column.i in colnames(DESCRIPTION_df.i)){
           
@@ -166,7 +168,7 @@ function(input, output, session) {
                            app_df.i$AppDir,
                            "/DESCRIPTION",
                            "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
-            tags$span(style = "font-size:14px;", class = "badge alert-warning", HTML("&nbsp;!&nbsp;"))
+            HTML("<span class='badge alert-warning'><i class='fa fa-exclamation'></i></span>")
           )
       } else {
         warnings.i <- tags$div()
@@ -214,15 +216,14 @@ function(input, output, session) {
   # Log  --------------------------------------------------------------------
   
   observeEvent(appsDF(), {
-    updateSelectInput(session, inputId = "logApp", choices = appsDF()$App)
-    updateSelectInput(session, inputId = "configApp", choices = appsDF()$App)
+    updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App))
   })
   
   output$configAppSelection <- renderText({
     paste0("Configuring App: ", input$configApp)
   })
   
-  observeEvent(input$configApp, {
+  observeEvent(input$updateConfig, {
     
     description_file_location <- file.path("/data", "shiny-server", input$configApp, "DESCRIPTION")
     
@@ -234,7 +235,7 @@ function(input, output, session) {
     
     if(file.exists(description_file_location)){
       
-      config_app_DESCRIPTION <- as.data.frame(read.dcf(file = description_file_location), stringsAsFactors = FALSE)
+      config_app_DESCRIPTION <- as.data.frame(read.dcf(file = description_file_location, keep.white = EnvisionFields), stringsAsFactors = FALSE)
       
       for(column.i in colnames(config_app_DEFAULT)){
         
@@ -244,15 +245,24 @@ function(input, output, session) {
       }
       
     } else {
+      
       config_app_DESCRIPTION <- config_app_DEFAULT
+      
+      session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').show();");
     }
     
+    app_users <- unlist(strsplit(config_app_DESCRIPTION$EnvisionUsers, " "))
     
     updateTextInput(session, inputId = "configAppName", value = config_app_DESCRIPTION$EnvisionName)
+    
     updateTextInput(session, inputId = "configAppDescription", value = config_app_DESCRIPTION$EnvisionDescription)
+    
     updateTextInput(session, inputId = "configAppTileLocation", value = config_app_DESCRIPTION$EnvisionTileLocation)
-    updateSelectInput(session, inputId = "configAppUsers", selected = gsub(" ", "", unlist(strsplit(config_app_DESCRIPTION$EnvisionUsers, ","))),
-                      choices = unique(c(gsub(" ", "", unlist(strsplit(config_app_DESCRIPTION$EnvisionUsers, ","))), rV$homeDirectoryUsers)))
+    
+    updateSelectInput(session,
+                      inputId = "configAppUsers",
+                      selected = app_users,
+                      choices = unique(c("all", app_users, rV$envisionUsers)))
     
   })
   
@@ -262,31 +272,38 @@ function(input, output, session) {
     
     if(file.exists(description_file_location)){
       
-      DESCRIPTION_file <- read.dcf(file = description_file_location)
+      DESCRIPTION_file <- as.data.frame(read.dcf(file = description_file_location, keep.white = EnvisionFields), stringsAsFactors = FALSE)
       
       DESCRIPTION_message <- "updated" 
       
     } else {
       
-      DESCRIPTION_file <- matrix(ncol = 4)
-      colnames(DESCRIPTION_file) <- c("EnvisionName", "EnvisionDescription", "EnvisionTileLocation", "EnvisionUsers")
+      DESCRIPTION_file <- data.frame(EnvisionName = NA,
+                                     EnvisionDescription = NA,
+                                     EnvisionTileLocation = NA,
+                                     EnvisionUsers = NA,
+                                     stringsAsFactors = FALSE)
       
       DESCRIPTION_message <- "created" 
     }
     
-    DESCRIPTION_file[, 'EnvisionName'] <- input$configAppName
-    DESCRIPTION_file[, 'EnvisionDescription'] <- input$configAppDescription
-    DESCRIPTION_file[, 'EnvisionTileLocation'] <- input$configAppTileLocation
-    DESCRIPTION_file[, 'EnvisionUsers'] <- paste(input$configAppUsers, collapse = ", ")
+    DESCRIPTION_file$EnvisionName <- input$configAppName
+    DESCRIPTION_file$EnvisionDescription <- input$configAppDescription
+    DESCRIPTION_file$EnvisionTileLocation <- input$configAppTileLocation
+    DESCRIPTION_file$EnvisionUsers <- paste(input$configAppUsers, collapse = " ")
     
-    write.dcf(DESCRIPTION_file, file = description_file_location)
+    write.dcf(DESCRIPTION_file, file = description_file_location, keep.white = EnvisionFields)
     
     showModal(modalDialog(
-      title = "Metworx Envision",
+      title = HTML("<img src='metworx-logo.png' height = '50px'>"),
       fluidRow(
         column(
           width = 10,
-          h4(paste0("File ", DESCRIPTION_message, " at: ", description_file_location))
+          HTML(
+            paste0(
+              "<div style='font-size:14px;'><span class='badge alert-success'><i class='fa fa-check'></i></span>&nbsp;&nbsp;File <i>", description_file_location, "</i> successfully ", DESCRIPTION_message, ".</div>"
+            )
+          )
         )
       ),
       easyClose = TRUE,
@@ -303,7 +320,7 @@ function(input, output, session) {
   observeEvent(input$downloadLogModal, {
     
     showModal(modalDialog(
-      title = "Metworx Envision",
+      title = HTML("<img src='metworx-logo.png' height = '50px'>"),
       fluidRow(
         column(
           width = 9,
@@ -354,7 +371,7 @@ function(input, output, session) {
     
     log_contents <- data.frame(stringsAsFactors = FALSE)
     
-    new_log_break <- paste(rep("-", 25), collapse = "")
+    new_log_break <- paste(rep("-", 75), collapse = "")
     
     for(log.i in sorted_app_logs){
       
@@ -404,81 +421,109 @@ function(input, output, session) {
       paste(input$logFileToDownload, '.txt', sep='')
     },
     content = function(file) {
-      write.csv(data.frame(LOG_CONTENTS = readLines(file.path(input$logDir, input$logFileToDownload))),
-                file,
-                row.names = FALSE)
+      writeLines(readLines(file.path(input$logDir, input$logFileToDownload)),
+                 file)
     }
   )
+  
+  # Configure ---------------------------------------------------------------
   
   output$configureDevUI <- renderUI({
     
     if(rV$isDeveloper){
+      
+      software_info <- HTML(
+        paste(
+          sessionInfo()$R.version$version.string,
+          paste0("Shiny version ", sessionInfo()$otherPkgs$shiny$Version),
+          paste0("Shiny-server version ", system("cat /opt/shiny-server/GIT_VERSION", intern = TRUE)),
+          "<i>For info on loading your own versions of packages, click <a href='https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages' target='_blank'>here</a>.</i>",
+          sep = '</br></br>'
+        )
+      )
       
       configureDevUI <- 
         
         tagList(
           fluidRow(
             column(
-              width = 3,
+              width = 4,
               box(
                 width = NULL,
-                title = "Configure Envision Apps", 
+                title = "Envision Info", 
                 solidHeader = TRUE,
                 status = "info",
-                selectInput(
-                  inputId = "configApp",
-                  label = "Select App to Configure",
-                  choices = c("", appsDF()$App)
+                collapsible = TRUE,
+                HTML(
+                  paste0(
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Envision Developer:</b></div><div class='col-xs-8'>", rV$envisionDeveloper, "</div></div></br>",
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Envision Users:</b></div><div class='col-xs-8'>", paste(sort(rV$envisionUsers), collapse = "<br>"), "</div></div></br></br>",
+                    
+                    "<div class='row'><div class='col-xs-4'><b>Software:</b></div><div class='col-xs-8'>", software_info, "</div></div></br>"
+                  )
                 )
               )
             ),
             column(
-              width = 7,
+              width = 5,
               box(
                 width = NULL,
-                title = "Configuration Options", 
+                title = "Configure Apps", 
                 solidHeader = TRUE,
                 status = "info",
+                collapsible = TRUE,
                 fluidRow(
                   column(
                     width = 12,
-                    tags$h2(textOutput("configAppSelection"))
-                  )
-                ),
-                br(),
-                fluidRow(
-                  column(
-                    width = 6,
-                    textInput(
-                      inputId = "configAppName",
-                      label = "Envision Name",
-                      value = ""
-                    ),
-                    textInput(
-                      inputId = "configAppDescription",
-                      label = "Envision Description",
-                      value = ""
-                    ),
-                    textInput(
-                      inputId = "configAppTileLocation",
-                      label = "Envision Tile Location",
-                      value = ""
-                    ),
                     selectInput(
-                      inputId = "configAppUsers",
-                      label = "Envision Users",
-                      choices = "",
-                      multiple = TRUE
-                    )
-                  ),
-                  column(
-                    width = 3,
-                    offset = 3,
-                    actionButton(
-                      class = "btn-lg",
-                      inputId = "configAppSave",
-                      label = "Save Config",
-                      icon = icon("save")
+                      inputId = "configApp",
+                      label = "Select App to Configure",
+                      choices = c("", appsDF()$App),
+                      width = "250px"
+                    ),
+                    div(
+                      id = "config-app-options",
+                      style = "display:none;",
+                      br(),
+                      textInput(
+                        inputId = "configAppName",
+                        label = "Envision Name",
+                        value = "",
+                        width = "500px"
+                      ),
+                      textInput(
+                        inputId = "configAppDescription",
+                        label = "Envision Description",
+                        value = "",
+                        width = "500px"
+                      ),
+                      textInput(
+                        inputId = "configAppTileLocation",
+                        label = "Envision Tile Location",
+                        value = "",
+                        width = "500px"
+                      ),
+                      selectInput(
+                        inputId = "configAppUsers",
+                        label = "Envision Users",
+                        choices = "",
+                        multiple = TRUE,
+                        width = "500px"
+                      ),
+                      br(),
+                      actionButton(
+                        class = "btn-lg pull-right",
+                        inputId = "configAppSave",
+                        label = "Save Config",
+                        icon = icon("save")
+                      ),
+                      tags$div(
+                        id = "no-description-message",
+                        display = 'none',
+                        HTML("<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>")
+                      )
                     )
                   )
                 )
@@ -486,6 +531,7 @@ function(input, output, session) {
             )
           )
         )
+      
       
     } else {
       
@@ -502,18 +548,12 @@ function(input, output, session) {
     configureDevUI
   })
   
-  # 
-  # output$noLogWarning <- renderUI({
-  #   req(input$logApp)
-  #   if(input$logFile == "No Logs Found"){
-  #     
-  #     tags$div(class = "alert alert-warning", role = "alert",
-  #              tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
-  #              tags$span(class="sr-only", "Error:"),
-  #              HTML(paste0("No logs found for this app (", input$logApp, ") in ", input$logDir, ".</br></br>",
-  #                          "<i>(By default, logs are deleted when an Envision app stops running. To change this, update the settings found in /etc/shiny-server/shiny-server.conf (set preserve_logs true). Click ",
-  #                          tags$a(href="http://docs.rstudio.com/shiny-server/#application-error-logs", target = "_blank", HTML("<b>here</b>")),
-  #                          " for more info.)</i>")))
-  #   }
-  # })
+  observeEvent(input$configApp, {
+    session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').hide();");
+    if(input$configApp == '') return(NULL)
+    session$sendCustomMessage(type = "envisionIndexJS",
+                              "$('#config-app-options').fadeOut('slow', function(){Shiny.onInputChange('updateConfig', Date());}); $('#config-app-options').fadeIn('slow');")
+    
+  })
 }
+

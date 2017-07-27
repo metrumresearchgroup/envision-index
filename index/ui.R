@@ -9,7 +9,7 @@ dashboardPage(
       menuItem("Logs",
                tabName = "logs",
                icon = icon("database")),
-      menuItem("Configue",
+      menuItem("Configure",
                tabName = "configure",
                icon = icon("gears"),
                badgeLabel = "Developer",
@@ -18,7 +18,7 @@ dashboardPage(
       #   class = "container",
       #   uiOutput('envisionDeveloper')
       # )
-
+      
     )
   ), ## Body content
   dashboardBody(
@@ -66,86 +66,46 @@ dashboardPage(
                       inputId = "logApp",
                       label = "Select App",
                       choices = NULL
-                    ),
-                    actionButton(
-                      inputId = "downloadLogModal",
-                      label = "Download Logs",
-                      icon = icon("download")
                     )
                   )
                 ),
-                column(
-                  width = 10,
-                  box(
-                    width = NULL,
-                    title = "Log", 
-                    solidHeader = TRUE,
-                    status = "primary",
-                    fluidRow(
-                      column(
-                        width = 1,
-                        offset = 11,
-                        span(
-                          style = "font-size:20px",
-                          checkboxInput(
-                            "liveStream",
-                            "Live Stream",
-                            value = TRUE
+                conditionalPanel(
+                  "input.logApp != ''",
+                  column(
+                    width = 10,
+                    box(
+                      width = NULL,
+                      title = "Log", 
+                      solidHeader = TRUE,
+                      status = "primary",
+                      fluidRow(
+                        column(
+                          width = 2,
+                          offset = 8,
+                          span(
+                            style = "font-size:20px",
+                            checkboxInput(
+                              "liveStream",
+                              "Live Stream",
+                              value = TRUE
+                            )
+                          )
+                        ),
+                        column(
+                          width = 1,
+                          actionButton(
+                            class = "pull-right",
+                            inputId = "downloadLogModal",
+                            label = "Download Logs",
+                            icon = icon("download")
                           )
                         )
-                      )
-                    ),
-                    uiOutput("logContents")
+                      ),
+                      uiOutput("logContents")
+                    )
                   )
                 )
               )
-              # div(class = "container-fluid",
-              #     id = "envision-log-reader",
-              #     style = "visibility:hidden; padding-top:20px;",
-              #     fluidRow(
-              #       column(
-              #         width = 1,
-              #         actionButton(inputId = "showApps",
-              #                      class = "btn-primary btn-lg",
-              #                      label = "Back to Apps",
-              #                      icon = icon("step-backward"))
-              #       )
-              #     ),
-              #     fluidRow(
-              #       column(
-              #         width = 2,
-              #         offset = 2,
-              #         uiOutput("logAppName")
-              #       ),
-              #       column(
-              #         width = 2,
-              #         textInput(inputId = "logDir", "Log Directory", value = "/var/log/shiny-server", width = "250px")
-              #       ),
-              #       column(
-              #         width = 3,
-              #         selectInput("logFile", "Log File", choices = NULL,  width = "450px")
-              #       ),
-              #       column(
-              #         width = 1,
-              #         uiOutput('logAppHelp')
-              #       ),
-              #       column(
-              #         width = 2,
-              #         span(
-              #           style = "font-size:20px",
-              #           checkboxInput("liveStream", "Live Stream", value = TRUE)
-              #         )
-              #       )
-              #     ),
-              #     fluidRow(
-              #       column(
-              #         width = 10,
-              #         offset = 1,
-              #         verbatimTextOutput("logContents"),
-              #         uiOutput("noLogWarning")
-              #       )
-              #     )
-              # )
       ),
       tabItem(tabName = "configure",
               uiOutput('configureDevUI')

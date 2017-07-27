@@ -8,7 +8,7 @@ It includes an html template (`index.html`) that directs the user to the `index`
 
 Metworx envision allows shiny app developers to specify options at the app level via a DESCRIPTION file.
 
-The DESCRIPTION file should be placed the same level as the code for the app (where server.R/ui.R or app.R are located).
+The DESCRIPTION file should be placed at the same level as the code for the app (where `server.R` & `ui.R` or `app.R` are located).
 
 ### Exhaustive list of Envision DESCRIPTION file options:
 

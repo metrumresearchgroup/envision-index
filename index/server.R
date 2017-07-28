@@ -17,8 +17,12 @@ function(input, output, session) {
     
     rV$envisionDeveloper <- envision_users_df$V1[which.min(envision_users_df$V3)]
     
-    rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper | rV$thisEnvisionUser == "danp"
+    rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper
+    
   })
+  
+  
+  
   # 
   # output$envisionDeveloper <- renderUI({
   #   HTML(
@@ -89,7 +93,7 @@ function(input, output, session) {
   output$appBoxes <- renderUI({
     
     # Clear out old temp tiles
-    tiles_to_keep <- paste("www/", c("metworx-logo.png", "default-tile.png"), sep = "")
+    tiles_to_keep <- paste("www/", c("metworx-logo.png", "default-tile.png", "favicon.ico"), sep = "")
     old_tiles <- list.files("www", full.names = TRUE)
     old_tiles <- old_tiles[!(old_tiles %in% tiles_to_keep)]
     lapply(old_tiles, file.remove)
@@ -135,71 +139,73 @@ function(input, output, session) {
       
       ## Name
       name.i <- tags$span(
-        style = "font-size:27px",
+        style = "font-size:22px;font-weight:bold;",
         app_df.i$EnvisionName
       )
       
       ## Description
       description.i <- tags$span(
-        style = "font-size:16px",
+        style = "font-size:20px",
         app_df.i$EnvisionDescription
       )
       
       ## Launch button
       launch_link.i <- tags$a(
-        class="btn btn-primary btn-lg",
+        class = "btn btn-default btn-lg btn-block",
         target = "_blank",
         href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
         icon("new-window", lib = "glyphicon"),
-        "Launch App"
+        "Launch"
       )
       
+      
       ## Developer warnings
-      if(!app_df.i$HasDescription & rV$isDeveloper){
+      show_warnings <- (!app_df.i$HasDescription & rV$isDeveloper)
+      
+      if(show_warnings){
         warnings.i <-
-          tags$button(
-            type="button",
-            class="btn btn-link appBoxesToolTip",
-            id=paste0(app_df.i$App, "-toolTip"),
-            `data-toggle`="tooltip",
-            `data-placement`="bottom",
-            title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
-                           "No description file found at:</br>",
-                           app_df.i$AppDir,
-                           "/DESCRIPTION",
-                           "</br></br>For more info, click <b><a 'toolTipLink' href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
-            HTML("<span class='badge alert-warning'><i class='fa fa-exclamation'></i></span>")
-          )
+            tags$button(
+              type="button",
+              class="btn btn-link appBoxesToolTip",
+              id=paste0(app_df.i$App, "-toolTip"),
+              `data-toggle`="tooltip",
+              `data-placement`="right",
+              title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
+                             "No description file found at:</br>",
+                             app_df.i$AppDir,
+                             "/DESCRIPTION</br></br>This file can be created via the Configure tab.",
+                             "</br></br>For more info, click <b><a href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
+              HTML("<span class='badge alert-warning'><i class='fa fa-exclamation'></i></span>")
+            )
+        
       } else {
         warnings.i <- tags$div()
       }
+      
       
       app_boxes <- 
         tagAppendChild(app_boxes,
                        box(width = NULL, 
                            status = "primary",
+                           solidHeader = TRUE,
+                           title = tagList(name.i, warnings.i),
+                           # collapsible = TRUE,
                            fluidRow(
                              column(
                                width = 2,
                                tile.i
                              ),
                              column(
-                               width = 2,
-                               name.i
-                             ),
-                             column(
-                               width = 4,
+                               width = 5,
+                               offset = 1,
                                description.i
                              ),
                              column(
                                width = 2,
-                               offset = 1,
+                               offset = 2,
                                launch_link.i
-                             ),
-                             column(
-                               width = 1,
-                               warnings.i
                              )
+                             
                            )
                        )
         )
@@ -295,7 +301,7 @@ function(input, output, session) {
     write.dcf(DESCRIPTION_file, file = description_file_location, keep.white = EnvisionFields)
     
     showModal(modalDialog(
-      title = HTML("<img src='metworx-logo.png' height = '50px'>"),
+      title = "Metworx Message",
       fluidRow(
         column(
           width = 10,
@@ -320,7 +326,7 @@ function(input, output, session) {
   observeEvent(input$downloadLogModal, {
     
     showModal(modalDialog(
-      title = HTML("<img src='metworx-logo.png' height = '50px'>"),
+      title = "Select Log to Download",
       fluidRow(
         column(
           width = 9,
@@ -427,6 +433,20 @@ function(input, output, session) {
   )
   
   # Configure ---------------------------------------------------------------
+  observe({
+    if(rV$isDeveloper){
+      insertUI(
+        selector = "#envision-dashboard-sidebar",
+        where = "beforeBegin",
+        menuItem("Configure",
+                 tabName = "configure",
+                 icon = icon("gears"),
+                 badgeLabel = "Developer",
+                 badgeColor = "light-blue")
+      )
+      
+    }
+  })
   
   output$configureDevUI <- renderUI({
     
@@ -448,7 +468,6 @@ function(input, output, session) {
           fluidRow(
             column(
               width = 6,
-              offset = 1,
               box(
                 width = NULL,
                 title = "Configure Apps", 

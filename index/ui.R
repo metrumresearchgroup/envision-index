@@ -1,28 +1,30 @@
 dashboardPage(
-  dashboardHeader(title = "Envision Dashboard"),
+  title = "Envision",
+  # title = HTML("<i class='fa fa-bar-chart'></i>Envision"),
+  # dashboardHeader(title = tags$img(width = "auto", height = "95%", src = "metworx-logo.png")),
+  dashboardHeader(title = HTML("<b>Envision</b>Dashboard")),
   ## Sidebar content
   dashboardSidebar(
     sidebarMenu(
+      id = "envision-dashboard-sidebar",
       menuItem("Apps",
+               
                tabName = "apps",
                icon = icon("th")),
       menuItem("Logs",
                tabName = "logs",
                icon = icon("database")),
-      menuItem("Configure",
-               tabName = "configure",
-               icon = icon("gears"),
-               badgeLabel = "Developer",
-               badgeColor = "blue")# ,
-      # tags$div(
-      #   class = "container",
-      #   uiOutput('envisionDeveloper')
-      # )
+      tags$img(id = "metworx-logo-image", height="auto", width = "150px", src = "metworx-logo.png")
       
     )
   ), ## Body content
   dashboardBody(
-    
+    tags$head(
+      tags$link(
+        rel = "shortcut icon",
+        href = "favicon.ico"
+      )
+    ),
     includeCSS(file.path("css", "envision-index.css")),
     includeScript(file.path("js", "envision-index.js")),
     
@@ -43,7 +45,7 @@ dashboardPage(
               div(
                 class = "container",
                 br(),
-                textOutput('clientUrl'),
+                # textOutput('clientUrl'),
                 uiOutput('appBoxes')
               )
       ),

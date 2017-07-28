@@ -1,6 +1,10 @@
-#shiny-tab-apps .tooltip-inner {
-    width: 800px;
+#appBoxes .tooltip-inner {
+    max-width: 700px;
     text-align: left;
+}
+
+#appBoxes .tooltip-inner a{
+    text-decoration: underline;
 }
 
 #logContents {
@@ -8,4 +12,11 @@
     background-color: #2A2A2A;
     overflow-y: scroll;
     padding: 20px;
+}
+
+#metworx-logo-image {
+    position:fixed;
+    bottom:0;
+    margin-left:40px;
+    margin-bottom:10px;
 }

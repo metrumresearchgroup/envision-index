@@ -14,7 +14,10 @@ dashboardPage(
       menuItem("Logs",
                tabName = "logs",
                icon = icon("database")),
-      tags$img(id = "metworx-logo-image", height="auto", width = "150px", src = "metworx-logo.png")
+      tags$img(id = "metworx-logo-image", 
+               height="auto", 
+               width = "150px",
+               src = "metworx-logo.png")
       
     )
   ), ## Body content

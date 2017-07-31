@@ -467,13 +467,23 @@ function(input, output, session) {
     
     if(rV$isDeveloper){
       
-      software_info <- HTML(
-        paste(
-          sessionInfo()$R.version$version.string,
-          paste0("Shiny version ", sessionInfo()$otherPkgs$shiny$Version),
-          paste0("Shiny-server version ", system("cat /opt/shiny-server/GIT_VERSION", intern = TRUE)),
-          "</br><i>For info on overriding default packages, click <a href='https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages' target='_blank'>here</a>.</i>",
-          sep = '</br></br>'
+      softwareInfo <- tagList(
+        sessionInfo()$R.version$version.string,
+        tags$br(),
+        tags$br(),
+        paste0("Shiny version ", sessionInfo()$otherPkgs$shiny$Version),
+        tags$br(),
+        tags$br(),
+        paste0("Shiny-server version ", system("cat /opt/shiny-server/GIT_VERSION", intern = TRUE)),
+        tags$br(),
+        tags$br(),
+        tags$br(),
+        tags$i("For info on overriding default packages, click ",
+               tags$a(
+                 href = "https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages",
+                 target = "_blank", 
+                 "here"
+               )
         )
       )
       
@@ -552,14 +562,20 @@ function(input, output, session) {
                 solidHeader = TRUE,
                 status = "info",
                 collapsible = TRUE,
-                HTML(
-                  paste0(
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Envision Developer:</b></div><div class='col-xs-8'>", rV$envisionDeveloper, "</div></div></br>",
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Envision Users:</b></div><div class='col-xs-8'>", paste(sort(rV$envisionUsers), collapse = "<br>"), "</div></div></br></br>",
-                    
-                    "<div class='row'><div class='col-xs-4'><b>Software:</b></div><div class='col-xs-8'>", software_info, "</div></div></br>"
+                tagList(
+                  fluidRow(
+                    column(width = 4, tags$b("Envision Developer:")),
+                    column(width = 8, rV$envisionDeveloper)
+                  ),
+                  tags$br(),
+                  fluidRow(
+                    column(width = 4, tags$b("Envision Users:")),
+                    column(width = 8, lapply(sort(rV$envisionUsers), function(x){tagList(x, tags$br())}))
+                  ), 
+                  tags$br(),
+                  fluidRow(
+                    column(width = 4, tags$b("Software:")),
+                    column(width = 8, softwareInfo)
                   )
                 )
               )
@@ -573,10 +589,12 @@ function(input, output, session) {
       configureDevUI <- 
         
         tagList(
-          tags$div(class = "alert alert-warning", role = "alert",
-                   tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
-                   tags$span(class="sr-only", "Message:"),
-                   "Only the Envision Developer can view this screen")
+          tags$div(
+            class = "alert alert-warning",
+            role = "alert",
+            tags$span(class = "glyphicon glyphicon-exclamation-sign", `aria-hidden` = "true"),
+            tags$span(class="sr-only", "Message:"),
+            "Only the Envision Developer can view this screen")
         )
     }
     

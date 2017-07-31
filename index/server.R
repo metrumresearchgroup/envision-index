@@ -3,22 +3,20 @@ function(input, output, session) {
   rV <- reactiveValues()
   
   observeEvent(session, {
+    
     ##  This entire block runs whenenver the page is refreshed
     
     rV$clientURL <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname)
     
-    rV$thisEnvisionUser <- Sys.info()[["user"]]
+    passwdDF <- read.delim('/etc/passwd', sep = ":", header = FALSE, stringsAsFactors = FALSE)
     
-    passwd_df <- read.delim('/etc/passwd', sep = ":", header = FALSE, stringsAsFactors = FALSE)
+    EnvisionUsersDF <- passwdDF[passwdDF$V3 > 999 & passwdDF$V3 < 2000 & !(passwdDF$V1 %in% c("ubuntu", "piranajs", "sas")), ]
     
-    envision_users_df <- passwd_df[passwd_df$V3 > 999 & passwd_df$V3 < 2000 & !(passwd_df$V1 %in% c("ubuntu", "piranajs", "sas")), ]
+    rV$envisionUsers <- sort(unique(EnvisionUsersDF$V1))
     
-    rV$envisionUsers <- sort(unique(envision_users_df$V1))
+    rV$envisionDeveloper <- EnvisionUsersDF$V1[which.min(EnvisionUsersDF$V3)]
     
-    rV$envisionDeveloper <- envision_users_df$V1[which.min(envision_users_df$V3)]
-    
-    rV$isDeveloper <- rV$thisEnvisionUser == rV$envisionDeveloper
-    
+    rV$isDeveloper <- EnvisionUser == rV$envisionDeveloper
   })
   
   
@@ -26,7 +24,7 @@ function(input, output, session) {
   # 
   # output$envisionDeveloper <- renderUI({
   #   HTML(
-  #     paste("User: ", rV$thisEnvisionUser, "</br>",
+  #     paste("User: ", EnvisionUser, "</br>",
   #           "Developer: ", rV$envisionDeveloper, "</br>",
   #           "Is Developer: ", rV$isDeveloper)
   #   )
@@ -82,7 +80,7 @@ function(input, output, session) {
       apps_df$ShowThisUser[i] <- ifelse(
         grepl("all", apps_df$EnvisionUsers[i]) | rV$isDeveloper,
         TRUE,
-        grepl(rV$thisEnvisionUser, apps_df$EnvisionUsers[i])
+        grepl(EnvisionUser, apps_df$EnvisionUsers[i])
       )
       
     }
@@ -164,19 +162,36 @@ function(input, output, session) {
       
       if(show_warnings){
         warnings.i <-
-            tags$button(
-              type="button",
-              class="btn btn-link appBoxesToolTip",
-              id=paste0(app_df.i$App, "-toolTip"),
-              `data-toggle`="tooltip",
-              `data-placement`="right",
-              title = paste0("<span style='font-weight:bold; font-size:16px;' >Envision Warning</span></br></br>",
-                             "No description file found at:</br>",
-                             app_df.i$AppDir,
-                             "/DESCRIPTION</br></br>This file can be created via the Configure tab.",
-                             "</br></br>For more info, click <b><a href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps' target='_blank'>here</a></b>."),
-              HTML("<span class='badge alert-warning'><i class='fa fa-exclamation'></i></span>")
-            )
+          tags$button(
+            type="button",
+            class="btn btn-link appBoxesToolTip",
+            id=paste0(app_df.i$App, "-toolTip"),
+            `data-toggle`="tooltip",
+            `data-placement`="right",
+            title = tagList(
+              tags$span(style='font-weight:bold; font-size:16px;', "Envision Warning"),
+              tags$br(),
+              tags$br(),
+              "No description file found at:",
+              tags$br(),
+              app_df.i$AppDir, "/DESCRIPTION", 
+              tags$br(),
+              tags$br(), 
+              "This file can be created via the Configure tab.",
+              tags$br(), 
+              tags$br(),
+              "For more info, click ", 
+              tags$b(
+                tags$a(
+                  href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps',
+                  target='_blank',
+                  "here"
+                )
+              )
+            ),
+            
+            tags$span(class = 'badge alert-warning', icon("exclamation"))
+          )
         
       } else {
         warnings.i <- tags$div()
@@ -305,11 +320,11 @@ function(input, output, session) {
       fluidRow(
         column(
           width = 10,
-          HTML(
-            paste0(
-              "<div style='font-size:14px;'><span class='badge alert-success'><i class='fa fa-check'></i></span>&nbsp;&nbsp;File <i>", description_file_location, "</i> successfully ", DESCRIPTION_message, ".</div>"
-            )
-          )
+          tags$div(style = 'font-size:14px;',
+                   tags$span(class = 'badge alert-success', icon("check")),
+                   "  File", tags$i(description_file_location),
+                   " successfully ",
+                   DESCRIPTION_message)
         )
       ),
       easyClose = TRUE,
@@ -516,13 +531,13 @@ function(input, output, session) {
                       actionButton(
                         class = "btn-lg pull-right",
                         inputId = "configAppSave",
-                        label = "Save Config",
+                        label = "Save",
                         icon = icon("save")
                       ),
                       tags$div(
                         id = "no-description-message",
                         display = 'none',
-                        HTML("<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>")
+                        tags$i("No DESCRIPTION file found for this app. Form generated using defaults.")
                       )
                     )
                   )

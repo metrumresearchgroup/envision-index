@@ -98,7 +98,7 @@ dashboardPage(
                           actionButton(
                             class = "pull-right",
                             inputId = "downloadLogModal",
-                            label = HTML("Download Logs"),
+                            label = "Download",
                             icon = icon("download")
                           )
                         )

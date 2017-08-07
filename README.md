@@ -36,8 +36,8 @@ The DESCRIPTION file should be placed at the same level as the code for the app 
   * Description: Location of the image file to display as app tile.
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
 
-### Example Result
-![Example](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/DESCRIPTION-example.png)
+[comment]: ### Example Result
+[comment]: ![Example](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/img/DESCRIPTION-example.png)
 
 Download example DESCRIPTION file [here](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/hello/DESCRIPTION).
   

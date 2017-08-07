@@ -2,4 +2,3 @@ EnvisionName: It's Alive
 EnvisionDescription: Simple example demonstrating a shiny app and the DESCRIPTION file
 EnvisionViewLogs: TRUE
 EnvisionTileLocation: /data/shiny-server/hello/tile.png
-EnvisionUsers: all

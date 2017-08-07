@@ -133,6 +133,7 @@ function(input, output, session) {
       tile.i <- tags$img(alt = "Tile Not Found", 
                          height = "120px",
                          width = "150px",
+                         class = "envision-index-tile-img",
                          src = tile_file.i)
       
       ## Name
@@ -492,6 +493,24 @@ function(input, output, session) {
         tagList(
           fluidRow(
             column(
+              width = 12,
+              tags$div(
+                class = "bg-info text-info alert",
+                tags$button(
+                  `aria-hidden`="true",
+                  class="close",
+                  `data-dismiss`="alert",
+                  type="button",
+                  "x"
+                ),
+                tags$div("Only the Envision ",
+                         tags$div(class = "badge alert-info", "Developer"),
+                         "can view this tab.")
+              )
+            )
+          ),
+          fluidRow(
+            column(
               width = 6,
               box(
                 width = NULL,
@@ -555,7 +574,7 @@ function(input, output, session) {
               )
             ),
             column(
-              width = 4,
+              width = 6,
               box(
                 width = NULL,
                 title = "Envision Info", 

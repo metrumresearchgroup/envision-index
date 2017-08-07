@@ -55,38 +55,35 @@ dashboardPage(
       tabItem(tabName = "logs",
               fluidRow(
                 column(
-                  width = 2,
+                  width = 12,
                   box(
                     width = NULL,
                     title = "Log View Options", 
                     solidHeader = TRUE,
                     status = "primary",
-                    textInput(
-                      inputId = "logDir",
-                      "Log Directory",
-                      value = "/var/log/shiny-server",
-                      width = "250px"
-                    ),
-                    selectInput(
-                      inputId = "logApp",
-                      label = "Select App",
-                      choices = NULL
-                    )
-                  )
-                ),
-                conditionalPanel(
-                  "input.logApp != ''",
-                  column(
-                    width = 10,
-                    box(
-                      width = NULL,
-                      title = "Log", 
-                      solidHeader = TRUE,
-                      status = "primary",
-                      fluidRow(
+                    fluidRow(
+                      column(
+                        width = 2,
+                        textInput(
+                          inputId = "logDir",
+                          "Log Directory",
+                          value = "/var/log/shiny-server",
+                          width = "250px"
+                        )
+                      ),
+                      column(
+                        width = 2,
+                        selectInput(
+                          inputId = "logApp",
+                          label = "Select App",
+                          choices = NULL
+                        )
+                      ),
+                      conditionalPanel(
+                        "input.logApp != ''",
                         column(
                           width = 2,
-                          offset = 7,
+                          offset = 4,
                           span(
                             style = "font-size:20px",
                             checkboxInput(
@@ -97,25 +94,33 @@ dashboardPage(
                           )
                         ),
                         column(
-                          width = 3,
+                          width = 1,
                           actionButton(
-                            class = "pull-right",
                             inputId = "downloadLogModal",
                             label = "Download",
                             icon = icon("download")
                           )
                         )
-                      ),
-                      uiOutput("logContents")
+                      )
+                    ),
+                    conditionalPanel(
+                      "input.logApp != ''",
+                      fluidRow(
+                        column(
+                          width = 12,
+                          uiOutput("logContents")
+                        )
+                      )
                     )
                   )
+                  
                 )
               )
       ),
       tabItem(tabName = "configure",
               uiOutput('configureDevUI')
-              
       )
     )
   )
 )
+

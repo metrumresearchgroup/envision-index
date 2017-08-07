@@ -379,6 +379,15 @@ function(input, output, session) {
   })
   
   logContents <- reactive({
+    
+    if(length(appLogs()) == 0) {
+      return(
+        data.frame(display_lines = paste0("No logs found for app ", tags$i(input$logApp), 
+                                          ". Launch this app from the&nbsp;", tags$b(icon("th"), "Apps"), "&nbsp;tab to initiate a log."),
+                   stringsAsFactors = FALSE)
+      )
+    }
+    
     app_logs_time_info <- do.call("rbind",
                                   lapply(strsplit(appLogs(), "-"), function(x){
                                     data.frame(

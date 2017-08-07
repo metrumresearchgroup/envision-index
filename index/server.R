@@ -20,7 +20,6 @@ function(input, output, session) {
   })
   
   
-  
   # 
   # output$envisionDeveloper <- renderUI({
   #   HTML(

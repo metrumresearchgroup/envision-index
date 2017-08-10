@@ -207,13 +207,13 @@ function(input, output, session) {
                                tile.i
                              ),
                              column(
-                               width = 5,
+                               width = 6,
                                offset = 1,
                                description.i
                              ),
                              column(
                                width = 2,
-                               offset = 2,
+                               offset = 1,
                                launch_link.i
                              )
                              

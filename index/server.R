@@ -312,7 +312,7 @@ function(input, output, session) {
     write.dcf(DESCRIPTION_file, file = description_file_location, keep.white = EnvisionFields)
     
     showModal(modalDialog(
-      title = "Metworx Message",
+      title = "Metworx Envision",
       fluidRow(
         column(
           width = 10,
@@ -532,18 +532,15 @@ function(input, output, session) {
                       width = "250px"
                     )
                   ),
-                  conditionalPanel(
-                    "input.configAppName != ''",
-                    column(
-                      width = 6,
-                      div(
-                        class = "config-app-options",
-                        style = "display:none;",
-                        actionButton(
-                          inputId = "restartApp",
-                          label = "Restart App",
-                          icon = icon("refresh")
-                        )
+                  column(
+                    width = 6,
+                    div(
+                      class = "config-app-options",
+                      style = "display:none;",
+                      actionButton(
+                        inputId = "restartApp",
+                        label = "Restart App",
+                        icon = icon("refresh")
                       )
                     )
                   )
@@ -655,7 +652,18 @@ function(input, output, session) {
   })
   
   observeEvent(input$restartApp, {
-    system(paste0("touch ", EnvisionAppsLocation, "/", input$configAppName, "/restart.txt"))
+    system(paste0("touch ", EnvisionAppsLocation, "/", input$configApp, "/restart.txt"))
+    
+    showModal(
+      modalDialog(
+        title = "Metworx Envision",
+        tags$div(style = 'font-size:14px;',
+                 tags$span(class = 'badge alert-success', icon("refresh")),
+                 paste0("Application ", input$configApp, " successfully restarted") 
+        )
+      )
+    )
+    
   })
   
   observeEvent(input$uploadImageModal, {

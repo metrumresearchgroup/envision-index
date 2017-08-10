@@ -673,7 +673,8 @@ function(input, output, session) {
     UploadedImageLoc <- file.path(EnvisionAppsLocation, input$configApp, input$envisionTileInput$name)
     
     file.copy(input$envisionTileInput$datapath,
-              UploadedImageLoc)
+              UploadedImageLoc,
+              overwrite = TRUE)
     
     updateTextInput(session, inputId = "configAppTileLocation", value = UploadedImageLoc)
   })

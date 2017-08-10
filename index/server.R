@@ -659,7 +659,7 @@ function(input, output, session) {
         title = "Metworx Envision",
         tags$div(style = 'font-size:14px;',
                  tags$span(class = 'badge alert-success', icon("refresh")),
-                 paste0("Application ", input$configApp, " successfully restarted") 
+                 paste0("Application ", input$configApp, " successfully restarted.") 
         )
       )
     )

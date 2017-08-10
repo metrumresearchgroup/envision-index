@@ -170,7 +170,7 @@ function(input, output, session) {
               tags$br(),
               "No description file found at:",
               tags$br(),
-              app_df.i$AppDir, "/DESCRIPTION", 
+              paste0(app_df.i$AppDir, "/DESCRIPTION"), 
               tags$br(),
               tags$br(), 
               tagList("This file can be created via the ", tags$b(icon("gears"), "Configure"), " tab."),

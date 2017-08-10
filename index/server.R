@@ -536,10 +536,14 @@ function(input, output, session) {
                     "input.configAppName != ''",
                     column(
                       width = 6,
-                      actionButton(
-                        inputId = "restartApp",
-                        label = "Restart App",
-                        icon = icon("refresh")
+                      div(
+                        class = "config-app-options",
+                        style = "display:none;",
+                        actionButton(
+                          inputId = "restartApp",
+                          label = "Restart App",
+                          icon = icon("refresh")
+                        )
                       )
                     )
                   )
@@ -548,7 +552,7 @@ function(input, output, session) {
                   column(
                     width = 12,
                     div(
-                      id = "config-app-options",
+                      class = "config-app-options",
                       style = "display:none;",
                       br(),
                       textInput(
@@ -695,7 +699,7 @@ function(input, output, session) {
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').hide();");
     if(input$configApp == '') return(NULL)
     session$sendCustomMessage(type = "envisionIndexJS",
-                              "$('#config-app-options').fadeOut('slow', function(){Shiny.onInputChange('updateConfig', Date());}); $('#config-app-options').fadeIn('slow');")
+                              "$('.config-app-options').fadeOut('slow', function(){Shiny.onInputChange('updateConfig', Date());}); $('.config-app-options').fadeIn('slow');")
     
   })
 }

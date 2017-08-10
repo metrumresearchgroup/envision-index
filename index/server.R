@@ -35,7 +35,7 @@ function(input, output, session) {
   appsDF <- reactive({
     input$dismissAfterConfig
     
-    shiny_server_directories <- list.dirs("../", recursive = FALSE, full.names = FALSE)
+    shiny_server_directories <- list.dirs("/data/shiny-server", recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
     

@@ -35,12 +35,12 @@ function(input, output, session) {
   appsDF <- reactive({
     input$dismissAfterConfig
     
-    shiny_server_directories <- list.dirs("/data/shiny-server", recursive = FALSE, full.names = FALSE)
+    shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
     
     apps_df <- data.frame(App = apps,
-                          AppDir = file.path("/data/shiny-server", apps),
+                          AppDir = file.path(EnvisionAppsLocation, apps),
                           MTime = NA,
                           HasDescription = NA,
                           EnvisionName = NA,
@@ -524,13 +524,29 @@ function(input, output, session) {
                 collapsible = TRUE,
                 fluidRow(
                   column(
-                    width = 12,
+                    width = 5,
                     selectInput(
                       inputId = "configApp",
                       label = "Select App to Configure",
                       choices = c("", appsDF()$App),
                       width = "250px"
-                    ),
+                    )
+                  ),
+                  conditionalPanel(
+                    "input.configAppName != ''",
+                    column(
+                      width = 6,
+                      actionButton(
+                        inputId = "restartApp",
+                        label = "Restart App",
+                        icon = icon("refresh")
+                      )
+                    )
+                  )
+                ),
+                fluidRow(
+                  column(
+                    width = 12,
                     div(
                       id = "config-app-options",
                       style = "display:none;",
@@ -553,6 +569,13 @@ function(input, output, session) {
                         value = "",
                         width = "500px"
                       ),
+                      actionButton(
+                        inputId = "uploadImageModal",
+                        label = "Upload New Image",
+                        icon = icon("upload")
+                      ),
+                      br(),
+                      br(),
                       selectInput(
                         inputId = "configAppUsers",
                         label = "Envision Users",
@@ -626,6 +649,35 @@ function(input, output, session) {
     
     configureDevUI
   })
+  
+  observeEvent(input$restartApp, {
+    system(paste0("touch ", EnvisionAppsLocation, "/", input$configAppName, "/restart.txt"))
+  })
+  
+  observeEvent(input$uploadImageModal, {
+    showModal(
+      modalDialog(
+        title = "Select Image",
+        fileInput(width = "100%",
+                  inputId = 'envisionTileInput',
+                  label = 'Upload Image',
+                  accept = c('image/*'))
+      )
+    )
+  })
+  
+  
+  observeEvent(input$envisionTileInput, {
+    req(input$envisionTileInput)
+    
+    UploadedImageLoc <- file.path(EnvisionAppsLocation, input$configApp, input$envisionTileInput$name)
+    
+    file.copy(input$envisionTileInput$datapath,
+              UploadedImageLoc)
+    
+    updateTextInput(session, inputId = "configAppTileLocation", value = UploadedImageLoc)
+  })
+  
   
   observeEvent(input$configAppName, {
     if(input$configAppName == ""){

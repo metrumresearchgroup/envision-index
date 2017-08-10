@@ -103,31 +103,29 @@ function(input, output, session) {
       
       ## Tile
       tile_file.i <- "default-tile.png"
+      alt_text.i = "Tile Not Found"
       
       if(app_df.i$EnvisionTileLocation != ""){
         
-        if(file.exists(app_df.i$EnvisionTileLocation)){
-          
-          # Create a name that will be unique to each session
-          temp_img_name.i <- paste0(app_df.i$App,
-                                    "-temp-tile-",
-                                    round(as.numeric(Sys.time()), 0),
-                                    "-",
-                                    basename(app_df.i$EnvisionTileLocation))
-          
-          try(
-            file.copy(
-              from = app_df.i$EnvisionTileLocation,
-              to = paste0("www/", temp_img_name.i)
-            )
+        # Create a name that will be unique to each session
+        temp_img_name.i <- paste0(app_df.i$App,
+                                  "-temp-tile-",
+                                  round(as.numeric(Sys.time()), 0),
+                                  "-",
+                                  basename(app_df.i$EnvisionTileLocation))
+        try(
+          file.copy(
+            from = app_df.i$EnvisionTileLocation,
+            to = paste0("www/", temp_img_name.i)
           )
-          
-          tile_file.i <- temp_img_name.i
-          
-        }
+        )
+        
+        tile_file.i <- temp_img_name.i
+        
+        alt_text.i <- paste0(alt_text.i, " At: ", app_df.i$EnvisionTileLocation)
       }
       
-      tile.i <- tags$img(alt = "Tile Not Found", 
+      tile.i <- tags$img(alt = alt_text.i, 
                          height = "120px",
                          width = "150px",
                          class = "envision-index-tile-img",
@@ -227,7 +225,7 @@ function(input, output, session) {
     tagList(
       app_boxes,
       tags$script(
-        '$(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1300 }});'
+        '$(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1500 }});'
       )
     )
   })

@@ -8,7 +8,6 @@ dashboardPage(
     sidebarMenu(
       id = "envision-dashboard-sidebar",
       menuItem("Apps",
-               
                tabName = "apps",
                icon = icon("th")),
       menuItem("Logs",
@@ -31,17 +30,6 @@ dashboardPage(
     includeCSS(file.path("css", "envision-index.css")),
     includeScript(file.path("js", "envision-index.js")),
     
-    # tags$nav(
-    #   class = "navbar navbar-default navbar-fixed-top",
-    #   tags$div(
-    #     class = "container-fluid",
-    #     tags$img(
-    #       class = "navbar-brand",
-    #       id = "metrum-logo",
-    #       alt = "Metrum Research Group",
-    #       src = "metworx-logo.png")
-    #   )
-    # ),
     tabItems(
       # First tab content
       tabItem(tabName = "apps",

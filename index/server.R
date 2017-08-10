@@ -45,7 +45,7 @@ function(input, output, session) {
                           HasDescription = NA,
                           EnvisionName = NA,
                           EnvisionDescription = "",
-                          EnvisionTileLocation = "default-tile.png",
+                          EnvisionTileLocation = "",
                           EnvisionUsers = "all",
                           ShowThisUser = NA,
                           stringsAsFactors = FALSE)
@@ -102,7 +102,9 @@ function(input, output, session) {
       app_df.i <- appsDF()[i, ]
       
       ## Tile
-      if(app_df.i$EnvisionTileLocation != "default-tile.png"){
+      tile_file.i <- "default-tile.png"
+      
+      if(app_df.i$EnvisionTileLocation != ""){
         
         if(file.exists(app_df.i$EnvisionTileLocation)){
           
@@ -123,10 +125,6 @@ function(input, output, session) {
           tile_file.i <- temp_img_name.i
           
         }
-        
-      } else {
-        
-        tile_file.i <- "default-tile.png"
       }
       
       tile.i <- tags$img(alt = "Tile Not Found", 
@@ -177,20 +175,20 @@ function(input, output, session) {
               app_df.i$AppDir, "/DESCRIPTION", 
               tags$br(),
               tags$br(), 
-              "This file can be created via the Configure tab.",
+              tagList("This file can be created via the ", tags$b(icon("gears"), "Configure"), " tab."),
               tags$br(), 
               tags$br(),
               "For more info, click ", 
-              tags$b(
-                tags$a(
-                  href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps',
-                  target='_blank',
-                  "here"
-                )
+              # tags$b(
+              tags$a(
+                href='https://github.com/metrumresearchgroup/envision-index/#description-file-in-envision-apps',
+                target='_blank',
+                "here."
+                # )
               )
             ),
             
-            tags$span(class = 'badge alert-warning', icon("exclamation"))
+            tags$span(class = 'badge alert-info', icon("exclamation"))
           )
         
       } else {
@@ -250,7 +248,7 @@ function(input, output, session) {
     
     config_app_DEFAULT <- data.frame(EnvisionName = input$configApp,
                                      EnvisionDescription = "",
-                                     EnvisionTileLocation = "default-tile.png",
+                                     EnvisionTileLocation = "",
                                      EnvisionUsers = "all",
                                      stringsAsFactors = FALSE)
     
@@ -295,7 +293,7 @@ function(input, output, session) {
       
       DESCRIPTION_file <- as.data.frame(read.dcf(file = description_file_location, keep.white = EnvisionFields), stringsAsFactors = FALSE)
       
-      DESCRIPTION_message <- "updated" 
+      DESCRIPTION_message <- "updated." 
       
     } else {
       
@@ -305,7 +303,7 @@ function(input, output, session) {
                                      EnvisionUsers = NA,
                                      stringsAsFactors = FALSE)
       
-      DESCRIPTION_message <- "created" 
+      DESCRIPTION_message <- "created." 
     }
     
     DESCRIPTION_file$EnvisionName <- input$configAppName
@@ -541,19 +539,19 @@ function(input, output, session) {
                       br(),
                       textInput(
                         inputId = "configAppName",
-                        label = "Envision Name",
+                        label = "Name*",
                         value = "",
                         width = "500px"
                       ),
                       textInput(
                         inputId = "configAppDescription",
-                        label = "Envision Description",
+                        label = "Description",
                         value = "",
                         width = "500px"
                       ),
                       textInput(
                         inputId = "configAppTileLocation",
-                        label = "Envision Tile Location",
+                        label = "Tile Location",
                         value = "",
                         width = "500px"
                       ),
@@ -565,11 +563,14 @@ function(input, output, session) {
                         width = "500px"
                       ),
                       br(),
-                      actionButton(
-                        class = "btn-lg pull-right",
-                        inputId = "configAppSave",
-                        label = "Save",
-                        icon = icon("save")
+                      conditionalPanel(
+                        "input.configAppName != ''",
+                        actionButton(
+                          class = "btn-lg pull-right",
+                          inputId = "configAppSave",
+                          label = "Save",
+                          icon = icon("save")
+                        )
                       ),
                       tags$div(
                         id = "no-description-message",
@@ -626,6 +627,17 @@ function(input, output, session) {
     }
     
     configureDevUI
+  })
+  
+  observeEvent(input$configAppName, {
+    if(input$configAppName == ""){
+      session$sendCustomMessage(type = "envisionIndexJS",
+                                "$('#configAppName').removeClass('parsley-success').addClass('parsley-error')")
+    } else {
+      session$sendCustomMessage(type = "envisionIndexJS",
+                                "$('#configAppName').removeClass('parsley-error').addClass('parsley-success')")
+    }
+    
   })
   
   observeEvent(input$configApp, {

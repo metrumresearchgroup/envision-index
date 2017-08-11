@@ -488,7 +488,8 @@ function(input, output, session) {
                  href = "https://metworx-help.zendesk.com/hc/en-us/articles/115001650486-Use-a-custom-R-library-for-a-shiny-application-including-overriding-system-packages",
                  target = "_blank", 
                  "here"
-               )
+               ),
+               "."
         )
       )
       
@@ -515,7 +516,7 @@ function(input, output, session) {
           ),
           fluidRow(
             column(
-              width = 6,
+              width = 5,
               box(
                 width = NULL,
                 title = "Configure Apps", 
@@ -527,23 +528,29 @@ function(input, output, session) {
                     width = 5,
                     selectInput(
                       inputId = "configApp",
-                      label = "Select App to Configure",
+                      label = "Select App",
                       choices = c("", appsDF()$App),
                       width = "250px"
                     )
                   ),
                   column(
-                    width = 6,
+                    width = 3,
                     div(
                       class = "config-app-options",
                       style = "display:none;",
                       actionButton(
+                        style = "margin-top:25px",
                         inputId = "restartApp",
-                        label = "Restart App",
+                        label = "Restart",
                         icon = icon("refresh")
                       )
                     )
                   )
+                ),
+                tags$div(
+                  id = "no-description-message",
+                  display = 'none',
+                  tags$i("No DESCRIPTION file found for this app. Form generated using defaults.")
                 ),
                 fluidRow(
                   column(
@@ -556,48 +563,52 @@ function(input, output, session) {
                         inputId = "configAppName",
                         label = "Name*",
                         value = "",
-                        width = "500px"
+                        width = "100%"
                       ),
-                      textInput(
+                      br(),
+                      textAreaInput(
                         inputId = "configAppDescription",
                         label = "Description",
                         value = "",
-                        width = "500px"
+                        width = "100%",
+                        height = "80px"
                       ),
+                      br(),
                       textInput(
                         inputId = "configAppTileLocation",
-                        label = "Tile Location",
+                        label = "Tile Location On Disk",
                         value = "",
-                        width = "500px"
+                        width = "100%"
                       ),
-                      actionButton(
-                        inputId = "uploadImageModal",
-                        label = "Upload New Image",
-                        icon = icon("upload")
-                      ),
-                      br(),
-                      br(),
+                      # actionButton(
+                      #   inputId = "uploadImageModal",
+                      #   label = "Upload New Image",
+                      #   icon = icon("upload")
+                      # ),
+                      fileInput(inputId = 'envisionTileInput',
+                                label = 'Upload New Tile Image',
+                                accept = c('image/*'),
+                                width = "100%"),
                       selectInput(
                         inputId = "configAppUsers",
                         label = "Envision Users",
                         choices = "",
                         multiple = TRUE,
-                        width = "500px"
+                        width = "100%"
                       ),
-                      br(),
                       conditionalPanel(
                         "input.configAppName != ''",
+                        # column(
+                        # width = 4,
+                        # br(),
                         actionButton(
+                          style = "margin-top:8px",
                           class = "btn-lg pull-right",
                           inputId = "configAppSave",
-                          label = "Save",
+                          label = "Save Config",
                           icon = icon("save")
                         )
-                      ),
-                      tags$div(
-                        id = "no-description-message",
-                        display = 'none',
-                        tags$i("No DESCRIPTION file found for this app. Form generated using defaults.")
+                        #  )
                       )
                     )
                   )
@@ -605,11 +616,12 @@ function(input, output, session) {
               )
             ),
             column(
-              width = 6,
+              width = 5,
+              offset = 1,
               box(
                 width = NULL,
                 title = "Envision Info", 
-                solidHeader = TRUE,
+                # solidHeader = TRUE,
                 status = "info",
                 collapsible = TRUE,
                 tagList(
@@ -666,17 +678,17 @@ function(input, output, session) {
     
   })
   
-  observeEvent(input$uploadImageModal, {
-    showModal(
-      modalDialog(
-        title = "Select Image",
-        fileInput(width = "100%",
-                  inputId = 'envisionTileInput',
-                  label = 'Upload Image',
-                  accept = c('image/*'))
-      )
-    )
-  })
+  # observeEvent(input$uploadImageModal, {
+  #   showModal(
+  #     modalDialog(
+  #       title = "Select Image",
+  #       fileInput(width = "100%",
+  #                 inputId = 'envisionTileInput',
+  #                 label = 'Upload Image',
+  #                 accept = c('image/*'))
+  #     )
+  #   )
+  # })
   
   
   observeEvent(input$envisionTileInput, {

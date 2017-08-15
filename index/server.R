@@ -629,12 +629,12 @@ function(input, output, session) {
                     column(width = 4, tags$b("Envision Developer:")),
                     column(width = 8, rV$envisionDeveloper)
                   ),
-                  tags$br(),
+                  tags$hr(),
                   fluidRow(
                     column(width = 4, tags$b("Envision Users:")),
                     column(width = 8, lapply(sort(rV$envisionUsers), function(x){tagList(x, tags$br())}))
                   ), 
-                  tags$br(),
+                  tags$hr(),
                   fluidRow(
                     column(width = 4, tags$b("Software:")),
                     column(width = 8, softwareInfo)

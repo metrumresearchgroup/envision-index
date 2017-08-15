@@ -3,6 +3,8 @@ $(document).ready(function () {
         function (code) {
             eval(code);
         });
+        
+      $("body").addClass("skin-blue-light");
 });
 
 /*

@@ -1,5 +1,6 @@
 dashboardPage(
   title = "Envision",
+  # skin = "yellow",
   # title = HTML("<i class='fa fa-bar-chart'></i>Envision"),
   # dashboardHeader(title = tags$img(width = "auto", height = "95%", src = "metworx-logo.png")),
   dashboardHeader(title = HTML("<b>Envision</b>Dashboard")),
@@ -15,7 +16,7 @@ dashboardPage(
                icon = icon("database")),
       tags$img(id = "metworx-logo-image", 
                height="auto", 
-               width = "150px",
+               width = "175px",
                src = "metworx-logo.png")
       
     )
@@ -72,8 +73,9 @@ dashboardPage(
                         column(
                           width = 2,
                           offset = 4,
-                          span(
-                            style = "font-size:20px",
+                          style = "margin-top:12px;",
+                          tags$span(
+                            style = "font-size:20px;",
                             checkboxInput(
                               "liveStream",
                               "Live Stream",
@@ -84,6 +86,7 @@ dashboardPage(
                         column(
                           width = 1,
                           actionButton(
+                            style = "margin-top:22px;",
                             inputId = "downloadLogModal",
                             label = "Download",
                             icon = icon("download")

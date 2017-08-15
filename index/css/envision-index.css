@@ -1,3 +1,5 @@
+
+
 #appBoxes .tooltip-inner {
     max-width: 700px;
     text-align: left;
@@ -17,8 +19,8 @@
 #metworx-logo-image {
     position:fixed;
     bottom:0;
-    margin-left:40px;
-    margin-bottom:10px;
+    margin-left:25px;
+    margin-bottom:20px;
 }
 
 .envision-index-tile-img{

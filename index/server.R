@@ -458,11 +458,11 @@ function(input, output, session) {
       insertUI(
         selector = "#envision-dashboard-sidebar",
         where = "beforeBegin",
-        menuItem("Configure",
-                 tabName = "configure",
-                 icon = icon("gears"),
-                 badgeLabel = "Developer",
-                 badgeColor = "light-blue")
+        menuItem(tagList("Configure",
+                         tags$div(class = "pull-right badge alert-info", "Developer")
+        ),
+        tabName = "configure",
+        icon = icon("gears"))
       )
       
     }

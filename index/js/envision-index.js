@@ -17,7 +17,7 @@ function getAppLink(app) {
 }
 */
 function resizeLogOutput() {
-    $("#logContents").css("max-height", $(window).height() - 225);
+    $("#logContents").css("max-height", $(window).height() - 255);
 }
 
 function scrollBottomLog() {

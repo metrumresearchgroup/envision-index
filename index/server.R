@@ -145,7 +145,7 @@ function(input, output, session) {
       
       ## Launch button
       launch_link.i <- tags$a(
-        class = "btn btn-default btn-lg btn-block pull-right",
+        class = "btn btn-primary btn-lg btn-block pull-right",
         target = "_blank",
         href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
         icon("new-window", lib = "glyphicon"),
@@ -215,7 +215,7 @@ function(input, output, session) {
                              column(
                                width = 2,
                                offset = 2,
-                               tags$br(),
+                               style = "padding-top:30px;",
                                launch_link.i
                              )
                              

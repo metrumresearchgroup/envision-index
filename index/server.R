@@ -133,19 +133,19 @@ function(input, output, session) {
       
       ## Name
       name.i <- tags$span(
-        style = "font-size:22px;font-weight:bold;",
+        style = "font-size:23px;font-weight:bold;",
         app_df.i$EnvisionName
       )
       
       ## Description
       description.i <- tags$span(
-        style = "font-size:20px",
+        style = "font-size:18px",
         app_df.i$EnvisionDescription
       )
       
       ## Launch button
       launch_link.i <- tags$a(
-        class = "btn btn-default btn-lg btn-block",
+        class = "btn btn-default btn-lg btn-block pull-right",
         target = "_blank",
         href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
         icon("new-window", lib = "glyphicon"),
@@ -197,9 +197,9 @@ function(input, output, session) {
       app_boxes <- 
         tagAppendChild(app_boxes,
                        box(width = NULL, 
-                           status = "primary",
-                           solidHeader = TRUE,
-                           title = tagList(name.i, warnings.i),
+                           # status = "primary",
+                           # solidHeader = TRUE,
+                           title = "", # tagList(name.i, warnings.i),
                            # collapsible = TRUE,
                            fluidRow(
                              column(
@@ -208,12 +208,14 @@ function(input, output, session) {
                              ),
                              column(
                                width = 6,
-                               offset = 1,
+                               tagList(name.i, warnings.i),
+                               tags$br(),
                                description.i
                              ),
                              column(
                                width = 2,
-                               offset = 1,
+                               offset = 2,
+                               tags$br(),
                                launch_link.i
                              )
                              
@@ -225,7 +227,10 @@ function(input, output, session) {
     tagList(
       app_boxes,
       tags$script(
-        '$(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1500 }});'
+        '
+         $(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1500 }});
+         $("#appBoxes .box-header").remove();
+        '
       )
     )
   })
@@ -530,7 +535,7 @@ function(input, output, session) {
                       inputId = "configApp",
                       label = "Select App",
                       choices = c("", appsDF()$App),
-                      width = "250px"
+                      width = "100%"
                     )
                   ),
                   column(

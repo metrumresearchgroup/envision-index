@@ -7,6 +7,10 @@ $(document).ready(function () {
       $("body").addClass("skin-blue-light");
 });
 
+function finalizeAppBoxes(){
+  $(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1500 }});
+}
+
 /*
 function getAppLink(app) {
   var curLocation = window.location.href.split("/");

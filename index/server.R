@@ -723,7 +723,7 @@ function(input, output, session) {
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     if(input$configApp == '') return(NULL)
     session$sendCustomMessage(type = "envisionIndexJS",
-                              "$('.config-app-options').fadeOut('slow', function(){Shiny.onInputChange('updateConfig', Date());}); $('.config-app-options').fadeIn('slow');")
+                              "$('.config-app-options').fadeOut(8000, function(){Shiny.onInputChange('updateConfig', Date());}); $('.config-app-options').fadeIn(800);")
     
   })
 }

@@ -34,6 +34,7 @@ function(input, output, session) {
   # App Table ---------------------------------------------------------------
   appsDF <- reactive({
     input$dismissAfterConfig
+    session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     
     shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
@@ -265,12 +266,12 @@ function(input, output, session) {
           config_app_DESCRIPTION[[column.i]] <- config_app_DEFAULT[[column.i]]
         }
       }
-      
+
     } else {
       
       config_app_DESCRIPTION <- config_app_DEFAULT
       
-      session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').show();");
+      session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').html('<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>');");
     }
     
     app_users <- unlist(strsplit(config_app_DESCRIPTION$EnvisionUsers, " "))
@@ -553,9 +554,7 @@ function(input, output, session) {
                   )
                 ),
                 tags$div(
-                  id = "no-description-message",
-                  display = 'none',
-                  tags$i("No DESCRIPTION file found for this app. Form generated using defaults.")
+                  id = "no-description-message"
                 ),
                 fluidRow(
                   column(
@@ -721,7 +720,7 @@ function(input, output, session) {
   })
   
   observeEvent(input$configApp, {
-    session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').hide();");
+    session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     if(input$configApp == '') return(NULL)
     session$sendCustomMessage(type = "envisionIndexJS",
                               "$('.config-app-options').fadeOut('slow', function(){Shiny.onInputChange('updateConfig', Date());}); $('.config-app-options').fadeIn('slow');")

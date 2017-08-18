@@ -216,7 +216,7 @@ function(input, output, session) {
                              column(
                                width = 2,
                                offset = 2,
-                               style = "padding-top:30px;",
+                               style = "padding-top:25px;",
                                launch_link.i
                              )
                              

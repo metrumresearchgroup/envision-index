@@ -584,11 +584,6 @@ function(input, output, session) {
                         value = "",
                         width = "100%"
                       ),
-                      # actionButton(
-                      #   inputId = "uploadImageModal",
-                      #   label = "Upload New Image",
-                      #   icon = icon("upload")
-                      # ),
                       fileInput(inputId = 'envisionTileInput',
                                 label = 'Upload New Tile Image',
                                 accept = c('image/*'),

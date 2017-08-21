@@ -212,7 +212,7 @@ function(input, output, session) {
                                tile.i
                              ),
                              tags$div(
-                               class = "col-lg-7 col-md-9 col-sm-9 col-xs-9",
+                               class = "col-lg-8 col-md-9 col-sm-9 col-xs-9",
                                tags$div(class = "small-screen-items", tags$br()),
                                tagList(name.i, warnings.i),
                                tags$div(class = "large-screen-items", tags$br()),

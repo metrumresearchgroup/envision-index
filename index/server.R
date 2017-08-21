@@ -207,8 +207,8 @@ function(input, output, session) {
                            title = "", # tagList(name.i, warnings.i),
                            # collapsible = TRUE,
                            fluidRow(
-                             tags$div(
-                               class = "col-lg-3 col-md-3 col-sm-3 col-xs-3",
+                             column(
+                               width = 3,
                                tile.i
                              ),
                              tags$div(

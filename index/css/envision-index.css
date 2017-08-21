@@ -1,40 +1,63 @@
-
-
 #appBoxes .tooltip-inner {
     max-width: 700px;
     text-align: left;
 }
 
-#appBoxes .tooltip-inner a{
+#appBoxes .tooltip-inner a {
     text-decoration: underline;
 }
 
 #logContents {
-    color: #4F4;		
+    color: #4F4;
     background-color: #2A2A2A;
     overflow-y: scroll;
     padding: 20px;
 }
 
 #metworx-logo-image {
-    position:fixed;
-    bottom:0;
-    margin-left:27px;
-    margin-bottom:20px;
+    position: fixed;
+    bottom: 0;
+    margin-left: 27px;
+    margin-bottom: 20px;
 }
 
-.envision-index-tile-img{
+.envision-index-tile-img {
     border: 1px solid #BFBFBF;
 }
 
-input.parsley-success, select.parsley-success, textarea.parsley-success {
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
     color: #468847;
     background-color: #DFF0D8;
     border: 1px solid #D6E9C6;
 }
 
-input.parsley-error, select.parsley-error, textarea.parsley-error {
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
     color: #B94A48;
     background-color: #F2DEDE;
     border: 1px solid #EED3D7;
+}
+
+.small-screen-items {
+    display: none;
+}
+
+.large-screen-items {
+    display: none;
+}
+
+
+@media (max-width: 767px) {
+    .small-screen-items {
+        display: block;
+    }
+}
+
+@media (min-width: 1025px) {
+    .large-screen-items {
+        display: block;
+    }
 }

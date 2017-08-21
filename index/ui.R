@@ -26,7 +26,8 @@ dashboardPage(
       tags$link(
         rel = "shortcut icon",
         href = "favicon.ico"
-      )
+      ),
+      HTML('<meta name="viewport" content="width=device-width, initial-scale=1">')
     ),
     includeCSS(file.path("css", "envision-index.css")),
     includeScript(file.path("js", "envision-index.js")),
@@ -34,11 +35,11 @@ dashboardPage(
     tabItems(
       # First tab content
       tabItem(tabName = "apps",
-              div(
-                class = "container",
-                br(),
-                # textOutput('clientUrl'),
-                uiOutput('appBoxes')
+              div(class = "row",
+                  div(class = "col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 col-lg-offset-2",
+                      br(),
+                      uiOutput('appBoxes')
+                  )
               )
       ),
       tabItem(tabName = "logs",

@@ -125,16 +125,21 @@ function(input, output, session) {
         alt_text.i <- paste0(alt_text.i, " At: ", app_df.i$EnvisionTileLocation)
       }
       
-      tile.i <- tags$img(alt = alt_text.i, 
-                         height = "120px",
-                         width = "150px",
-                         class = "envision-index-tile-img",
-                         src = tile_file.i)
+      tile.i <- 
+        tags$a(
+          href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
+          target = "_blank",
+          tags$img(alt = alt_text.i, 
+                   class = "envision-index-tile-img img-responsive",
+                   src = tile_file.i)
+        )
       
       ## Name
-      name.i <- tags$span(
+      name.i <- tags$a(
+        href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
+        target = "_blank",
         style = "font-size:23px;font-weight:bold;",
-        app_df.i$EnvisionName
+        HTML(paste0(app_df.i$EnvisionName, "&nbsp;&nbsp;", icon("new-window", lib = "glyphicon")))
       )
       
       ## Description
@@ -203,21 +208,21 @@ function(input, output, session) {
                            # collapsible = TRUE,
                            fluidRow(
                              column(
-                               width = 2,
+                               width = 3,
                                tile.i
                              ),
                              column(
-                               width = 6,
+                               width = 9,
+                               tags$div(class = "small-screen-items", tags$br()),
                                tagList(name.i, warnings.i),
-                               tags$br(),
+                               tags$div(class = "large-screen-items", tags$br()),
                                description.i
-                             ),
-                             column(
-                               width = 2,
-                               offset = 2,
-                               style = "padding-top:25px;",
-                               launch_link.i
-                             )
+                             )# ,
+                             # column(
+                             #   width = 3,
+                             #   style = "padding-top:25px;",
+                             #   launch_link.i
+                             # )
                              
                            )
                        )
@@ -265,7 +270,7 @@ function(input, output, session) {
           config_app_DESCRIPTION[[column.i]] <- config_app_DEFAULT[[column.i]]
         }
       }
-
+      
     } else {
       
       config_app_DESCRIPTION <- config_app_DEFAULT

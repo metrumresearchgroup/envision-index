@@ -206,13 +206,14 @@ function(input, output, session) {
                            # solidHeader = TRUE,
                            title = "", # tagList(name.i, warnings.i),
                            # collapsible = TRUE,
-                           fluidRow(
-                             column(
-                               width = 3,
+                           div(
+                             class = "row",
+                             div(
+                               class = "col-lg-3 col-md-3 col-sm-3 col-xs-3",
                                tile.i
                              ),
-                             column(
-                               width = 9,
+                             div(
+                               class = "col-lg-10 col-md-12 col-sm-12 col-xs-12",
                                tags$div(class = "small-screen-items", tags$br()),
                                tagList(name.i, warnings.i),
                                tags$div(class = "large-screen-items", tags$br()),

@@ -110,9 +110,9 @@ function(input, output, session) {
         # Create a name that will be unique to each session
         temp_img_name.i <- paste0(app_df.i$App,
                                   "-temp-tile-",
-                                  round(as.numeric(Sys.time()), 0),
-                                  "-",
-                                  basename(app_df.i$EnvisionTileLocation))
+                                  as.character(round(as.numeric(Sys.time()), 0)),
+                                  ".",
+                                  tools::file_ext(app_df.i$EnvisionTileLocation))
         try(
           file.copy(
             from = app_df.i$EnvisionTileLocation,

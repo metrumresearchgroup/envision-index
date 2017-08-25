@@ -311,11 +311,11 @@ function(input, output, session) {
   
   observeEvent(appsDF(), {
     if(rV$isDeveloper){
-      firstApp <- c("EnvisionDashboard" = "index")
+      lastApp <- c("EnvisionDashboard" = "index")
     } else {
-      firstApp <- ""
+      lastApp <- NULL
     }
-    updateSelectInput(session, inputId = "logApp", choices = c(firstApp, appsDF()$App))
+    updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))
   })
   
   output$EnvisionDashboardLogMessage <- renderUI({

@@ -129,7 +129,7 @@ function(input, output, session) {
       tile_file.i <- "default-tile.png"
       alt_text.i = "Tile Not Found"
       tile_alpha.i <- .75
-      tile_margin.i <- "13px"
+      tile_margin.i <- "14px"
       
       if(app_df.i$EnvisionTileLocation != ""){
         

@@ -4,7 +4,7 @@ function(input, output, session) {
   
   observeEvent(session, {
     
-    ##  This entire block runs whenenver the page is refreshed
+    #  This entire block runs whenenver the page is refreshed
     message(
       paste0(
         "\n# *********************** EnvisionDashboard Page Load ********************** #"

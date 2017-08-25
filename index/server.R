@@ -25,7 +25,6 @@ function(input, output, session) {
     
     message(
       paste0(
-        "\n# *************** EnvisionDashboard *************** #\n",
         "USER:  ", paste(EnvisionUser, sep = "", collapse = ", "), "\n",
         "DEVELOPER: ", paste(rV$envisionDeveloper, sep = "", collapse = ", "), "\n",
         "ENVISION USERS: ", paste(rV$envisionUsers, sep = "", collapse = ", ")
@@ -102,7 +101,6 @@ function(input, output, session) {
     
     message(
       paste0(
-        "\n# *************** EnvisionDashboard *************** #\n",
         "ENVISION APPS: ", paste(apps_df$App, sep = "", collapse = ", "), "\n",
         "ENVISION APPS FOR THIS USER: ", paste(apps_df$App[apps_df$ShowThisUser], sep = "", collapse = ", ")
       )
@@ -129,7 +127,7 @@ function(input, output, session) {
       tile_file.i <- "default-tile.png"
       alt_text.i = "Tile Not Found"
       tile_alpha.i <- .75
-      tile_padding.i <- "12px 30px 12px 30px;"
+      tile_padding.i <- "10px 25px 10px 25px;"
       
       if(app_df.i$EnvisionTileLocation != ""){
         
@@ -151,7 +149,7 @@ function(input, output, session) {
           
           message(
             paste0(
-              "\n# *************** EnvisionDashboard *************** #\n",
+              "\n",
               paste0("TILE COPY FAIL FOR APP: ", app_df.i$App,"\n", 
                      "FAIL COPY PATH: ", app_df.i$EnvisionTileLocation)
             )
@@ -396,7 +394,7 @@ function(input, output, session) {
     
     message(
       paste0(
-        "\n# *************** EnvisionDashboard *************** #\n",
+        "\n",
         "SAVING DESCRIPTION FOR APP:  ", input$configApp, "\n",
         "ENVISION NAME: ",  DESCRIPTION_file$EnvisionName, "\n",
         "ENVISION DESCRIPTION: ",  DESCRIPTION_file$EnvisionDescription, "\n",

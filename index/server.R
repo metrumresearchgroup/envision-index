@@ -106,7 +106,25 @@ function(input, output, session) {
       )
     )
     
-    apps_df[apps_df$ShowThisUser, ]
+    if(any(apps_df$ShowThisUser)){
+      
+      return(apps_df[apps_df$ShowThisUser, ])
+      
+    } else {
+      return(
+        data.frame(App = "",
+                   AppDir = file.path(EnvisionAppsLocation, ""),
+                   MTime = NA,
+                   HasDescription = NA,
+                   EnvisionName = "No Apps Found.",
+                   EnvisionDescription = "",
+                   EnvisionTileLocation = "",
+                   EnvisionUsers = "all",
+                   ShowThisUser = TRUE,
+                   stringsAsFactors = FALSE)
+      )
+    }
+    
   })
   
   output$appBoxes <- renderUI({
@@ -116,6 +134,20 @@ function(input, output, session) {
     old_tiles <- list.files("www", full.names = TRUE)
     old_tiles <- old_tiles[!(old_tiles %in% tiles_to_keep)]
     lapply(old_tiles, file.remove)
+    
+    if(all(appsDF()$EnvisionName == "No Apps Found.")) {
+      return(
+        box(
+          width = NULL,
+          status = "warning",
+          tagList(
+            span(style = "font-size:25px", HTML("No Apps Found.&nbsp;&nbsp;")), 
+            tags$a(style = "font-size:25px", href="javascript:history.go(0)", icon("refresh"))),
+          tags$br(),
+          tags$p("Please contact the developer.")
+        )
+      )
+    }
     
     app_boxes <- tagList()
     

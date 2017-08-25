@@ -5,7 +5,16 @@ $(document).ready(function () {
         });
         
       $("body").addClass("skin-blue-light");
+      /*
+   $( window ).resize(function() {
+  if($(window).width() <=1000) {
+    $('.envision-index-tile-img').addClass('img-responsive')
+  } else {
+        $('.envision-index-tile-img').removeClass('img-responsive')
+  }
+  */
 });
+
 
 function finalizeAppBoxes(){
   $(".appBoxesToolTip").tooltip({html: true, delay: { "show": 400, "hide": 1500 }});

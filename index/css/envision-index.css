@@ -17,8 +17,8 @@
 #metworx-logo-image {
     position: fixed;
     bottom: 0;
-    margin-left: 27px;
-    margin-bottom: 20px;
+    margin-left: 15px;
+    margin-bottom: 30px;
 }
 
 .envision-index-tile-img {
@@ -49,12 +49,28 @@ textarea.parsley-error {
     display: none;
 }
 
-
 @media (max-width: 767px) {
     .small-screen-items {
         display: block;
     }
+    /*
+    .envision-index-tile-img {
+      height: 240px;
+      width: 320px;
+    }
+    */
 }
+
+
+/*
+@media (min-width: 768px) and (max-width: 1024px){
+  .envision-index-tile-img {
+      height: 75px;
+      width: 100px;
+    }
+}
+*/
+
 
 @media (min-width: 1025px) {
     .large-screen-items {

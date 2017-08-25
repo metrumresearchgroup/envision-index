@@ -16,7 +16,7 @@ dashboardPage(
                icon = icon("database")),
       tags$img(id = "metworx-logo-image", 
                height="auto", 
-               width = "175px",
+               width = "200px",
                src = "metworx-logo.png")
       
     )
@@ -56,26 +56,21 @@ dashboardPage(
                     fluidRow(
                       column(
                         width = 2,
-                        textInput(
-                          inputId = "logDir",
-                          "Log Directory",
-                          value = "/var/log/shiny-server",
-                          width = "250px"
-                        )
-                      ),
-                      column(
-                        width = 2,
                         selectInput(
                           inputId = "logApp",
                           label = "Select App",
                           choices = NULL
                         )
                       ),
+                      column(
+                        width = 4,
+                        uiOutput("EnvisionDashboardLogMessage")
+                      ),
                       conditionalPanel(
                         "input.logApp != ''",
                         column(
                           width = 2,
-                          offset = 4,
+                          offset = 2,
                           style = "margin-top:12px;",
                           tags$span(
                             style = "font-size:20px;",
@@ -89,7 +84,8 @@ dashboardPage(
                         column(
                           width = 1,
                           actionButton(
-                            style = "margin-top:22px;",
+                            class = "btn-lg",
+                            style = "margin-top:15px;",
                             inputId = "downloadLogModal",
                             label = "Download",
                             icon = icon("download")

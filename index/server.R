@@ -5,6 +5,8 @@ function(input, output, session) {
   observeEvent(session, {
     
     ##  This entire block runs whenenver the page is refreshed
+    # envisionIndexMessage(message_title = "refresh app", message_elements = Sys.time())
+    
     
     rV$clientURL <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname)
     
@@ -14,9 +16,28 @@ function(input, output, session) {
     
     rV$envisionUsers <- sort(unique(EnvisionUsersDF$V1))
     
+    # envisionIndexMessage(message_title = "Users",
+    #                      message_elements = rV$envisionUsers)
+    
     rV$envisionDeveloper <- EnvisionUsersDF$V1[which.min(EnvisionUsersDF$V3)]
     
+    # envisionIndexMessage(message_title = "Developer",
+    #                      message_elements = rV$envisionDeveloper)
+    
     rV$isDeveloper <- EnvisionUser == rV$envisionDeveloper
+    
+    # envisionIndexMessage(message_title = "Is Developer", 
+    #                      message_elements = rV$isDeveloper)
+    
+    message(
+      paste0(
+        "\n############# EnvisionDashboard ##############\n",
+        "# User: ", paste(EnvisionUser, sep = "", collapse = ", "), "\n",
+        "# Envision Developer: ", paste(rV$envisionDeveloper, sep = "", collapse = ", "), "\n",
+        "# Envision Users: ", paste(rV$envisionUsers, sep = "", collapse = ", ")
+      )
+    )
+    
   })
   
   
@@ -32,12 +53,25 @@ function(input, output, session) {
   
   # App Table ---------------------------------------------------------------
   appsDF <- reactive({
+    
+    # envisionIndexMessage(message_elements = "Gathering Envision Apps")
+    
+    message(
+      paste0(
+        "\n############# EnvisionDashboard ##############\n",
+        "#**************** Page Refresh ***************#"
+      )
+    )
+    
     input$dismissAfterConfig
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     
     shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
+    
+    # envisionIndexMessage(message_title = "All Apps", 
+    #                      message_elements = apps)
     
     apps_df <- data.frame(App = apps,
                           AppDir = file.path(EnvisionAppsLocation, apps),
@@ -84,6 +118,14 @@ function(input, output, session) {
       
     }
     
+    message(
+      paste0(
+        "\n############# EnvisionDashboard ##############\n",
+        "# Envision Apps: ", paste(apps_df$App, sep = "", collapse = ", "), "\n",
+        "# Envision Apps For This User: ", paste(apps_df$App[apps_df$ShowThisUser], sep = "", collapse = ", ")
+      )
+    )
+    
     apps_df[apps_df$ShowThisUser, ]
   })
   
@@ -104,6 +146,8 @@ function(input, output, session) {
       ## Tile
       tile_file.i <- "default-tile.png"
       alt_text.i = "Tile Not Found"
+      tile_alpha.i <- .75
+      tile_margin.i <- "13px"
       
       if(app_df.i$EnvisionTileLocation != ""){
         
@@ -113,16 +157,29 @@ function(input, output, session) {
                                   as.character(round(as.numeric(Sys.time()), 0)),
                                   ".",
                                   tools::file_ext(app_df.i$EnvisionTileLocation))
-        try(
+        
+        tile_copy_try.i <- try(
           file.copy(
             from = app_df.i$EnvisionTileLocation,
             to = paste0("www/", temp_img_name.i)
           )
         )
         
-        tile_file.i <- temp_img_name.i
+        if(class(tile_copy_try.i) == "try-error"){
+          
+          message(
+            paste0(
+              "\n############# EnvisionDashboard ##############\n",
+              paste0("# Tile Copy Fail for app: ", app_df.i$App,"\n", 
+                     "# Fail Path: ", app_df.i$EnvisionTileLocation)
+            )
+          )
+        }
         
+        tile_file.i <- temp_img_name.i
         alt_text.i <- paste0(alt_text.i, " At: ", app_df.i$EnvisionTileLocation)
+        tile_alpha.i <- 1
+        tile_margin.i <- "0px"
       }
       
       tile.i <- 
@@ -130,7 +187,10 @@ function(input, output, session) {
           href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
           target = "_blank",
           tags$img(alt = alt_text.i, 
-                   class = "envision-index-tile-img img-responsive",
+                   # height = "170px",
+                   width = "90%",
+                   style = paste0("opacity:", tile_alpha.i,";", "padding:", tile_margin.i),
+                   class = "envision-index-tile-img",# img-responsive",
                    src = tile_file.i)
         )
       
@@ -210,9 +270,16 @@ function(input, output, session) {
                              column(
                                width = 3,
                                tile.i
+                               # fluidRow(
+                               #   column(
+                               #     offset = 1,
+                               #     width = 10,
+                               #     tile.i
+                               #   )
+                               # )
                              ),
                              tags$div(
-                               class = "col-lg-8 col-md-9 col-sm-9 col-xs-9",
+                               class = "col-lg-8 col-md-9 col-sm-9 col-xs-12",
                                tags$div(class = "small-screen-items", tags$br()),
                                tagList(name.i, warnings.i),
                                tags$div(class = "large-screen-items", tags$br()),
@@ -243,7 +310,33 @@ function(input, output, session) {
   # Log  --------------------------------------------------------------------
   
   observeEvent(appsDF(), {
-    updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App))
+    if(rV$isDeveloper){
+      firstApp <- c("EnvisionDashboard" = "index")
+    } else {
+      firstApp <- ""
+    }
+    updateSelectInput(session, inputId = "logApp", choices = c(firstApp, appsDF()$App))
+  })
+  
+  output$EnvisionDashboardLogMessage <- renderUI({
+    if(input$logApp == "index"){
+      tags$div(
+        style = "margin-top:5px",
+        class = "bg-info text-info alert",
+        # tags$button(
+        #   `aria-hidden`="true",
+        #   class="close",
+        #   `data-dismiss`="alert",
+        #   type="button",
+        #   "x"
+        # ),
+        tags$div("Only the Envision ",
+                 tags$div(class = "badge alert-info", "Developer"),
+                 HTML("can view logs for <b>Envision</b>Dashboard."))
+      )
+    } else {
+      tags$div()
+    }
   })
   
   output$configAppSelection <- renderText({
@@ -379,7 +472,11 @@ function(input, output, session) {
     if(input$liveStream){
       autoInvalidate()
     }
-    logs <- list.files(input$logDir)
+    logs <- list.files(EnvisionAppsLogDirectory)
+    
+    if(rV$isDeveloper){
+      system(paste0("sudo chown shiny:shiny ", EnvisionAppsLogDirectory, "/*"))
+    }
     
     logs[grepl(input$logApp, logs)]
   })
@@ -403,7 +500,7 @@ function(input, output, session) {
                                     )
                                   }))
     
-    sorted_app_logs <- gsub(paste0(input$logDir, "/"), "", appLogs()[order(app_logs_time_info$DATE, app_logs_time_info$TIME, decreasing = TRUE)])
+    sorted_app_logs <- gsub(paste0(EnvisionAppsLogDirectory, "/"), "", appLogs()[order(app_logs_time_info$DATE, app_logs_time_info$TIME, decreasing = TRUE)])
     
     log_contents <- data.frame(stringsAsFactors = FALSE)
     
@@ -415,7 +512,7 @@ function(input, output, session) {
       
       log_lines.i <- data.frame(
         file = paste0("[", log.i, "]"),
-        contents = readLines(file.path(input$logDir, log.i)),
+        contents = readLines(file.path(EnvisionAppsLogDirectory, log.i)),
         stringsAsFactors = FALSE
       )
       
@@ -457,7 +554,7 @@ function(input, output, session) {
       paste(input$logFileToDownload, '.txt', sep='')
     },
     content = function(file) {
-      writeLines(readLines(file.path(input$logDir, input$logFileToDownload)),
+      writeLines(readLines(file.path(EnvisionAppsLogDirectory, input$logFileToDownload)),
                  file)
     }
   )

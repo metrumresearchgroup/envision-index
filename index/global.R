@@ -7,3 +7,5 @@ EnvisionFields <- c("EnvisionName", "EnvisionDescription", "EnvisionTileLocation
 EnvisionUser <- Sys.info()[["user"]]
 
 EnvisionAppsLocation <- "/data/shiny-server"
+
+EnvisionAppsLogDirectory <- "/var/log/shiny-server"

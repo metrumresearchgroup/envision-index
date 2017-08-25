@@ -7,7 +7,7 @@ dashboardPage(
   ## Sidebar content
   dashboardSidebar(
     sidebarMenu(
-      id = "envision-dashboard-sidebar",
+      id = "envisionDashboardSidebar",
       menuItem("Apps",
                tabName = "apps",
                icon = icon("th")),
@@ -55,7 +55,7 @@ dashboardPage(
                     status = "primary",
                     fluidRow(
                       column(
-                        width = 2,
+                        width = 3,
                         selectInput(
                           inputId = "logApp",
                           label = "Select App",
@@ -69,8 +69,12 @@ dashboardPage(
                       conditionalPanel(
                         "input.logApp != ''",
                         column(
+                          class = "large-screen-items",
+                          width = 1
+                        ),
+                        column(
                           width = 2,
-                          offset = 2,
+                          # offset = 1,
                           style = "margin-top:12px;",
                           tags$span(
                             style = "font-size:20px;",
@@ -82,13 +86,12 @@ dashboardPage(
                           )
                         ),
                         column(
-                          width = 1,
+                          width = 2,
                           actionButton(
-                            class = "btn-lg",
+                            # class = "btn-lg",
                             style = "margin-top:15px;",
                             inputId = "downloadLogModal",
-                            label = "Download",
-                            icon = icon("download")
+                            label = "Download Logs"
                           )
                         )
                       )

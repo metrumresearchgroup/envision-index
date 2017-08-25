@@ -25,6 +25,7 @@ function(input, output, session) {
     
     message(
       paste0(
+        "\n ** EnvisionDashboard Message **\n",
         "USER:  ", paste(EnvisionUser, sep = "", collapse = ", "), "\n",
         "DEVELOPER: ", paste(rV$envisionDeveloper, sep = "", collapse = ", "), "\n",
         "ENVISION USERS: ", paste(rV$envisionUsers, sep = "", collapse = ", ")
@@ -46,10 +47,9 @@ function(input, output, session) {
   
   # App Table ---------------------------------------------------------------
   appsDF <- reactive({
-    
     input$dismissAfterConfig
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
-    
+    # message("appsDF")
     shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
@@ -101,6 +101,7 @@ function(input, output, session) {
     
     message(
       paste0(
+        "\n ** EnvisionDashboard Message **\n",
         "ENVISION APPS: ", paste(apps_df$App, sep = "", collapse = ", "), "\n",
         "ENVISION APPS FOR THIS USER: ", paste(apps_df$App[apps_df$ShowThisUser], sep = "", collapse = ", ")
       )
@@ -111,6 +112,7 @@ function(input, output, session) {
       return(apps_df[apps_df$ShowThisUser, ])
       
     } else {
+      # Empty return when no apps are found (make data frame because dependant code requires that)
       return(
         data.frame(App = "",
                    AppDir = file.path(EnvisionAppsLocation, ""),
@@ -128,7 +130,7 @@ function(input, output, session) {
   })
   
   output$appBoxes <- renderUI({
-    
+    # message("appBoxes")
     # Clear out old temp tiles
     tiles_to_keep <- paste("www/", c("metworx-logo.png", "default-tile.png", "favicon.ico"), sep = "")
     old_tiles <- list.files("www", full.names = TRUE)
@@ -181,7 +183,7 @@ function(input, output, session) {
           
           message(
             paste0(
-              "\n",
+              "\n ** EnvisionDashboard Message **\n",
               paste0("TILE COPY FAIL FOR APP: ", app_df.i$App,"\n", 
                      "FAIL COPY PATH: ", app_df.i$EnvisionTileLocation)
             )
@@ -322,6 +324,7 @@ function(input, output, session) {
   # Log  --------------------------------------------------------------------
   
   observeEvent(appsDF(), {
+    # message('updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))')
     if(rV$isDeveloper){
       lastApp <- c("EnvisionDashboard" = "index")
     } else {
@@ -331,6 +334,7 @@ function(input, output, session) {
   })
   
   output$EnvisionDashboardLogMessage <- renderUI({
+    # message('EnvisionDashboardLogMessage')
     if(input$logApp == "index"){
       tags$div(
         style = "margin-top:5px",
@@ -344,7 +348,7 @@ function(input, output, session) {
         # ),
         tags$div("Only the Envision ",
                  tags$div(class = "badge alert-info", "Developer"),
-                 HTML("can view logs for <b>Envision</b>Dashboard."))
+                 HTML("can view logs for <b>Envision</b>&#8203;Dashboard."))
       )
     } else {
       tags$div()
@@ -352,6 +356,7 @@ function(input, output, session) {
   })
   
   output$configAppSelection <- renderText({
+    # message('paste0("Configuring App: ", input$configApp)')
     paste0("Configuring App: ", input$configApp)
   })
   
@@ -380,22 +385,20 @@ function(input, output, session) {
       
       config_app_DESCRIPTION <- config_app_DEFAULT
       
-      session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').html('<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>');");
+      session$sendCustomMessage(type = "envisionIndexJS",
+                                "$('#no-description-message').html('<i>No DESCRIPTION file found for this app. Form generated using defaults.</i>');");
     }
     
     app_users <- unlist(strsplit(config_app_DESCRIPTION$EnvisionUsers, " "))
     
     updateTextInput(session, inputId = "configAppName", value = config_app_DESCRIPTION$EnvisionName)
-    
     updateTextInput(session, inputId = "configAppDescription", value = config_app_DESCRIPTION$EnvisionDescription)
-    
     updateTextInput(session, inputId = "configAppTileLocation", value = config_app_DESCRIPTION$EnvisionTileLocation)
     
     updateSelectInput(session,
                       inputId = "configAppUsers",
                       selected = app_users,
                       choices = unique(c("all", app_users, rV$envisionUsers)))
-    
   })
   
   observeEvent(input$configAppSave, {
@@ -426,12 +429,12 @@ function(input, output, session) {
     
     message(
       paste0(
-        "\n",
+        "\n ** EnvisionDashboard Message **\n",
         "SAVING DESCRIPTION FOR APP:  ", input$configApp, "\n",
-        "ENVISION NAME: ",  DESCRIPTION_file$EnvisionName, "\n",
-        "ENVISION DESCRIPTION: ",  DESCRIPTION_file$EnvisionDescription, "\n",
-        "ENVISION TILE LOCATION: ",  DESCRIPTION_file$EnvisionTileLocation, "\n",
-        "ENVISION USERS: ",  DESCRIPTION_file$EnvisionUsers
+        "EnvisionName: ",  DESCRIPTION_file$EnvisionName, "\n",
+        "EnvisionDescription: ",  DESCRIPTION_file$EnvisionDescription, "\n",
+        "EnvisionTileLocation: ",  DESCRIPTION_file$EnvisionTileLocation, "\n",
+        "EnvisionUsers: ",  DESCRIPTION_file$EnvisionUsers
       )
     )
     
@@ -491,7 +494,7 @@ function(input, output, session) {
   
   
   appLogs <- reactive({
-    
+     # message('appLogs')
     if(input$liveStream){
       autoInvalidate()
     }
@@ -505,7 +508,7 @@ function(input, output, session) {
   })
   
   logContents <- reactive({
-    
+    # message('logContents')
     if(length(appLogs()) == 0) {
       return(
         data.frame(display_lines = paste0("No logs found for app ", tags$i(input$logApp), 
@@ -568,11 +571,12 @@ function(input, output, session) {
   })
   
   output$logContents <- renderUI({
+    # message('logContents')
     HTML(paste(logContents()$display_lines, collapse = "</br>"))
   })
   
   output$downloadLog <- downloadHandler(
-    
+
     filename = function() {
       paste(input$logFileToDownload, '.txt', sep='')
     },
@@ -580,13 +584,15 @@ function(input, output, session) {
       writeLines(readLines(file.path(EnvisionAppsLogDirectory, input$logFileToDownload)),
                  file)
     }
+  #   message('downloadLog')
   )
   
   # Configure ---------------------------------------------------------------
   observe({
+    # message('insertUI')
     if(rV$isDeveloper){
       insertUI(
-        selector = "#envision-dashboard-sidebar",
+        selector = "#envisionDashboardSidebar",
         where = "beforeBegin",
         menuItem(tagList("Configure",
                          tags$div(class = "pull-right badge alert-info", "Developer")
@@ -599,7 +605,7 @@ function(input, output, session) {
   })
   
   output$configureDevUI <- renderUI({
-    
+    # message('configureDevUI')
     if(rV$isDeveloper){
       
       softwareInfo <- tagList(
@@ -655,7 +661,7 @@ function(input, output, session) {
                 collapsible = TRUE,
                 fluidRow(
                   column(
-                    width = 5,
+                    width = 6,
                     selectInput(
                       inputId = "configApp",
                       label = "Select App",

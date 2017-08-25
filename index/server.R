@@ -129,7 +129,7 @@ function(input, output, session) {
       tile_file.i <- "default-tile.png"
       alt_text.i = "Tile Not Found"
       tile_alpha.i <- .75
-      tile_margin.i <- "18px"
+      tile_padding.i <- "12px 30px 12px 30px;"
       
       if(app_df.i$EnvisionTileLocation != ""){
         
@@ -161,7 +161,7 @@ function(input, output, session) {
         tile_file.i <- temp_img_name.i
         alt_text.i <- paste0(alt_text.i, " At: ", app_df.i$EnvisionTileLocation)
         tile_alpha.i <- 1
-        tile_margin.i <- "0px"
+        tile_padding.i <- "0px"
       }
       
       tile.i <- 
@@ -171,7 +171,7 @@ function(input, output, session) {
           tags$img(alt = alt_text.i, 
                    # height = "170px",
                    width = "100%",
-                   style = paste0("opacity:", tile_alpha.i,";", "padding:", tile_margin.i),
+                   style = paste0("opacity:", tile_alpha.i,";", "padding:", tile_padding.i, ";"),
                    class = "envision-index-tile-img", # center-block",# img-responsive",
                    src = tile_file.i)
         )

@@ -5,8 +5,11 @@ function(input, output, session) {
   observeEvent(session, {
     
     ##  This entire block runs whenenver the page is refreshed
-    # envisionIndexMessage(message_title = "refresh app", message_elements = Sys.time())
-    
+    message(
+      paste0(
+        "\n# *********************** EnvisionDashboard Page Load ********************** #"
+      )
+    )
     
     rV$clientURL <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname)
     
@@ -16,25 +19,16 @@ function(input, output, session) {
     
     rV$envisionUsers <- sort(unique(EnvisionUsersDF$V1))
     
-    # envisionIndexMessage(message_title = "Users",
-    #                      message_elements = rV$envisionUsers)
-    
     rV$envisionDeveloper <- EnvisionUsersDF$V1[which.min(EnvisionUsersDF$V3)]
-    
-    # envisionIndexMessage(message_title = "Developer",
-    #                      message_elements = rV$envisionDeveloper)
     
     rV$isDeveloper <- EnvisionUser == rV$envisionDeveloper
     
-    # envisionIndexMessage(message_title = "Is Developer", 
-    #                      message_elements = rV$isDeveloper)
-    
     message(
       paste0(
-        "\n############# EnvisionDashboard ##############\n",
-        "# User: ", paste(EnvisionUser, sep = "", collapse = ", "), "\n",
-        "# Envision Developer: ", paste(rV$envisionDeveloper, sep = "", collapse = ", "), "\n",
-        "# Envision Users: ", paste(rV$envisionUsers, sep = "", collapse = ", ")
+        "\n# *************** EnvisionDashboard *************** #\n",
+        "USER:  ", paste(EnvisionUser, sep = "", collapse = ", "), "\n",
+        "DEVELOPER: ", paste(rV$envisionDeveloper, sep = "", collapse = ", "), "\n",
+        "ENVISION USERS: ", paste(rV$envisionUsers, sep = "", collapse = ", ")
       )
     )
     
@@ -54,24 +48,12 @@ function(input, output, session) {
   # App Table ---------------------------------------------------------------
   appsDF <- reactive({
     
-    # envisionIndexMessage(message_elements = "Gathering Envision Apps")
-    
-    message(
-      paste0(
-        "\n############# EnvisionDashboard ##############\n",
-        "#**************** Page Refresh ***************#"
-      )
-    )
-    
     input$dismissAfterConfig
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     
     shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
     not_apps <- c("index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
-    
-    # envisionIndexMessage(message_title = "All Apps", 
-    #                      message_elements = apps)
     
     apps_df <- data.frame(App = apps,
                           AppDir = file.path(EnvisionAppsLocation, apps),
@@ -120,9 +102,9 @@ function(input, output, session) {
     
     message(
       paste0(
-        "\n############# EnvisionDashboard ##############\n",
-        "# Envision Apps: ", paste(apps_df$App, sep = "", collapse = ", "), "\n",
-        "# Envision Apps For This User: ", paste(apps_df$App[apps_df$ShowThisUser], sep = "", collapse = ", ")
+        "\n# *************** EnvisionDashboard *************** #\n",
+        "ENVISION APPS: ", paste(apps_df$App, sep = "", collapse = ", "), "\n",
+        "ENVISION APPS FOR THIS USER: ", paste(apps_df$App[apps_df$ShowThisUser], sep = "", collapse = ", ")
       )
     )
     
@@ -169,9 +151,9 @@ function(input, output, session) {
           
           message(
             paste0(
-              "\n############# EnvisionDashboard ##############\n",
-              paste0("# Tile Copy Fail for app: ", app_df.i$App,"\n", 
-                     "# Fail Path: ", app_df.i$EnvisionTileLocation)
+              "\n# *************** EnvisionDashboard *************** #\n",
+              paste0("TILE COPY FAIL FOR APP: ", app_df.i$App,"\n", 
+                     "FAIL COPY PATH: ", app_df.i$EnvisionTileLocation)
             )
           )
         }
@@ -411,6 +393,17 @@ function(input, output, session) {
     DESCRIPTION_file$EnvisionDescription <- input$configAppDescription
     DESCRIPTION_file$EnvisionTileLocation <- input$configAppTileLocation
     DESCRIPTION_file$EnvisionUsers <- paste(input$configAppUsers, collapse = " ")
+    
+    message(
+      paste0(
+        "\n# *************** EnvisionDashboard *************** #\n",
+        "SAVING DESCRIPTION FOR APP:  ", input$configApp, "\n",
+        "ENVISION NAME: ",  DESCRIPTION_file$EnvisionName, "\n",
+        "ENVISION DESCRIPTION: ",  DESCRIPTION_file$EnvisionDescription, "\n",
+        "ENVISION TILE LOCATION: ",  DESCRIPTION_file$EnvisionTileLocation, "\n",
+        "ENVISION USERS: ",  DESCRIPTION_file$EnvisionUsers
+      )
+    )
     
     write.dcf(DESCRIPTION_file, file = description_file_location, keep.white = EnvisionFields)
     

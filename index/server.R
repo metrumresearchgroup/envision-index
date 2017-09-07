@@ -325,11 +325,11 @@ function(input, output, session) {
   
   observeEvent(appsDF(), {
     # message('updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))')
-    if(rV$isDeveloper){
-      lastApp <- c("EnvisionDashboard" = "index")
-    } else {
+    # if(rV$isDeveloper){
+    #   lastApp <- c("EnvisionDashboard" = "index")
+    # } else {
       lastApp <- NULL
-    }
+    # }
     updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))
   })
   

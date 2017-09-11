@@ -15,13 +15,14 @@ output: pdf_document
 ```{r, include = FALSE}
 .libPaths("lib")
 source("testing-functions.R")
-knitr::opts_chunk$set(out.width="428px", out.height="321px", echo=FALSE, fig.cap= "Envsion Index Testing")
+knitr::opts_chunk$set(out.width="428px", out.height="321px", echo=FALSE, fig.cap= "Envision Index Testing")
+
 #################################
 ##### Variables for Testing ##### 
 #################################
 
-# The URL from the Metworx workflow (e.g. https://i-02226ccaed6ba0fdd.metworx.com)
-workflowURL <- "https://i-02226ccaed6ba0fdd.metworx.com"
+# The URL from the Metworx workflow (e.g. "https://i-02226ccaed6ba0fdd.metworx.com")
+workflowURL <- "https://i-0e72b8144a6559c76.metworx.com"
 
 # User name for logging into RStudio and Envision (e.g. "anderson")
 username <- "anderson"

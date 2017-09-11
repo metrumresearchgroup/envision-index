@@ -210,6 +210,7 @@ function(input, output, session) {
       
       ## Name
       name.i <- tags$a(
+        id = paste0(app_df.i$App, "-link"),
         href = file.path(rV$clientURL, "envision", app_df.i$App, ""),
         target = "_blank",
         style = "font-size:23px;font-weight:bold;",

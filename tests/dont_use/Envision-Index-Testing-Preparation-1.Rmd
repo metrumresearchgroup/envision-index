@@ -1,0 +1,9 @@
+# tester creates a metworx envision workflow with password 'indextesting'
+
+# open Envision-Index-Testing-1.Rmd
+
+# fill in author email
+
+# fill in R variables on top
+
+# run script

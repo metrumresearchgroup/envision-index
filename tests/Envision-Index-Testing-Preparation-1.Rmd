@@ -5,3 +5,5 @@
 # fill in author email
 
 # fill in R variables on top
+
+# run script

@@ -329,7 +329,7 @@ function(input, output, session) {
     # if(rV$isDeveloper){
     #   lastApp <- c("EnvisionDashboard" = "index")
     # } else {
-      lastApp <- NULL
+    lastApp <- NULL
     # }
     updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))
   })
@@ -495,7 +495,7 @@ function(input, output, session) {
   
   
   appLogs <- reactive({
-     # message('appLogs')
+    # message('appLogs')
     if(input$liveStream){
       autoInvalidate()
     }
@@ -535,35 +535,41 @@ function(input, output, session) {
     
     for(log.i in sorted_app_logs){
       
-      if(nrow(log_contents) > 200) break
-      
-      log_lines.i <- data.frame(
-        file = paste0("[", log.i, "]"),
-        contents = readLines(file.path(EnvisionAppsLogDirectory, log.i)),
-        stringsAsFactors = FALSE
-      )
-      
-      log_contents.i <- rbind(
-        data.frame(
-          file = c("", ""),
-          contents = c("", paste0(new_log_break, " Begin Log [", log.i, "] ", new_log_break)),
+      if(nrow(log_contents) < 200) {
+        
+        log_lines.i <- data.frame(
+          file = paste0("[", log.i, "]"),
+          contents = readLines(file.path(EnvisionAppsLogDirectory, log.i)),
           stringsAsFactors = FALSE
-        ),
-        log_lines.i
-      )
-      
-      if(any(grepl("Execution halted", log_contents.i$contents))){
-        log_contents.i <- rbind(
-          log_contents.i,
-          data.frame(
-            file = "",
-            contents = paste0(new_log_break, " End Log [", log.i, "] ", new_log_break, "</br>"),
-            stringsAsFactors = FALSE
-          )
         )
+        
+        log_contents.i <- rbind(
+          data.frame(
+            file = c("", ""),
+            contents = c("", paste0(new_log_break, " Begin Log [", log.i, "] ", new_log_break)),
+            stringsAsFactors = FALSE
+          ),
+          log_lines.i
+        )
+        
+        if(any(grepl("Execution halted", log_contents.i$contents))){
+          log_contents.i <- rbind(
+            log_contents.i,
+            data.frame(
+              file = "",
+              contents = paste0(new_log_break, " End Log [", log.i, "] ", new_log_break, "</br>"),
+              stringsAsFactors = FALSE
+            )
+          )
+        }
+        
+        log_contents <- rbind(log_contents.i, log_contents)
       }
-      
-      log_contents <- rbind(log_contents.i, log_contents)
+    }
+    
+    # the log can be over 200 if one of the logs on its own is over 200
+    if(nrow(log_contents) > 200){
+      log_contents <- log_contents[(nrow(log_contents) - 200):nrow(log_contents), ]
     }
     
     log_contents$display_lines <- paste(log_contents$file, log_contents$contents, sep = paste(rep("&nbsp;", 10), collapse = ""))
@@ -577,7 +583,7 @@ function(input, output, session) {
   })
   
   output$downloadLog <- downloadHandler(
-
+    
     filename = function() {
       paste(input$logFileToDownload, '.txt', sep='')
     },
@@ -585,7 +591,7 @@ function(input, output, session) {
       writeLines(readLines(file.path(EnvisionAppsLogDirectory, input$logFileToDownload)),
                  file)
     }
-  #   message('downloadLog')
+    #   message('downloadLog')
   )
   
   # Configure ---------------------------------------------------------------

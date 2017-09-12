@@ -1,7 +1,15 @@
 library(shiny)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
+  
+  autoInvalidate <- reactiveTimer(2000, session = session)
+  
+  observeEvent(autoInvalidate(), {
+    
+    message(paste0("It's Alive ", Sys.time()))
+    
+  })
 
   # Expression that generates a histogram. The expression is
   # wrapped in a call to renderPlot to indicate that:

@@ -3,7 +3,7 @@ library(shiny)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
-  autoInvalidate <- reactiveTimer(2000, session = session)
+  autoInvalidate <- reactiveTimer(3000, session = session)
   
   observeEvent(autoInvalidate(), {
     

@@ -17,3 +17,9 @@ system(paste0("sudo chmod 0777 ", shiny_server_conf))
 system(paste0("sudo cp /data/envision-index/misc/development/shiny-server.conf ", shiny_server_conf))
 
 system("sudo restart shiny-server")
+
+# make log folder readable / writable
+system("sudo chmod -R 0777 /var/log/shiny-server")
+
+# make www folder in index readable / writable
+system("sudo chmod -R 0777 /data/shiny-server/index/www")

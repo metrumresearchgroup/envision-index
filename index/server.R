@@ -109,6 +109,8 @@ function(input, output, session) {
     
     if(any(apps_df$ShowThisUser)){
       
+      apps_df <- apps_df[order(-apps_df$MTime), ]
+      
       return(apps_df[apps_df$ShowThisUser, ])
       
     } else {

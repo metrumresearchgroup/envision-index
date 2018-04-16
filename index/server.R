@@ -331,10 +331,12 @@ function(input, output, session) {
     # if(rV$isDeveloper){
     #   lastApp <- c("EnvisionDashboard" = "index")
     # } else {
-    lastApp <- NULL
+    # lastApp <- NULL
     # }
     # 
-    updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))
+    appChoices <- c("", appsDF()$App)
+    names(appChoices)  <- c("", appsDF()$EnvisionName)
+    updateSelectInput(session, inputId = "logApp", choices = appChoices)
   })
   
   output$EnvisionDashboardLogMessage <- renderUI({

@@ -333,6 +333,7 @@ function(input, output, session) {
     # } else {
     lastApp <- NULL
     # }
+    # 
     updateSelectInput(session, inputId = "logApp", choices = c("", appsDF()$App, lastApp))
   })
   

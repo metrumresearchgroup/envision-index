@@ -1,6 +1,4 @@
-.libPaths("lib")
-
-library(shinydashboard)
+library(shinydashboard, lib.loc = "lib")
 
 EnvisionFields <- c("EnvisionName", "EnvisionDescription", "EnvisionTileLocation", "EnvisionUsers")
 

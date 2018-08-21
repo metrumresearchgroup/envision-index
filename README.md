@@ -2,6 +2,8 @@
 
 `shiny::runGitHub("metrumresearchgroup/envision-index")`
 
+(May need to `install.packages(shinydashboard)`)
+
 # Envision Index App
 This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.
 

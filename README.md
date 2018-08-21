@@ -1,7 +1,9 @@
+## Quickstart:
+
+`shiny::runGitHub("metrumresearchgroup/envision-index")`
+
 # Envision Index App
 This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.
-
-It includes an html template (`index.html`) that directs the user to the `index` app. It also has example applications (`hello` & `rmd`).
 
 [](#description-file-in-envision)
 ## DESCRIPTION file in Envision apps

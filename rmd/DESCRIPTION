@@ -1,4 +1,0 @@
-EnvisionName: RMarkdown
-EnvisionDescription: Example R Markdown file that uses shiny reactivity
-EnvisionTileLocation: /data/shiny-server/rmd/tile.png
-EnvisionUsers: all

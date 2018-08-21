@@ -1,8 +1,8 @@
 ## Quickstart:
 
-Download bundle [here](https://github.com/metrumresearchgroup/envision-index/raw/master/packrat/bundles/envision-index-2018-08-21.tar.gz).
+Download bundle `envision-index-2018-08-21.tar.gz`  [here](https://github.com/metrumresearchgroup/envision-index/raw/master/packrat/bundles/envision-index-2018-08-21.tar.gz).
 
-Upload to Metworx Envision workflow into `/data`
+Upload `envision-index-2018-08-21.tar.gz` to Metworx Envision workflow into `/data`
 
 Run `packrat::unbundle("/data/envision-index-2018-08-21.tar.gz", where = "/data/shiny-server")`
 

@@ -39,5 +39,5 @@ The DESCRIPTION file should be placed at the same level as the code for the app 
   * Example: `EnvisionTileLocation: /data/shiny-server/hello/tile.png`
 
 
-Download example DESCRIPTION file [here](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/hello/DESCRIPTION).
+Download example DESCRIPTION file [here](https://raw.githubusercontent.com/metrumresearchgroup/envision-index/master/misc/example-app/hello/DESCRIPTION).
   

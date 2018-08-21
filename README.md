@@ -1,8 +1,12 @@
 ## Quickstart:
 
-`shiny::runGitHub("metrumresearchgroup/envision-index")`
+Download bundle [here](https://github.com/metrumresearchgroup/envision-index/raw/master/packrat/bundles/envision-index-2018-08-21.tar.gz).
 
-(May need to `install.packages(shinydashboard)`)
+Upload to Metworx Envision workflow into `/data`
+
+Run `packrat::unbundle("/data/envision-index-2018-08-21.tar.gz", where = "/data/shiny-server")`
+
+*Install `packrat` if necessary via `install.packages(packrat)`
 
 # Envision Index App
 This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.

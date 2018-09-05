@@ -1,12 +1,15 @@
 ## Quickstart:
 
-Download bundle `envision-index-2018-08-21.tar.gz`  [here](https://github.com/metrumresearchgroup/envision-index/raw/master/packrat/bundles/envision-index-2018-08-21.tar.gz).
+### Start with command line:
+1) cd /data/shiny-server
+2) git clone https://github.com/metrumresearchgroup/envision-index.git
 
-Upload `envision-index-2018-08-21.tar.gz` to Metworx Envision workflow into `/data`
+### Open RStudio
+1) Click on the (open) file /data/shiny-server/envision-index/envision-index.Rproj
+2) Wait for packages to install
 
-Run `packrat::unbundle("/data/envision-index-2018-08-21.tar.gz", where = "/data/shiny-server")`
-
-*Install `packrat` if necessary via `install.packages("packrat")`
+### Run an R Script
+1) Run the R script: /data/shiny-server/envision-index/misc/prep-for-use.R
 
 # Envision Index App
 This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.

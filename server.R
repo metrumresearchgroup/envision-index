@@ -51,7 +51,7 @@ function(input, output, session) {
     session$sendCustomMessage(type = "envisionIndexJS", "$('#no-description-message').empty();");
     # message("appsDF")
     shiny_server_directories <- list.dirs(EnvisionAppsLocation, recursive = FALSE, full.names = FALSE)
-    not_apps <- c("index", ".git")
+    not_apps <- ".git" # c("envision-index", ".git")
     apps <- shiny_server_directories[!(shiny_server_directories %in% not_apps)]
     
     apps_df <- data.frame(App = apps,
@@ -158,6 +158,8 @@ function(input, output, session) {
     for(i in 1:nrow(appsDF())){
       
       app_df.i <- appsDF()[i, ]
+      
+      if(app_df.i$App == "envision-index") next
       
       ## Tile
       tile_file.i <- "default-tile.png"
@@ -336,12 +338,13 @@ function(input, output, session) {
     # 
     appChoices <- c("", appsDF()$App)
     names(appChoices)  <- c("", appsDF()$EnvisionName)
+    # names(appChoices)[appChoices == "envision-index"] <- "EnvisionDashboard"
     updateSelectInput(session, inputId = "logApp", choices = appChoices)
   })
   
   output$EnvisionDashboardLogMessage <- renderUI({
     # message('EnvisionDashboardLogMessage')
-    if(input$logApp == "index"){
+    if(input$logApp == "envision-index"){
       tags$div(
         style = "margin-top:5px",
         class = "bg-info text-info alert",

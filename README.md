@@ -1,15 +1,15 @@
 ## Quickstart:
 
 ### Start with command line:
-1) cd /data/shiny-server
-2) git clone https://github.com/metrumresearchgroup/envision-index.git
+1) Run: `cd /data/shiny-server`
+2) Run: `git clone https://github.com/metrumresearchgroup/envision-index.git`
 
 ### Open RStudio
 1) Click on the (open) file /data/shiny-server/envision-index/envision-index.Rproj
 2) Wait for packages to install
 
 ### Run an R Script
-1) Run the R script: /data/shiny-server/envision-index/misc/prep-for-use.R
+1) Run the R script: `/data/shiny-server/envision-index/misc/prep-for-use.R`
 
 # Envision Index App
 This is the code to place at `/data/shiny-server` on a Metworx Envision workflow.

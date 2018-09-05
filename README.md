@@ -1,6 +1,6 @@
 ## Quickstart:
 
-### Using the command line
+### Open the command line
 1) Run: `cd /data/shiny-server`
 2) Run: `git clone https://github.com/metrumresearchgroup/envision-index.git`
 

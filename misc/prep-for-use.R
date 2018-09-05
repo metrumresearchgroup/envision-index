@@ -15,7 +15,7 @@ system("sudo chmod -R 0777 /var/log/shiny-server")
 # system("sudo chmod g+s /var/log/shiny-server")
 
 
-# Make www folder in index readable / writable ----------------------------s
+# Make www folder in index readable / writable ----------------------------
 system("sudo chmod -R 0777 /data/shiny-server/envision-index/www")
 # system("sudo chmod g+s /data/shiny-server/index/www")
 

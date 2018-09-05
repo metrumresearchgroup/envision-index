@@ -339,6 +339,9 @@ function(input, output, session) {
     appChoices <- c("", appsDF()$App)
     names(appChoices)  <- c("", appsDF()$EnvisionName)
     # names(appChoices)[appChoices == "envision-index"] <- "EnvisionDashboard"
+    if(!rV$isDeveloper){
+      appChoices <- appChoices[appChoices != "envision-index"]
+    }
     updateSelectInput(session, inputId = "logApp", choices = appChoices)
   })
   

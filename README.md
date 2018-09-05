@@ -5,7 +5,7 @@
 2) Run: `git clone https://github.com/metrumresearchgroup/envision-index.git`
 
 ### Open RStudio
-1) Click on the (open) the file: `/data/shiny-server/envision-index/envision-index.Rproj`
+1) Click on (open) the file: `/data/shiny-server/envision-index/envision-index.Rproj`
 2) Wait for packages to install
 
 ### Run an R Script

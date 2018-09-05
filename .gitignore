@@ -4,5 +4,5 @@
 .Ruserdata
 .DS_Store
 .Rapp.history
-index/www/*temp*
+www/*temp*
 packrat/lib*/
